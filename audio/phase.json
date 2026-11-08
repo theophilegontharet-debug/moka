@@ -1,11 +1,12 @@
 {
  "plafond": 35000,
- "consomme": 18505,
+ "consomme": 26050,
  "note": "Phase 1 ElevenLabs : plafond 25 000 (8 nov. 2026), limité par la clé API, relevée à 35 000 crédits cumulés le 8 nov. « consomme » = toute la consommation de la clé depuis sa création.",
  "demandes": [
   1,
   2,
-  3
+  3,
+  4
  ],
  "fichiers": [
   {
@@ -199,6 +200,126 @@
    "fichier": "airbnb-muscle-un-petit-modele-d-ia-pour-egaler-les-geants-10-20261105/comprendre-701817dc35.mp3",
    "chars": 1213,
    "credits": 485
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "afrique-octobre-2026/comprendre-0d81ca469a.mp3",
+   "chars": 1678,
+   "credits": 671
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "afrique-bilan-2026/comprendre-d8f7c554e7.mp3",
+   "chars": 1507,
+   "credits": 603
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "logistique-depasse-fintech/comprendre-dc54239568.mp3",
+   "chars": 1458,
+   "credits": 583
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "nigeria-en-tete/comprendre-8f8008aea8.mp3",
+   "chars": 1506,
+   "credits": 602
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "energie-recule/comprendre-b34b315714.mp3",
+   "chars": 1243,
+   "credits": 497
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "femmes-fondatrices/comprendre-e8f24791dc.mp3",
+   "chars": 1223,
+   "credits": 489
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "base-qui-samincit/comprendre-2a78068366.mp3",
+   "chars": 1499,
+   "credits": 600
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "ido-sum-le-mur/comprendre-640101639e.mp3",
+   "chars": 1817,
+   "credits": 727
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "les-mesures-locales-contre-les-data-centers-gagnent-presque--20261105/comprendre-097cb4bd72.mp3",
+   "chars": 1037,
+   "credits": 415
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "moeve-vend-ses-actifs-petroliers-algeriens-a-pertamina-20261105/comprendre-c70c8a8fb6.mp3",
+   "chars": 783,
+   "credits": 313
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "posthog-abandonne-duckdb-cinq-mois-apres-l-avoir-adopte-20261105/comprendre-dc52fbadc6.mp3",
+   "chars": 901,
+   "credits": 360
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "sagard-boucle-a-520-millions-d-euros-son-fonds-de-fonds-dedi-20261105/comprendre-499ee6264c.mp3",
+   "chars": 1267,
+   "credits": 507
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "apple-reduit-le-budget-ia-de-ses-employes-20261105/comprendre-049cadacd8.mp3",
+   "chars": 888,
+   "credits": 355
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "les-plus-gros-depensiers-d-ia-ont-cale-au-troisieme-trimestr-20261105/comprendre-f72f79b530.mp3",
+   "chars": 658,
+   "credits": 263
+  },
+  {
+   "demande": 4,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "midterms-ia/comprendre-6a35b6b531.mp3",
+   "chars": 1399,
+   "credits": 560
   }
  ],
  "plafond_cle": 35000

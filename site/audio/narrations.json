@@ -14,6 +14,21 @@
    }
   }
  },
+ "afrique-bilan-2026": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1311598,
+    "chars": 1507,
+    "credits": 603,
+    "engine": "elevenlabs",
+    "file": "comprendre-d8f7c554e7.mp3",
+    "hash": "d8f7c554e7",
+    "model": "eleven_v4",
+    "seconds": 82,
+    "voice": "Patrick"
+   }
+  }
+ },
  "afrique-octobre-2026": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
@@ -25,6 +40,17 @@
     "hash": "4c6921d056",
     "model": "eleven_v4",
     "seconds": 197,
+    "voice": "Patrick"
+   },
+   "comprendre": {
+    "bytes": 1446181,
+    "chars": 1678,
+    "credits": 671,
+    "engine": "elevenlabs",
+    "file": "comprendre-0d81ca469a.mp3",
+    "hash": "0d81ca469a",
+    "model": "eleven_v4",
+    "seconds": 90,
     "voice": "Patrick"
    }
   }
@@ -100,6 +126,51 @@
    }
   }
  },
+ "apple-reduit-le-budget-ia-de-ses-employes-20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 733143,
+    "chars": 888,
+    "credits": 355,
+    "engine": "elevenlabs",
+    "file": "comprendre-049cadacd8.mp3",
+    "hash": "049cadacd8",
+    "model": "eleven_v4",
+    "seconds": 46,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "base-qui-samincit": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1247651,
+    "chars": 1499,
+    "credits": 600,
+    "engine": "elevenlabs",
+    "file": "comprendre-2a78068366.mp3",
+    "hash": "2a78068366",
+    "model": "eleven_v4",
+    "seconds": 78,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "energie-recule": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1089244,
+    "chars": 1243,
+    "credits": 497,
+    "engine": "elevenlabs",
+    "file": "comprendre-b34b315714.mp3",
+    "hash": "b34b315714",
+    "model": "eleven_v4",
+    "seconds": 68,
+    "voice": "Patrick"
+   }
+  }
+ },
  "europe-levees-semaine": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "comprendre": {
@@ -152,6 +223,21 @@
    }
   }
  },
+ "femmes-fondatrices": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 985590,
+    "chars": 1223,
+    "credits": 489,
+    "engine": "elevenlabs",
+    "file": "comprendre-e8f24791dc.mp3",
+    "hash": "e8f24791dc",
+    "model": "eleven_v4",
+    "seconds": 62,
+    "voice": "Patrick"
+   }
+  }
+ },
  "hardware-sans-chine": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "comprendre": {
@@ -178,6 +264,17 @@
     "hash": "2a3eda8470",
     "model": "eleven_v4",
     "seconds": 250,
+    "voice": "Patrick"
+   },
+   "comprendre": {
+    "bytes": 1613783,
+    "chars": 1817,
+    "credits": 727,
+    "engine": "elevenlabs",
+    "file": "comprendre-640101639e.mp3",
+    "hash": "640101639e",
+    "model": "eleven_v4",
+    "seconds": 101,
     "voice": "Patrick"
    }
   }
@@ -212,6 +309,66 @@
    }
   }
  },
+ "les-mesures-locales-contre-les-data-centers-gagnent-presque--20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 893221,
+    "chars": 1037,
+    "credits": 415,
+    "engine": "elevenlabs",
+    "file": "comprendre-097cb4bd72.mp3",
+    "hash": "097cb4bd72",
+    "model": "eleven_v4",
+    "seconds": 56,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "les-plus-gros-depensiers-d-ia-ont-cale-au-troisieme-trimestr-20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 569303,
+    "chars": 658,
+    "credits": 263,
+    "engine": "elevenlabs",
+    "file": "comprendre-f72f79b530.mp3",
+    "hash": "f72f79b530",
+    "model": "eleven_v4",
+    "seconds": 36,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "logistique-depasse-fintech": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1228425,
+    "chars": 1458,
+    "credits": 583,
+    "engine": "elevenlabs",
+    "file": "comprendre-dc54239568.mp3",
+    "hash": "dc54239568",
+    "model": "eleven_v4",
+    "seconds": 77,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "midterms-ia": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1214632,
+    "chars": 1399,
+    "credits": 560,
+    "engine": "elevenlabs",
+    "file": "comprendre-6a35b6b531.mp3",
+    "hash": "6a35b6b531",
+    "model": "eleven_v4",
+    "seconds": 76,
+    "voice": "Patrick"
+   }
+  }
+ },
  "mistral-ai-rachete-skiplabs-sa-cinquieme-acquisition-de-l-an-20261106": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "comprendre": {
@@ -227,6 +384,36 @@
    }
   }
  },
+ "moeve-vend-ses-actifs-petroliers-algeriens-a-pertamina-20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 683406,
+    "chars": 783,
+    "credits": 313,
+    "engine": "elevenlabs",
+    "file": "comprendre-c70c8a8fb6.mp3",
+    "hash": "c70c8a8fb6",
+    "model": "eleven_v4",
+    "seconds": 43,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "nigeria-en-tete": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1336258,
+    "chars": 1506,
+    "credits": 602,
+    "engine": "elevenlabs",
+    "file": "comprendre-8f8008aea8.mp3",
+    "hash": "8f8008aea8",
+    "model": "eleven_v4",
+    "seconds": 84,
+    "voice": "Patrick"
+   }
+  }
+ },
  "pe-sous-pression": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "comprendre": {
@@ -238,6 +425,21 @@
     "hash": "712403bfcb",
     "model": "eleven_v4",
     "seconds": 86,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "posthog-abandonne-duckdb-cinq-mois-apres-l-avoir-adopte-20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 787060,
+    "chars": 901,
+    "credits": 360,
+    "engine": "elevenlabs",
+    "file": "comprendre-dc52fbadc6.mp3",
+    "hash": "dc52fbadc6",
+    "model": "eleven_v4",
+    "seconds": 49,
     "voice": "Patrick"
    }
   }
@@ -279,6 +481,21 @@
     "hash": "66709123f5",
     "model": "eleven_v4",
     "seconds": 105,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "sagard-boucle-a-520-millions-d-euros-son-fonds-de-fonds-dedi-20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1081303,
+    "chars": 1267,
+    "credits": 507,
+    "engine": "elevenlabs",
+    "file": "comprendre-499ee6264c.mp3",
+    "hash": "499ee6264c",
+    "model": "eleven_v4",
+    "seconds": 68,
     "voice": "Patrick"
    }
   }
