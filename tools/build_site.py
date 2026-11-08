@@ -53,7 +53,7 @@ for a in arts:
 blob = json.dumps(arts, ensure_ascii=False, separators=(",", ":"))
 assert "mail.google.com" not in blob and "@gmail" not in blob, "lien Gmail ou email dans les données"
 assert len(arts) == 32, len(arts)
-assert sum(1 for a in arts if a.get("image")) == 14
+assert sum(1 for a in arts if a.get("image")) == len(photos)
 
 # ---------- Fichiers ----------
 if site.exists(): shutil.rmtree(site)

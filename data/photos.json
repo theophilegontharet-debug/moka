@@ -278,5 +278,43 @@
   "width": 1400,
   "height": 933,
   "added_at": "2026-11-07T23:00:00Z"
+ },
+ "abu-dhabi-attire-les-grands-fonds-de-private-equity-malgre-l-20261106": {
+  "src": "photos/abu-dhabi-skyline.jpg",
+  "kind": "contexte",
+  "subject": "contexte",
+  "caption": "la skyline d'Abu Dhabi depuis la mer, en 2014",
+  "alt": "Tours d'Abu Dhabi au bord de l'eau, ciel bleu",
+  "title": "Abu dhabi skylines 2014",
+  "credit": "Wadiia",
+  "author": "Wadiia",
+  "license": "CC BY-SA 4.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.fr",
+  "attribution": "Citer l'auteur, la licence et la source, et indiquer les modifications. La version modifiée reste diffusée sous la même licence.",
+  "modifications": "redimensionnée",
+  "source_url": "https://commons.wikimedia.org/wiki/File:Abu_dhabi_skylines_2014.jpg",
+  "source_site": "Wikimedia Commons",
+  "width": 1400,
+  "height": 769,
+  "added_at": "2026-11-08T02:00:00Z"
+ },
+ "moeve-vend-ses-actifs-petroliers-algeriens-a-pertamina-20261105": {
+  "src": "photos/moeve-raffinerie-san-roque.jpg",
+  "kind": "photo",
+  "subject": "sujet",
+  "caption": "la raffinerie Gibraltar-San Roque, en Espagne, exploitée par Cepsa, devenue Moeve",
+  "alt": "Cheminées et installations d'une raffinerie derrière la végétation",
+  "title": "CEPSA Refinery Gibraltar-San Roque",
+  "credit": "Asterion (Wikipédia en anglais)",
+  "author": "The original uploader was Asterion at English Wikipedia.",
+  "license": "CC BY-SA 2.5",
+  "license_url": "https://creativecommons.org/licenses/by-sa/2.5/deed.fr",
+  "attribution": "Citer l'auteur, la licence et la source, et indiquer les modifications. La version modifiée reste diffusée sous la même licence.",
+  "modifications": "redimensionnée",
+  "source_url": "https://commons.wikimedia.org/wiki/File:CEPSA_Refinery_Gibraltar-San_Roque.jpg",
+  "source_site": "Wikimedia Commons",
+  "width": 1280,
+  "height": 960,
+  "added_at": "2026-11-08T02:00:00Z"
  }
 }

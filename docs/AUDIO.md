@@ -50,3 +50,28 @@ data/users/<id>/audio       { "<articleId>-<format>": position_s, … }
 ## Limite à vérifier avant de développer
 
 La lecture en arrière-plan et sur écran verrouillé depuis une page affichée dans l'app Claude n'est pas garantie. Pour un vrai usage podcast, une app indépendante installable (trajectoire B) est plus sûre.
+
+## Version 1 (8 novembre 2026) : synthèse vocale du navigateur
+
+Module `MokaAudio` dans `app/index.html`. Aucun serveur, aucun frais, aucun quota Claude.
+
+- Bouton « Écouter » sous les formats de chaque article : lit le format choisi
+  (Express, Comprendre, Approfondir ; à défaut Comprendre).
+- Le texte est assemblé depuis les données (titre, chapeau, corps, analyse, « pourquoi ça compte »,
+  inconnues), normalisé pour l'oral (« M$ » → « millions de dollars », « T3 » → « troisième trimestre »…)
+  et lu phrase par phrase.
+- Mini-lecteur au-dessus de la barre d'onglets : lecture/pause (reprise à la phrase en cours),
+  arrêt, vitesse 0,85× à 1,5×, choix parmi les voix françaises de l'appareil.
+- Préférences : `localStorage` `moka.audio.voice` et `moka.audio.rate` (les favoris ne sont pas touchés).
+
+Limites connues : la voix dépend de l'appareil (sur iPhone, Réglages → Accessibilité → Contenu énoncé →
+Voix → Français permet de télécharger des voix « améliorées ») ; sur iPhone, la synthèse s'arrête
+généralement quand l'écran se verrouille ou quand on change d'application, et il n'y a pas de
+contrôles sur l'écran verrouillé.
+
+## Étape suivante : vrais fichiers audio
+
+Pour une écoute écran verrouillé, avec les contrôles du centre de contrôle : générer un MP3 par
+article et par format (API de synthèse vocale : OpenAI TTS, ElevenLabs, Google Cloud TTS, Azure),
+le stocker avec le site ou sur Vercel Blob, et le lire avec un élément `<audio>` + Media Session API.
+C'est aussi la base du briefing quotidien narré.
