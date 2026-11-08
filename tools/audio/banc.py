@@ -29,6 +29,7 @@ say = lambda *a: print(*a, flush=True)
 def renditions():
     for p in CFG["passages"]:
         for m in CFG["moteurs"]:
+            if m.get("passages") and p["id"] not in m["passages"]: continue   # voix limitée à certains passages
             yield p, m, "commun", p["commun"]
             if m["engine"] == "google" and p.get("chirp"):
                 yield p, m, "chirp", p["chirp"]["text"]

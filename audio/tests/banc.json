@@ -30,7 +30,10 @@
    "model": "eleven_v4",
    "voice_id": "F1toM6PcP54s45kOOAyV",
    "voice": "Koraly",
-   "label": "ElevenLabs v4 · Koraly (Expressive)"
+   "label": "ElevenLabs v4 · Koraly (Expressive, tarif ×2)",
+   "passages": [
+    "p5"
+   ]
   },
   {
    "id": "v2-anais",
