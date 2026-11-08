@@ -1,1 +1,1 @@
-{"mode": "diagnostic", "note": "diagnostic = gratuit (aucune génération). generer = payant, uniquement après accord explicite de Théophile.", "demande": 2}
+{"mode": "generer", "note": "diagnostic = gratuit (aucune génération). generer = payant, uniquement après accord explicite de Théophile.", "demande": 3, "accord": "Go génération donné par Théophile le 8 novembre 2026 à 12:44 : 19 extraits ElevenLabs, 7 Google, ~4 921 crédits, plafond 6 000."}
