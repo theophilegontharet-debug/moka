@@ -1,0 +1,29 @@
+name: Essais de diction Moka
+
+# Lancement manuel uniquement : génère les variantes de audio/tests/passages.json (plafond 3 000 caractères).
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Générer les essais
+        env:
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+          MAX_TOTAL_CHARS: "3000"
+        run: python3 tools/audio/tests.py
+      - name: Publier
+        run: |
+          git config user.name "moka-audio[bot]"
+          git config user.email "moka-audio@users.noreply.github.com"
+          git add site/audio/tests
+          git diff --cached --quiet && { echo "Rien de nouveau"; exit 0; }
+          git commit -m "Essais de diction"
+          git pull --rebase origin main
+          git push

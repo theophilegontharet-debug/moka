@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#FDF9F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A120D" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Moka, votre brief quotidien : startups africaines, capital, énergie et tech.">
-<link rel="preload" href="data/articles.json?v=9b758bf88b" as="fetch" crossorigin>
+<link rel="preload" href="data/articles.json?v=02dbe4f16a" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -420,7 +420,7 @@ details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
 .player .pbtn.main{background:var(--espresso); color:#FFFDF9}
 .player .pbtn .ico{width:20px; height:20px}
 .player .pbtn.main .ico{fill:currentColor; stroke:none}
-.player .rate{min-width:44px; height:32px; padding:0 8px; border-radius:var(--r-pill); background:var(--soft); font-weight:700; font-size:13px; color:var(--accent-strong); font-variant-numeric:tabular-nums}
+.player .rate{flex:none; min-width:52px; height:32px; padding:0 10px; border:0; border-radius:var(--r-pill); background:var(--soft); font:inherit; font-weight:700; font-size:13px; color:var(--accent-strong); font-variant-numeric:tabular-nums; text-align:center; text-align-last:center; -webkit-appearance:none; appearance:none; cursor:pointer}
 .player .bar{height:4px; border-radius:2px; background:var(--soft); overflow:hidden}
 .player .bar i{display:block; height:100%; width:0; background:var(--mocha); transition:width .3s}
 .player .more{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted)}
@@ -468,7 +468,7 @@ body.has-player{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom
 window.MOKA_STANDALONE = true;
 window.claude = { use: async (name) => {
   if (name !== "db") return null;            // pas d'utilisateur, de Gmail, de rédaction ni d'upload
-  const load = fetch("data/articles.json?v=9b758bf88b").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
+  const load = fetch("data/articles.json?v=02dbe4f16a").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
   const none = { exists: false, data: () => undefined };
   return {
     collection: () => ({ onSnapshot: (ok, ko) => { load.then(list => ok({ docs: list.map(a => ({ id: a.id, exists: true, data: () => a })), metadata: { fromCache: false } })).catch(e => ko && ko(e)); return () => {}; } }),
@@ -848,7 +848,7 @@ function viewSources(){
     ${window.MOKA_STANDALONE?`<div class="panel"><h2>Édition de lecture</h2>
       <p>Cette version de Moka est indépendante de claude.ai : elle affiche l'édition du 7 novembre 2026, enregistrée dans des fichiers statiques. La collecte des newsletters n'y est pas encore active.</p>
       <p>Vos articles sauvegardés restent sur cet appareil. Ils ne sont pas synchronisés avec vos autres appareils.</p>
-      <p><a class="linkbtn" href="audio/essais/">Moka Audio : écouter les essais de voix</a></p></div>`:`<div class="panel"><h2>Relever les newsletters</h2>
+      <p><a class="linkbtn" href="audio/essais/">Moka Audio : écouter les essais de voix</a> · <a class="linkbtn" href="audio/tests/">essais de diction</a></p></div>`:`<div class="panel"><h2>Relever les newsletters</h2>
       <p>Moka passe par votre connecteur Gmail sur claude.ai, avec deux outils de lecture seulement : <b>rechercher</b> dans le libellé et <b>lire</b> un fil. Il ne peut ni envoyer, ni supprimer, ni modifier vos emails, et la page ne voit jamais vos identifiants.</p>
       <p>À chaque relève, Moka lit au plus 6 newsletters des 3 derniers jours qu'il n'a pas encore traitées, les fait résumer par Claude avec la consigne de n'utiliser que leur contenu, puis les ajoute avec la mention « Rédigé automatiquement ».</p>
       ${S.isOwner?"":`<p class="note-line">La relève est réservée au propriétaire de Moka.</p>`}
@@ -927,10 +927,11 @@ function toggleSave(id){
 const MokaAudio = (()=>{
   const synth = window.speechSynthesis;
   const ttsOk = !!(synth && window.SpeechSynthesisUtterance);
-  const RATES=[0.85,1,1.15,1.3,1.5];
+  const RATES=[0.85,0.9,0.95,1,1.15,1.3,1.5];
   const st={ a:null, fmt:null, mode:null, chunks:[], i:0, playing:false, done:false, voices:[], voice:null, rate:1, token:0, index:{}, entry:null };
-  try{ st.rate=parseFloat(localStorage.getItem("moka.audio.rate"))||1; }catch(e){}
+  try{ const r=parseFloat(localStorage.getItem("moka.audio.rate")); st.rate=RATES.includes(r)?r:1; }catch(e){}
   const el = new Audio(); el.preload="none";
+  const rateLabel=r=>String(r).replace(".",",")+"×";
   const fmtName=f=>({express:"Express",comprendre:"Comprendre",approfondir:"Approfondir"})[f]||f;
   const mmss=s=>{ s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); };
 
@@ -999,7 +1000,8 @@ const MokaAudio = (()=>{
 
   // ---- MP3 ----
   let lastSave=0;
-  el.addEventListener("play",()=>{ st.playing=true; st.done=false; render(); });
+  el.addEventListener("play",()=>{ if(el.playbackRate!==st.rate){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; } st.playing=true; st.done=false; render(); });
+  el.addEventListener("playing",()=>{ if(el.playbackRate!==st.rate) el.playbackRate=st.rate; });
   el.addEventListener("pause",()=>{ if(st.mode!=="mp3") return; st.playing=false; if(st.a && !el.ended) posSet(st.a.id, st.fmt, el.currentTime); render(); });
   el.addEventListener("ended",()=>{ st.playing=false; st.done=true; if(st.a) posSet(st.a.id, st.fmt, 0); render(); });
   el.addEventListener("timeupdate",()=>{ progress(); const now=Date.now(); if(st.a && now-lastSave>4000){ lastSave=now; posSet(st.a.id, st.fmt, el.currentTime); }
@@ -1044,8 +1046,8 @@ const MokaAudio = (()=>{
     st.playing=false; st.a=null; st.chunks=[]; st.i=0; st.mode=null; st.entry=null; render();
     if("mediaSession" in navigator){ try{ navigator.mediaSession.metadata=null; }catch(e){} }
   }
-  function cycleRate(){ const k=RATES.indexOf(st.rate); st.rate=RATES[(k+1)%RATES.length]; try{ localStorage.setItem("moka.audio.rate",st.rate); }catch(e){}
-    if(st.mode==="mp3"){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; render(); } else if(st.playing) speak(); else render(); }
+  function setRate(r){ r=parseFloat(r); if(!RATES.includes(r)) return; st.rate=r; try{ localStorage.setItem("moka.audio.rate",st.rate); }catch(e){}
+    if(st.mode==="mp3"){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; progress(); } else if(st.playing) speak(); }
   function setVoice(uri){ st.voice=st.voices.find(v=>v.voiceURI===uri)||st.voice; try{ localStorage.setItem("moka.audio.voice",uri); }catch(e){} if(st.playing) speak(); }
 
   // ---- bouton « Écouter » de l'article ----
@@ -1085,7 +1087,7 @@ const MokaAudio = (()=>{
     if(on){
       box.innerHTML=`<div class="top"><button class="pbtn main" id="pPlay" type="button" aria-label="${st.playing?"Pause":"Lecture"}">${st.playing?I.pause:I.play}</button>
         <a class="ttl" href="#a-${esc(st.a.id)}"><b>${esc(st.a.title)}</b><span>${fmtName(st.fmt)}${st.done?" · terminé":""} · <span id="pTime"></span></span></a>
-        <button class="rate" id="pRate" type="button" aria-label="Vitesse de lecture">${String(st.rate).replace(".",",")}×</button>
+        <select class="rate" id="pRate" aria-label="Vitesse de lecture">${RATES.map(r=>`<option value="${r}"${r===st.rate?" selected":""}>${rateLabel(r)}</option>`).join("")}</select>
         <button class="pbtn" id="pStop" type="button" aria-label="Arrêter">${I.stop}</button></div>
         ${st.mode==="mp3"
           ? `<input class="seek" id="pSeek" type="range" min="0" max="1" step="1" value="0" aria-label="Position de lecture">
@@ -1093,7 +1095,7 @@ const MokaAudio = (()=>{
           : `<div class="bar"><i></i></div>${st.voices.length>1?`<label class="more">Voix <select id="pVoice">${st.voices.map(v=>`<option value="${esc(v.voiceURI)}"${v===st.voice?" selected":""}>${esc(v.name.replace(/\s*\(.*\)$/,""))} · ${esc(v.lang)}</option>`).join("")}</select></label>`:""}`}`;
       box.querySelector("#pPlay").onclick=()=>st.playing?pause():play();
       box.querySelector("#pStop").onclick=stop;
-      box.querySelector("#pRate").onclick=cycleRate;
+      const rs=box.querySelector("#pRate"); rs.onchange=()=>setRate(rs.value);
       const seek=box.querySelector("#pSeek"); if(seek){ seek.oninput=()=>{ el.currentTime=+seek.value; progress(); }; }
       const bk=box.querySelector("#pBack"); if(bk) bk.onclick=()=>{ el.currentTime=Math.max(0,el.currentTime-15); };
       const fw=box.querySelector("#pFwd"); if(fw) fw.onclick=()=>{ el.currentTime=Math.min(el.duration||1e9,el.currentTime+15); };

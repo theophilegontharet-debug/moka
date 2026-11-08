@@ -1,0 +1,57 @@
+[
+ {
+  "groupe": "« 11,2 fois » (MNT-Halan)",
+  "items": [
+   [
+    "Version actuelle",
+    "La part réservée aux investisseurs institutionnels a été demandée plus de onze fois : onze virgule deux fois l'offre disponible, précisément."
+   ],
+   [
+    "Chiffre en toutes lettres, phrase simplifiée",
+    "La part réservée aux investisseurs institutionnels a été demandée onze virgule deux fois plus que l’offre disponible."
+   ],
+   [
+    "Chiffre en chiffres",
+    "La part réservée aux investisseurs institutionnels a été souscrite 11,2 fois."
+   ],
+   [
+    "Arrondi, sans décimale",
+    "La part réservée aux investisseurs institutionnels a été souscrite plus de onze fois."
+   ]
+  ]
+ },
+ {
+  "groupe": "« jusqu’à » (MNT-Halan)",
+  "items": [
+   [
+    "Version actuelle (apostrophe droite)",
+    "Le premier jour, le titre a pris jusqu'à dix-huit pour cent, ce qui valorisait l'activité égyptienne autour de sept cent quarante-cinq millions de dollars."
+   ],
+   [
+    "Apostrophe typographique",
+    "Le premier jour, le titre a pris jusqu’à dix-huit pour cent, ce qui valorisait l’activité égyptienne autour de sept cent quarante-cinq millions de dollars."
+   ],
+   [
+    "Reformulation sans « jusqu’à »",
+    "Le premier jour, au plus haut de la séance, le titre gagnait dix-huit pour cent. À ce prix, l’activité égyptienne valait environ sept cent quarante-cinq millions de dollars."
+   ]
+  ]
+ },
+ {
+  "groupe": "« l’équipe » (Sequoia)",
+  "items": [
+   [
+    "Version actuelle (apostrophe droite)",
+    "D'abord, il ferme son bureau de Londres, ouvert il y a six ans. Selon Sifted, plusieurs membres de l'équipe européenne vont perdre leur poste."
+   ],
+   [
+    "Apostrophe typographique",
+    "D’abord, il ferme son bureau de Londres, ouvert il y a six ans. Selon Sifted, plusieurs membres de l’équipe européenne vont perdre leur poste."
+   ],
+   [
+    "Votre formulation",
+    "D’abord, il ferme son bureau de Londres, ouvert il y a six ans. Selon Sifted, plusieurs salariés de l’équipe européenne de Sequoia vont perdre leur emploi."
+   ]
+  ]
+ }
+]

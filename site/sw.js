@@ -1,5 +1,5 @@
-const C = "moka-9b758bf88b";
-self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(C).then(c => c.addAll(["./", "data/articles.json?v=9b758bf88b"]))); });
+const C = "moka-02dbe4f16a";
+self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(C).then(c => c.addAll(["./", "data/articles.json?v=02dbe4f16a"]))); });
 self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", e => {
   const u = new URL(e.request.url);
