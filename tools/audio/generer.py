@@ -53,9 +53,11 @@ def adapter(t):
     return re.sub(r"[ \t]+", " ", t).strip()
 
 def source(art, fmt):
-    d = root / CMD.get("scripts", "audio/scripts") / art
-    for name in (f"{fmt}.{eng}.txt", f"{fmt}.txt"):
-        if (d / name).exists(): return d / name
+    dirs = CMD.get("scripts", "audio/scripts")
+    for base in ([dirs] if isinstance(dirs, str) else dirs):     # premier dossier qui a le script
+        d = root / base / art
+        for name in (f"{fmt}.{eng}.txt", f"{fmt}.txt"):
+            if (d / name).exists(): return d / name
     return None
 
 def chunks(text, limit):
@@ -71,16 +73,35 @@ if eng == "elevenlabs" and mult is None:
     except EngineError as e: print("modèles :", e)
 tarif = voix.get("rate") if eng == "elevenlabs" else 0
 
+# coût réellement observé par caractère (registre) ; pire cas = multiplicateur × tarif annoncés
+obs = [f["credits"] / f["chars"] for f in phase["fichiers"] if f.get("chars") and f.get("voix") == voix["id"] and f.get("modele") == modele]
+pire = (mult or 0) * (tarif or 0)
+ratio = min(pire, max(obs) * 1.02) if (obs and pire) else pire
+
+def decoupe(text, reste):
+    """Requêtes successives : jusqu'à CHUNK caractères, mais chacune doit tenir dans le reste du plafond
+    même au tarif annoncé (pire cas). Renvoie la liste des requêtes, ou None si le fichier ne tient pas
+    en supposant le coût observé."""
+    pars, out = text.split("\n\n"), []
+    while pars:
+        cur = ""
+        while pars and len(cur) + len(pars[0]) + 2 <= CHUNK and (len(cur) + len(pars[0]) + 2) * pire <= reste:
+            cur = f"{cur}\n\n{pars.pop(0)}" if cur else pars.pop(0)
+        if not cur: return None
+        out.append(cur); reste -= len(cur) * ratio
+    return out
+CHUNK = 2500
+
 plan = []
-for art in CMD["articles"]:
-    for fmt in CMD["formats"]:
+for fmt in CMD["formats"]:            # ordre : formats d'abord (Approfondir, Comprendre, Express)
+    for art in CMD["articles"]:
         p = source(art, fmt)
         if not p: print(f"  {art}/{fmt} : pas de script, ignoré"); continue
         text = adapter(p.read_text())
         h = hashlib.sha256(f"{voix['id']}|{modele}\n{text}".encode()).hexdigest()[:10]
         prev = narr.get(art, {}).get(voix["id"], {}).get(fmt)
         reuse = bool(prev and prev.get("hash") == h and (root / "site/audio" / art / prev["file"]).exists())
-        est = 0 if (reuse or eng == "google") else (round(len(text) * mult * tarif) if (mult is not None and tarif is not None) else None)
+        est = 0 if (reuse or eng == "google") else (round(len(text) * ratio) if ratio else None)
         plan.append({"art": art, "fmt": fmt, "src": str(p.relative_to(root)), "text": text, "hash": h, "reuse": reuse, "est": est})
 
 total = sum(x["est"] or 0 for x in plan)
@@ -95,7 +116,7 @@ print(f"Total prévisionnel : {total} crédits · phase : {phase['consomme']} co
 if eng == "elevenlabs" and any(x["est"] is None for x in plan):
     sys.exit("Coût prévisionnel inconnu (tarif ou multiplicateur absent) : arrêt.")
 if total > reste_phase:
-    sys.exit("Le total dépasse le reste du plafond de phase : arrêt.")
+    print("Le total dépasse le reste du plafond : génération dans l'ordre, tant que le budget le permet.")
 if eng == "google" and sum(len(x["text"]) for x in plan if not x["reuse"]) > GOOGLE_MAX_CHARS:
     sys.exit("Plus de 25 000 caractères Google : arrêt.")
 
@@ -105,7 +126,7 @@ if eng == "elevenlabs":
         print(f"Solde suffisant pour cette demande (marge {MARGE} comprise) : {'oui' if dispo >= total + MARGE else 'non'}")
     except EngineError as e:
         sys.exit(f"Lecture du solde impossible : {e}")
-    if dispo < total + MARGE: sys.exit("Solde insuffisant : arrêt.")
+    if dispo < MARGE + min([x["est"] for x in plan if x["est"]] or [0]): sys.exit("Solde insuffisant : arrêt.")
 
 if MODE != "generer":
     print("Mode estimer : aucune synthèse lancée."); sys.exit(0)
@@ -119,6 +140,7 @@ def save():
     PHASE_F.write_text(json.dumps(phase, ensure_ascii=False, indent=1))
     NARR_F.write_text(json.dumps(narr, ensure_ascii=False, indent=1, sort_keys=True))
 
+restants = []
 SET = {"stability": 0.5, "similarity_boost": 0.75, "style": 0.15, "use_speaker_boost": True, "speed": 1.0}
 SET.update(CMD.get("reglages") or {})
 try:
@@ -126,10 +148,13 @@ try:
         if x["reuse"]: continue
         parts, cost = [], 0
         if eng == "elevenlabs":
-            if phase["consomme"] + x["est"] > phase["plafond"]: raise EngineError("plafond de phase atteint")
-            for c in chunks(x["text"], 4500):
+            reste = phase["plafond"] - phase["consomme"]; cs = decoupe(x["text"], reste)
+            if cs is None:
+                print(f"  — {x['art']}/{x['fmt']} : ne tient pas dans le reste du plafond ({reste}), non généré"); restants.append(x); continue
+            for c in cs:
+                if phase["plafond"] - phase["consomme"] < len(c) * pire: raise EngineError("plafond de phase atteint (pire cas)")
                 b = el_subscription()
-                if (b["limit"] or 0) - (b["used"] or 0) < len(c) * mult * tarif + MARGE: raise EngineError("solde insuffisant")
+                if (b["limit"] or 0) - (b["used"] or 0) < len(c) * pire + MARGE: raise EngineError("solde insuffisant")
                 mp3, annonce = el_tts(c, voix["voice_id"], modele, SET, "fr")
                 a = el_subscription(); delta = (a["used"] or 0) - (b["used"] or 0)
                 reel = annonce if annonce is not None else (delta if delta > 0 else None)
@@ -137,7 +162,7 @@ try:
                     phase["consomme"] += round(len(c) * mult * tarif); save()
                     raise EngineError("coût réel inconnu : arrêt (estimation comptée par prudence)")
                 phase["consomme"] += reel; cost += reel; parts.append(mp3); save()
-                if reel > 1.25 * len(c) * mult * tarif + 20: raise EngineError(f"coût réel anormal ({reel})")
+                if reel > len(c) * ratio * 1.1 + 5: raise EngineError(f"coût réel anormal ({reel})")
         else:
             for c in chunks(x["text"], 4000):
                 parts.append(google_tts(markup=c, voice=voix["voice"]) if "[pause" in c else google_tts(text=c, voice=voix["voice"]))
@@ -149,10 +174,14 @@ try:
             "file": name, "hash": x["hash"], "voice": voix["name"].split(" - ")[0].split(" – ")[0].strip(),
             "engine": eng, "model": modele, "chars": len(x["text"]), "bytes": len(mp3),
             "seconds": round(len(mp3) * 8 / kbps), "credits": cost}
-        phase["fichiers"].append({"demande": dem, "voix": voix["id"], "modele": modele, "fichier": f"{x['art']}/{name}", "credits": cost})
+        phase["fichiers"].append({"demande": dem, "voix": voix["id"], "modele": modele, "fichier": f"{x['art']}/{name}", "chars": len(x["text"]), "credits": cost})
         save()
         print(f"  ✓ {x['art']}/{name} · {cost} crédits")
 except EngineError as e:
-    save(); print(f"Arrêt : {e}"); sys.exit(1)
+    save(); print(f"Arrêt : {e}")
+    for x in plan:
+        if not x["reuse"] and not (root / "site/audio" / x["art"] / f"{x['fmt']}-{x['hash']}.mp3").exists(): print(f"  reste à faire : {x['art']}/{x['fmt']}")
+    sys.exit(1)
 save()
 print(f"Terminé. Phase : {phase['consomme']} crédits consommés sur {phase['plafond']}.")
+for x in restants: print(f"  reste à faire : {x['art']}/{x['fmt']}")
