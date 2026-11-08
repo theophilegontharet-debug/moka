@@ -122,6 +122,7 @@ self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Prom
 self.addEventListener("fetch", e => {
   const u = new URL(e.request.url);
   if (e.request.method !== "GET" || u.origin !== location.origin) return;
+  if (u.pathname.includes("/audio/")) return;   // MP3 : requêtes partielles (Range) laissées au navigateur
   if (/\\/(photos|icons)\\//.test(u.pathname)) {
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { const cp = res.clone(); caches.open(C).then(c => c.put(e.request, cp)); return res; })));
   } else {
@@ -135,6 +136,8 @@ self.addEventListener("fetch", e => {
         {"source": "/photos/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
         {"source": "/icons/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]},
         {"source": "/sw.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
+        {"source": "/audio/(.*).mp3", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
+        {"source": "/audio/index.json", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
         {"source": "/(.*)", "headers": [{"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}]}]
 }, indent=1))
 

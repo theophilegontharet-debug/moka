@@ -404,7 +404,7 @@ details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
 .player .top{display:flex; align-items:center; gap:10px}
 .player .ttl{flex:1; min-width:0; overflow:hidden; display:block}
 .player .ttl b{display:block; font-family:var(--font-head); font-weight:600; font-size:14px; color:var(--title); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.player .ttl span{font-size:12px; color:var(--muted)}
+.player .ttl span{font-size:12px; color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums}
 .player .pbtn{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; color:var(--title); flex:none}
 .player .pbtn.main{background:var(--espresso); color:#FFFDF9}
 .player .pbtn .ico{width:20px; height:20px}
@@ -414,6 +414,14 @@ details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
 .player .bar i{display:block; height:100%; width:0; background:var(--mocha); transition:width .3s}
 .player .more{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted)}
 .player select{flex:1; min-width:0; height:30px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--text); font:inherit; font-size:13px; padding:0 8px}
+.player .seek{-webkit-appearance:none; appearance:none; width:100%; height:18px; background:transparent; margin:0}
+.player .seek::-webkit-slider-runnable-track{height:4px; border-radius:2px; background:linear-gradient(to right, var(--mocha) var(--p,0%), var(--soft) var(--p,0%))}
+.player .seek::-moz-range-track{height:4px; border-radius:2px; background:var(--soft)}
+.player .seek::-moz-range-progress{height:4px; border-radius:2px; background:var(--mocha)}
+.player .seek::-webkit-slider-thumb{-webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--espresso); margin-top:-5px}
+.player .seek::-moz-range-thumb{width:14px; height:14px; border:0; border-radius:50%; background:var(--espresso)}
+.player .more .sp{flex:1}
+.player .skip{height:28px; padding:0 10px; border-radius:var(--r-pill); background:var(--soft); color:var(--accent-strong); font-weight:700; font-size:12px; font-variant-numeric:tabular-nums}
 body.has-player{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 130px)}
 </style>
 </head>
@@ -886,15 +894,34 @@ function toggleSave(id){
 }
 
 
-/* ---------- Moka Audio : synthèse vocale du navigateur (aucun serveur, aucun quota) ----------
-   Le texte du format choisi est découpé en phrases, lues une à une. Pause = arrêt mémorisé à la
-   phrase en cours (plus fiable que speechSynthesis.pause selon les navigateurs). */
+/* ---------- Moka Audio ----------
+   1) Vrais fichiers MP3 (narrations Google Chirp 3 HD, voix Aoede) quand ils existent : élément <audio>,
+      lecture en arrière-plan, commandes sur l'écran verrouillé (Media Session), reprise de la position.
+   2) Sinon, repli sur la synthèse vocale du navigateur, lue phrase par phrase.
+   Aucun appel à un service pendant l'écoute : les MP3 sont des fichiers statiques. */
 const MokaAudio = (()=>{
   const synth = window.speechSynthesis;
-  const ok = !!(synth && window.SpeechSynthesisUtterance);
+  const ttsOk = !!(synth && window.SpeechSynthesisUtterance);
   const RATES=[0.85,1,1.15,1.3,1.5];
-  const st={ a:null, fmt:null, chunks:[], i:0, playing:false, voices:[], voice:null, rate:1, token:0 };
+  const st={ a:null, fmt:null, mode:null, chunks:[], i:0, playing:false, done:false, voices:[], voice:null, rate:1, token:0, index:{}, entry:null };
   try{ st.rate=parseFloat(localStorage.getItem("moka.audio.rate"))||1; }catch(e){}
+  const el = new Audio(); el.preload="none";
+  const fmtName=f=>({express:"Express",comprendre:"Comprendre",approfondir:"Approfondir"})[f]||f;
+  const mmss=s=>{ s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); };
+
+  // ---- index des MP3 disponibles (version autonome) ----
+  fetch("audio/index.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{}).then(j=>{ st.index=j||{}; const a=S.articles.find(x=>"#a-"+x.id===location.hash); if(a) bindButton(a); }).catch(()=>{});
+  const usedFormat=(a,f)=>{ const x=a.formats?.express, d=a.formats?.approfondir;
+    if(f==="express"&&!x) return "comprendre"; if(f==="approfondir"&&(!d||d.status==="indisponible")) return "comprendre"; return f; };
+  const mp3For=(a,f)=>{ const u=usedFormat(a,f); const e=st.index?.[a.id]?.[u]; return e?{...e, used:u, src:`audio/${a.id}/${e.file}`}:null; };
+
+  // ---- position mémorisée (par article et par format) ----
+  const POSK="moka.audio.pos";
+  const posAll=()=>{ try{ return JSON.parse(localStorage.getItem(POSK)||"{}"); }catch(e){ return {}; } };
+  const posGet=(a,f)=>posAll()[a+"|"+f]||0;
+  const posSet=(a,f,t)=>{ try{ const m=posAll(); if(t>0) m[a+"|"+f]=Math.round(t); else delete m[a+"|"+f]; localStorage.setItem(POSK,JSON.stringify(m)); }catch(e){} };
+
+  // ---- texte pour la synthèse du navigateur (repli) ----
   const norm = t => String(t||"")
     .replace(/(\d)\s?Md\$/g,"$1 milliards de dollars").replace(/(\d)\s?M\$/g,"$1 millions de dollars").replace(/(\d)\s?k\$/g,"$1 mille dollars")
     .replace(/(\d)\s?Md€/g,"$1 milliards d'euros").replace(/(\d)\s?M€/g,"$1 millions d'euros").replace(/(\d)\s?M£/g,"$1 millions de livres")
@@ -903,17 +930,12 @@ const MokaAudio = (()=>{
     .replace(/\bT([1-4])\b/g,(m,n)=>["","premier","deuxième","troisième","quatrième"][n]+" trimestre")
     .replace(/\bVC\b/g,"capital-risque").replace(/\bPE\b/g,"private equity").replace(/\s+/g," ").trim();
   function script(a, f){
-    const P=[]; const add=(t,pause)=>{ if(t) P.push(norm(t)); };
+    const P=[]; const add=t=>{ if(t) P.push(norm(t)); };
     add(a.title+"."); add(a.dek);
-    const x=a.formats?.express, d=a.formats?.approfondir;
-    let used=f;
-    if(f==="express" && !x) used="comprendre";
-    if(f==="approfondir" && (!d || d.status==="indisponible")) used="comprendre";
-    if(used==="express"){
-      add("L'essentiel."); x.points.forEach(add); add("Pourquoi ça compte. "+x.why);
-    } else {
-      add(a.brief);
-      (a.body||[]).forEach(b=>{ if(b.h) add(b.h+"."); add(b.p); });
+    const x=a.formats?.express, d=a.formats?.approfondir; const used=usedFormat(a,f);
+    if(used==="express"){ add("L'essentiel."); x.points.forEach(add); add("Pourquoi ça compte. "+x.why); }
+    else {
+      add(a.brief); (a.body||[]).forEach(b=>{ if(b.h) add(b.h+"."); add(b.p); });
       (a.items||[]).forEach(it=>add(`${it.name}, ${it.where} : ${it.amount}. ${it.what}`));
       if(used==="approfondir"){ add("Analyse approfondie."); d.sections.forEach(sec=>{ add(sec.h+"."); sec.p.forEach(add); }); }
       if(a.why) add("Pourquoi ça compte. "+a.why);
@@ -921,7 +943,6 @@ const MokaAudio = (()=>{
       const unk=[...(a.unknowns||[]), ...(used==="approfondir"?(d.limits||[]):[])];
       if(unk.length) add("Ce qu'on ne sait pas encore. "+unk.map(u=>u.replace(/[.\s]+$/,"")).join(". ")+".");
     }
-    // découpe en phrases (≤ 220 caractères) pour éviter les coupures des longues lectures
     const out=[];
     P.forEach(par=>{ (par.match(/[^.!?…]+[.!?…]+[»"”)]*|\S[^.!?…]*$/g)||[par]).forEach(sn=>{ sn=sn.trim(); if(!sn) return;
       while(sn.length>220){ const k=sn.lastIndexOf(", ",220); const cut=k>80?k+1:220; out.push(sn.slice(0,cut).trim()); sn=sn.slice(cut).trim(); }
@@ -929,71 +950,136 @@ const MokaAudio = (()=>{
     return {chunks:out, used};
   }
   function pickVoices(){
-    if(!ok) return;
-    const all=synth.getVoices(); const fr=all.filter(v=>/^fr/i.test(v.lang));
+    if(!ttsOk) return;
+    const fr=synth.getVoices().filter(v=>/^fr/i.test(v.lang));
     const score=v=>(/premium|enhanced|natural|neural|online/i.test(v.name)?4:0)+(/^fr[-_]FR/i.test(v.lang)?2:0)+(/amélie|amelie|thomas|audrey|aurélie|denise|henri|google/i.test(v.name)?1:0)+(v.localService?0.5:0);
     st.voices=fr.sort((a,b)=>score(b)-score(a)||a.name.localeCompare(b.name));
     let saved=null; try{ saved=localStorage.getItem("moka.audio.voice"); }catch(e){}
     st.voice=st.voices.find(v=>v.voiceURI===saved)||st.voices[0]||null;
-    if(!st.player_hidden) render();
+    if(st.mode==="tts") render();
   }
-  if(ok){ pickVoices(); synth.addEventListener?.("voiceschanged", pickVoices); setTimeout(pickVoices,500); }
-  const fmtName=f=>({express:"Express",comprendre:"Comprendre",approfondir:"Approfondir"})[f]||f;
+  if(ttsOk){ pickVoices(); synth.addEventListener?.("voiceschanged", pickVoices); setTimeout(pickVoices,500); }
+
+  // ---- synthèse du navigateur ----
   function speak(){
-    const my=++st.token;
-    synth.cancel();
+    const my=++st.token; synth.cancel();
     if(st.i>=st.chunks.length){ st.playing=false; st.i=0; st.done=true; render(); return; }
     st.done=false;
     const u=new SpeechSynthesisUtterance(st.chunks[st.i]);
     u.lang=st.voice?.lang||"fr-FR"; if(st.voice) u.voice=st.voice; u.rate=st.rate; u.pitch=1;
-    u.onend=()=>{ if(my!==st.token||!st.playing) return; st.i++; render(); speak(); };
+    u.onend=()=>{ if(my!==st.token||!st.playing) return; st.i++; progress(); speak(); };
     u.onerror=(e)=>{ if(my!==st.token) return; if(e.error==="interrupted"||e.error==="canceled"){ st.playing=false; render(); return; } st.i++; speak(); };
-    st.playing=true; render();
-    synth.speak(u);
+    st.playing=true; render(); synth.speak(u);
+  }
+
+  // ---- MP3 ----
+  let lastSave=0;
+  el.addEventListener("play",()=>{ st.playing=true; st.done=false; render(); });
+  el.addEventListener("pause",()=>{ if(st.mode!=="mp3") return; st.playing=false; if(st.a && !el.ended) posSet(st.a.id, st.fmt, el.currentTime); render(); });
+  el.addEventListener("ended",()=>{ st.playing=false; st.done=true; if(st.a) posSet(st.a.id, st.fmt, 0); render(); });
+  el.addEventListener("timeupdate",()=>{ progress(); const now=Date.now(); if(st.a && now-lastSave>4000){ lastSave=now; posSet(st.a.id, st.fmt, el.currentTime); }
+    if("mediaSession" in navigator && el.duration && navigator.mediaSession.setPositionState){ try{ navigator.mediaSession.setPositionState({duration:el.duration, playbackRate:el.playbackRate, position:Math.min(el.currentTime, el.duration)}); }catch(e){} } });
+  el.addEventListener("loadedmetadata",()=>{ progress(); });
+  el.addEventListener("error",()=>{ if(st.mode!=="mp3"||!st.a) return; const a=st.a; st.mode=null; st.entry=null; startTts(a); });
+  function mediaSession(a){
+    if(!("mediaSession" in navigator)) return;
+    const art=[{src:"icons/icon-512.png", sizes:"512x512", type:"image/png"}];
+    if(a.image?.src) art.unshift({src:a.image.src, sizes:`${a.image.width||1400}x${a.image.height||933}`, type:"image/jpeg"});
+    try{ navigator.mediaSession.metadata=new MediaMetadata({title:a.title, artist:"Moka · voix Aoede", album:fmtName(st.fmt), artwork:art}); }catch(e){}
+    const set=(k,f)=>{ try{ navigator.mediaSession.setActionHandler(k,f); }catch(e){} };
+    set("play",()=>el.play()); set("pause",()=>el.pause());
+    set("seekbackward",d=>{ el.currentTime=Math.max(0,el.currentTime-(d.seekOffset||15)); });
+    set("seekforward",d=>{ el.currentTime=Math.min(el.duration||1e9,el.currentTime+(d.seekOffset||15)); });
+    set("seekto",d=>{ if(d.seekTime!=null) el.currentTime=d.seekTime; });
+    set("stop",()=>stop());
+  }
+  function startMp3(a, e){
+    if(ttsOk){ st.token++; synth.cancel(); }
+    st.a=a; st.fmt=e.used; st.mode="mp3"; st.entry=e; st.chunks=[]; st.done=false;
+    el.src=e.src; el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; el.preload="auto";
+    const pos=posGet(a.id, e.used);
+    if(pos>3){ const once=()=>{ el.removeEventListener("loadedmetadata",once); if(!el.duration||pos<el.duration-3) el.currentTime=pos; }; el.addEventListener("loadedmetadata",once); }
+    mediaSession(a); render(); el.play().catch(()=>{ st.playing=false; render(); });
+  }
+  function startTts(a){
+    if(!ttsOk) return;
+    el.pause(); const sc=script(a,S.format); st.a=a; st.fmt=sc.used; st.mode="tts"; st.entry=null; st.chunks=sc.chunks; st.i=0; speak();
   }
   function start(a){
-    if(!ok) return;
-    const f=S.format;
-    if(st.a && st.a.id===a.id && st.fmt===f && st.chunks.length){ st.playing?pause():play(); return; }
-    const sc=script(a,f); st.a=a; st.fmt=sc.used; st.chunks=sc.chunks; st.i=0; play();
+    const e=mp3For(a,S.format); const used=usedFormat(a,S.format);
+    const same = st.a && st.a.id===a.id && st.fmt===used && st.mode===(e?"mp3":"tts");
+    if(same && (st.mode==="mp3" || st.chunks.length)){ st.playing?pause():play(); return; }
+    e?startMp3(a,e):startTts(a);
   }
-  function play(){ if(!st.chunks.length) return; speak(); }
-  function pause(){ st.token++; st.playing=false; synth.cancel(); render(); }
-  function stop(){ st.token++; synth.cancel(); st.playing=false; st.a=null; st.chunks=[]; st.i=0; render(); }
-  function cycleRate(){ const k=RATES.indexOf(st.rate); st.rate=RATES[(k+1)%RATES.length]; try{ localStorage.setItem("moka.audio.rate",st.rate); }catch(e){} if(st.playing) speak(); else render(); }
+  function play(){ if(st.mode==="mp3"){ el.play().catch(()=>{}); } else if(st.chunks.length) speak(); }
+  function pause(){ if(st.mode==="mp3"){ el.pause(); } else { st.token++; st.playing=false; synth.cancel(); render(); } }
+  function stop(){
+    if(st.mode==="mp3"){ if(st.a && !el.ended) posSet(st.a.id, st.fmt, el.currentTime); el.pause(); el.removeAttribute("src"); el.load(); }
+    else { st.token++; synth?.cancel(); }
+    st.playing=false; st.a=null; st.chunks=[]; st.i=0; st.mode=null; st.entry=null; render();
+    if("mediaSession" in navigator){ try{ navigator.mediaSession.metadata=null; }catch(e){} }
+  }
+  function cycleRate(){ const k=RATES.indexOf(st.rate); st.rate=RATES[(k+1)%RATES.length]; try{ localStorage.setItem("moka.audio.rate",st.rate); }catch(e){}
+    if(st.mode==="mp3"){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; render(); } else if(st.playing) speak(); else render(); }
   function setVoice(uri){ st.voice=st.voices.find(v=>v.voiceURI===uri)||st.voice; try{ localStorage.setItem("moka.audio.voice",uri); }catch(e){} if(st.playing) speak(); }
+
+  // ---- bouton « Écouter » de l'article ----
   function bindButton(a){
     const b=document.getElementById("listenBtn"); if(!b) return;
-    const cur = st.a && st.a.id===a.id;
-    const sc = script(a,S.format); const mins=Math.max(1,Math.round(sc.chunks.join(" ").split(/\s+/).length/(160*st.rate)));
-    b.querySelector("span").textContent = cur&&st.playing&&st.fmt===sc.used ? "Pause" : cur&&st.fmt===sc.used&&st.chunks.length ? (st.done?"Réécouter":"Reprendre") : "Écouter";
-    document.getElementById("listenFmt").textContent = `${fmtName(sc.used)} · ${mins} min`;
+    const e=mp3For(a,S.format); const used=usedFormat(a,S.format);
+    const cur = st.a && st.a.id===a.id && st.fmt===used;
+    let label="Écouter", meta;
+    if(e){
+      const secs=e.seconds||0; meta=`${fmtName(used)} · ${secs<60?secs+" s":Math.round(secs/60)+" min"} · voix Aoede`;
+      const pos=posGet(a.id,used);
+      if(cur && st.playing) label="Pause"; else if(cur && st.done) label="Réécouter"; else if(pos>3) label=`Reprendre à ${mmss(pos)}`;
+    } else {
+      const sc=script(a,S.format); const mins=Math.max(1,Math.round(sc.chunks.join(" ").split(/\s+/).length/(160*st.rate)));
+      meta=`${fmtName(sc.used)} · ${mins} min · voix de l'appareil`;
+      if(cur && st.playing) label="Pause"; else if(cur && st.chunks.length) label=st.done?"Réécouter":"Reprendre";
+    }
+    b.querySelector("span").textContent=label;
+    document.getElementById("listenFmt").textContent=meta;
     b.setAttribute("aria-pressed", cur&&st.playing?"true":"false");
     b.onclick=()=>start(a);
   }
+
+  // ---- mini-lecteur ----
+  function progress(){
+    const el2=document.getElementById("player"); if(!el2||el2.hidden) return;
+    let pct=0, txt="";
+    if(st.mode==="mp3"){ const d=el.duration||st.entry?.seconds||0; pct=d?el.currentTime/d*100:0; txt=`${mmss(el.currentTime)} / ${mmss(d)}`;
+      const r=el2.querySelector("#pSeek"); if(r && !r.matches(":active")){ r.max=Math.round(d)||1; r.value=Math.round(el.currentTime); r.style.setProperty("--p",pct+"%"); } }
+    else { pct=st.chunks.length?st.i/st.chunks.length*100:0; txt=`${Math.round(pct)} %`; const bar=el2.querySelector(".bar i"); if(bar) bar.style.width=pct+"%"; }
+    const t=el2.querySelector("#pTime"); if(t) t.textContent=txt;
+  }
   function render(){
-    const el=document.getElementById("player"); if(!el) return;
-    const on=!!(st.a && st.chunks.length);
-    el.hidden=!on; document.body.classList.toggle("has-player", on);
+    const box=document.getElementById("player"); if(!box) return;
+    const on=!!(st.a && (st.mode==="mp3" || st.chunks.length));
+    box.hidden=!on; document.body.classList.toggle("has-player", on);
     if(on){
-      const pct=Math.round(st.i/st.chunks.length*100);
-      el.innerHTML=`<div class="top"><button class="pbtn main" id="pPlay" type="button" aria-label="${st.playing?"Pause":"Lecture"}">${st.playing?I.pause:I.play}</button>
-        <a class="ttl" href="#a-${esc(st.a.id)}"><b>${esc(st.a.title)}</b><span>${fmtName(st.fmt)} · ${st.done?"terminé":st.playing?"lecture":"en pause"}${st.done?"":` · ${pct} %`}</span></a>
+      box.innerHTML=`<div class="top"><button class="pbtn main" id="pPlay" type="button" aria-label="${st.playing?"Pause":"Lecture"}">${st.playing?I.pause:I.play}</button>
+        <a class="ttl" href="#a-${esc(st.a.id)}"><b>${esc(st.a.title)}</b><span>${fmtName(st.fmt)}${st.done?" · terminé":""} · <span id="pTime"></span></span></a>
         <button class="rate" id="pRate" type="button" aria-label="Vitesse de lecture">${String(st.rate).replace(".",",")}×</button>
         <button class="pbtn" id="pStop" type="button" aria-label="Arrêter">${I.stop}</button></div>
-        <div class="bar"><i style="width:${pct}%"></i></div>
-        ${st.voices.length>1?`<label class="more">Voix <select id="pVoice">${st.voices.map(v=>`<option value="${esc(v.voiceURI)}"${v===st.voice?" selected":""}>${esc(v.name.replace(/\s*\(.*\)$/,""))} · ${esc(v.lang)}</option>`).join("")}</select></label>`:""}`;
-      el.querySelector("#pPlay").onclick=()=>st.playing?pause():play();
-      el.querySelector("#pStop").onclick=stop;
-      el.querySelector("#pRate").onclick=cycleRate;
-      const sel=el.querySelector("#pVoice"); if(sel) sel.onchange=()=>setVoice(sel.value);
-    } else el.innerHTML="";
+        ${st.mode==="mp3"
+          ? `<input class="seek" id="pSeek" type="range" min="0" max="1" step="1" value="0" aria-label="Position de lecture">
+             <div class="more">${st.entry?.voice?`Voix ${esc(st.entry.voice)} · Google`:"Narration"} <span class="sp"></span><button class="skip" id="pBack" type="button" aria-label="Reculer de 15 secondes">−15 s</button><button class="skip" id="pFwd" type="button" aria-label="Avancer de 15 secondes">+15 s</button></div>`
+          : `<div class="bar"><i></i></div>${st.voices.length>1?`<label class="more">Voix <select id="pVoice">${st.voices.map(v=>`<option value="${esc(v.voiceURI)}"${v===st.voice?" selected":""}>${esc(v.name.replace(/\s*\(.*\)$/,""))} · ${esc(v.lang)}</option>`).join("")}</select></label>`:""}`}`;
+      box.querySelector("#pPlay").onclick=()=>st.playing?pause():play();
+      box.querySelector("#pStop").onclick=stop;
+      box.querySelector("#pRate").onclick=cycleRate;
+      const seek=box.querySelector("#pSeek"); if(seek){ seek.oninput=()=>{ el.currentTime=+seek.value; progress(); }; }
+      const bk=box.querySelector("#pBack"); if(bk) bk.onclick=()=>{ el.currentTime=Math.max(0,el.currentTime-15); };
+      const fw=box.querySelector("#pFwd"); if(fw) fw.onclick=()=>{ el.currentTime=Math.min(el.duration||1e9,el.currentTime+15); };
+      const sel=box.querySelector("#pVoice"); if(sel) sel.onchange=()=>setVoice(sel.value);
+      progress();
+    } else box.innerHTML="";
     const a=st.a||S.articles.find(x=>"#a-"+x.id===location.hash);
     if(a && location.hash==="#a-"+a.id) bindButton(a);
   }
-  // iPhone : la synthèse s'interrompt quand l'écran se verrouille ; on garde la position pour reprendre.
-  document.addEventListener("visibilitychange",()=>{ if(document.hidden && st.playing && /iPhone|iPad/.test(navigator.userAgent)){ /* iOS coupe la voix : on la laisse terminer si possible */ } else if(!document.hidden && st.a && st.playing && !synth.speaking){ st.playing=false; render(); } });
-  return {ok, start, play, pause, stop, bindButton, _st:st, _script:script};
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden && st.mode==="tts" && st.playing && !synth.speaking){ st.playing=false; render(); } });
+  return {ok:ttsOk||true, start, play, pause, stop, bindButton, _st:st, _el:el, _script:script};
 })();
 
 /* ---------- Démarrage ---------- */

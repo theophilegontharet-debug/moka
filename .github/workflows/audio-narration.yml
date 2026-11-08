@@ -1,0 +1,57 @@
+name: Narrations Moka Audio
+
+# Lancement manuel uniquement. Génère les MP3 (Google Chirp 3 HD, voix Aoede) des articles indiqués,
+# à partir des scripts oraux de audio/scripts/. Un fichier déjà généré pour le même texte est réutilisé.
+on:
+  workflow_dispatch:
+    inputs:
+      articles:
+        description: "Identifiants des articles, séparés par des virgules"
+        required: true
+      formats:
+        description: "Formats à générer"
+        required: false
+        default: "express,comprendre,approfondir"
+      max_total_chars:
+        description: "Plafond de caractères pour ce lancement (25 000 max conseillé)"
+        required: false
+        default: "25000"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: audio-narration
+  cancel-in-progress: false
+
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vérifier le plafond (sans appel à Google)
+        env:
+          ARTICLES: ${{ inputs.articles }}
+          FORMATS: ${{ inputs.formats }}
+          MAX_TOTAL_CHARS: ${{ inputs.max_total_chars }}
+          DRY_RUN: "1"
+        run: python3 tools/audio/narrate.py
+      - name: Générer les narrations
+        env:
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+          ARTICLES: ${{ inputs.articles }}
+          FORMATS: ${{ inputs.formats }}
+          MAX_TOTAL_CHARS: ${{ inputs.max_total_chars }}
+        run: python3 tools/audio/narrate.py
+      - name: Publier
+        env:
+          ARTICLES: ${{ inputs.articles }}
+        run: |
+          git config user.name "moka-audio[bot]"
+          git config user.email "moka-audio@users.noreply.github.com"
+          git add site/audio
+          git diff --cached --quiet && { echo "Rien de nouveau"; exit 0; }
+          git commit -m "Narrations : $ARTICLES"
+          git pull --rebase origin main
+          git push
