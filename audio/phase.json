@@ -1,10 +1,11 @@
 {
  "plafond": 25000,
- "consomme": 9818,
+ "consomme": 18505,
  "note": "Phase 1 ElevenLabs : plafond porté à 25 000 le 8 nov. 2026, limité par la clé API (20 000 crédits cumulés). « consomme » = toute la consommation de la clé depuis sa création (banc arrêté à 0).",
  "demandes": [
   1,
-  2
+  2,
+  3
  ],
  "fichiers": [
   {
@@ -70,6 +71,134 @@
    "fichier": "exits-afrique-octobre/express-7539a8d948.mp3",
    "chars": 643,
    "credits": 256
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "sequoia-recentre/comprendre-2c426fd075.mp3",
+   "chars": 1716,
+   "credits": 686
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "exits-afrique-octobre/comprendre-8484278f55.mp3",
+   "chars": 2035,
+   "credits": 814
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "anthropic-ipo/comprendre-96d2c492ae.mp3",
+   "chars": 1701,
+   "credits": 680
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "europe-levees-semaine/comprendre-1cbf7f71db.mp3",
+   "chars": 1918,
+   "credits": 767
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "hardware-sans-chine/comprendre-711da205ca.mp3",
+   "chars": 1290,
+   "credits": 516
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "abu-dhabi-attire-les-grands-fonds-de-private-equity-malgre-l-20261106/comprendre-ff0a1f75bc.mp3",
+   "chars": 1513,
+   "credits": 605
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "apollo-investit-350-millions-de-dollars-pour-rendre-le-priva-20261106/comprendre-c03b1a645d.mp3",
+   "chars": 1491,
+   "credits": 596
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "les-elections-americaines-menacent-la-course-aux-data-center-20261106/comprendre-da19b90d82.mp3",
+   "chars": 956,
+   "credits": 382
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "mistral-ai-rachete-skiplabs-sa-cinquieme-acquisition-de-l-an-20261106/comprendre-fb878ecd5b.mp3",
+   "chars": 715,
+   "credits": 286
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "qualcomm-fournira-les-equipements-5g-du-reseau-terrestre-de--20261106/comprendre-5cc3ac524f.mp3",
+   "chars": 885,
+   "credits": 354
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "shield-ai-rachete-echodyne-pour-5-3-milliards-de-dollars-20261106/comprendre-84fccceb9a.mp3",
+   "chars": 819,
+   "credits": 328
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "texas-un-moratoire-sur-les-data-centers-menace-13-3-gw-de-pr-20261106/comprendre-2a4ee51d51.mp3",
+   "chars": 1015,
+   "credits": 406
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "agility-robotics-entre-au-nasdaq-avec-1-8-million-de-dollars-20261106/comprendre-3cee320ee6.mp3",
+   "chars": 1425,
+   "credits": 570
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "pe-sous-pression/comprendre-712403bfcb.mp3",
+   "chars": 1574,
+   "credits": 630
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "les-gros-cheques-de-l-ia-se-font-plus-rares-openai-n-a-leve--20261105/comprendre-92e559e1b2.mp3",
+   "chars": 1454,
+   "credits": 582
+  },
+  {
+   "demande": 3,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "airbnb-muscle-un-petit-modele-d-ia-pour-egaler-les-geants-10-20261105/comprendre-701817dc35.mp3",
+   "chars": 1213,
+   "credits": 485
   }
  ],
  "plafond_cle": 20000

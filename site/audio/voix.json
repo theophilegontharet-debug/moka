@@ -14,27 +14,6 @@
    "rate": 0
   },
   {
-   "id": "el:5OnMHwgTFgvPVwE8jP6B",
-   "engine": "elevenlabs",
-   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
-   "name": "Anaïs - Instructor",
-   "label": "Anaïs · ElevenLabs",
-   "gender": "female",
-   "category": "professional",
-   "rate": 1.0,
-   "optimise_pour": [
-    "eleven_multilingual_v2",
-    "eleven_turbo_v2_5",
-    "eleven_flash_v2_5",
-    "eleven_multilingual_sts_v2",
-    "eleven_v4",
-    "eleven_v4_hq",
-    "eleven_v4_post_trained",
-    "eleven_v4_turbo"
-   ],
-   "v4": true
-  },
-  {
    "id": "el:NEjemlRxgWmL5ZGJetsB",
    "engine": "elevenlabs",
    "voice_id": "NEjemlRxgWmL5ZGJetsB",
@@ -46,27 +25,6 @@
    "optimise_pour": [
     "eleven_multilingual_v2",
     "eleven_turbo_v2_5",
-    "eleven_flash_v2_5",
-    "eleven_v4",
-    "eleven_v4_hq",
-    "eleven_v4_post_trained",
-    "eleven_v4_turbo"
-   ],
-   "v4": true
-  },
-  {
-   "id": "el:NyxenPOqNyllHIzSoPbJ",
-   "engine": "elevenlabs",
-   "voice_id": "NyxenPOqNyllHIzSoPbJ",
-   "name": "Theo - Warm and Young",
-   "label": "Theo · ElevenLabs",
-   "gender": "male",
-   "category": "professional",
-   "rate": 2.0,
-   "optimise_pour": [
-    "eleven_turbo_v2_5",
-    "eleven_multilingual_sts_v2",
-    "eleven_multilingual_v2",
     "eleven_flash_v2_5",
     "eleven_v4",
     "eleven_v4_hq",
@@ -96,19 +54,40 @@
    "v4": true
   },
   {
-   "id": "el:BVBq6HVJVdnwOMJOqvy9",
+   "id": "el:5OnMHwgTFgvPVwE8jP6B",
    "engine": "elevenlabs",
-   "voice_id": "BVBq6HVJVdnwOMJOqvy9",
-   "name": "Nova - Deep and Calm",
-   "label": "Nova · ElevenLabs",
-   "gender": "male",
+   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
+   "name": "Anaïs - Instructor",
+   "label": "Anaïs · ElevenLabs",
+   "gender": "female",
    "category": "professional",
    "rate": 1.0,
    "optimise_pour": [
+    "eleven_multilingual_v2",
     "eleven_turbo_v2_5",
     "eleven_flash_v2_5",
-    "eleven_multilingual_v2",
     "eleven_multilingual_sts_v2",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:NyxenPOqNyllHIzSoPbJ",
+   "engine": "elevenlabs",
+   "voice_id": "NyxenPOqNyllHIzSoPbJ",
+   "name": "Theo - Warm and Young",
+   "label": "Theo · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 2.0,
+   "optimise_pour": [
+    "eleven_turbo_v2_5",
+    "eleven_multilingual_sts_v2",
+    "eleven_multilingual_v2",
+    "eleven_flash_v2_5",
     "eleven_v4",
     "eleven_v4_hq",
     "eleven_v4_post_trained",
@@ -129,6 +108,27 @@
     "eleven_multilingual_v2",
     "eleven_turbo_v2_5",
     "eleven_flash_v2_5",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:BVBq6HVJVdnwOMJOqvy9",
+   "engine": "elevenlabs",
+   "voice_id": "BVBq6HVJVdnwOMJOqvy9",
+   "name": "Nova - Deep and Calm",
+   "label": "Nova · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_multilingual_v2",
+    "eleven_multilingual_sts_v2",
     "eleven_v4",
     "eleven_v4_hq",
     "eleven_v4_post_trained",

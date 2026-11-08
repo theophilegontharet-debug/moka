@@ -1,4 +1,19 @@
 {
+ "abu-dhabi-attire-les-grands-fonds-de-private-equity-malgre-l-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1292790,
+    "chars": 1513,
+    "credits": 605,
+    "engine": "elevenlabs",
+    "file": "comprendre-ff0a1f75bc.mp3",
+    "hash": "ff0a1f75bc",
+    "model": "eleven_v4",
+    "seconds": 81,
+    "voice": "Patrick"
+   }
+  }
+ },
  "afrique-octobre-2026": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
@@ -14,6 +29,36 @@
    }
   }
  },
+ "agility-robotics-entre-au-nasdaq-avec-1-8-million-de-dollars-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1232604,
+    "chars": 1425,
+    "credits": 570,
+    "engine": "elevenlabs",
+    "file": "comprendre-3cee320ee6.mp3",
+    "hash": "3cee320ee6",
+    "model": "eleven_v4",
+    "seconds": 77,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "airbnb-muscle-un-petit-modele-d-ia-pour-egaler-les-geants-10-20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1060823,
+    "chars": 1213,
+    "credits": 485,
+    "engine": "elevenlabs",
+    "file": "comprendre-701817dc35.mp3",
+    "hash": "701817dc35",
+    "model": "eleven_v4",
+    "seconds": 66,
+    "voice": "Patrick"
+   }
+  }
+ },
  "anthropic-ipo": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
@@ -25,6 +70,47 @@
     "hash": "a7bb682815",
     "model": "eleven_v4",
     "seconds": 192,
+    "voice": "Patrick"
+   },
+   "comprendre": {
+    "bytes": 1375964,
+    "chars": 1701,
+    "credits": 680,
+    "engine": "elevenlabs",
+    "file": "comprendre-96d2c492ae.mp3",
+    "hash": "96d2c492ae",
+    "model": "eleven_v4",
+    "seconds": 86,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "apollo-investit-350-millions-de-dollars-pour-rendre-le-priva-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1256846,
+    "chars": 1491,
+    "credits": 596,
+    "engine": "elevenlabs",
+    "file": "comprendre-c03b1a645d.mp3",
+    "hash": "c03b1a645d",
+    "model": "eleven_v4",
+    "seconds": 79,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "europe-levees-semaine": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1612529,
+    "chars": 1918,
+    "credits": 767,
+    "engine": "elevenlabs",
+    "file": "comprendre-1cbf7f71db.mp3",
+    "hash": "1cbf7f71db",
+    "model": "eleven_v4",
+    "seconds": 101,
     "voice": "Patrick"
    }
   }
@@ -42,6 +128,17 @@
     "seconds": 244,
     "voice": "Patrick"
    },
+   "comprendre": {
+    "bytes": 1712421,
+    "chars": 2035,
+    "credits": 814,
+    "engine": "elevenlabs",
+    "file": "comprendre-8484278f55.mp3",
+    "hash": "8484278f55",
+    "model": "eleven_v4",
+    "seconds": 107,
+    "voice": "Patrick"
+   },
    "express": {
     "bytes": 548823,
     "chars": 643,
@@ -51,6 +148,21 @@
     "hash": "7539a8d948",
     "model": "eleven_v4",
     "seconds": 34,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "hardware-sans-chine": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1073780,
+    "chars": 1290,
+    "credits": 516,
+    "engine": "elevenlabs",
+    "file": "comprendre-711da205ca.mp3",
+    "hash": "711da205ca",
+    "model": "eleven_v4",
+    "seconds": 67,
     "voice": "Patrick"
    }
   }
@@ -66,6 +178,81 @@
     "hash": "2a3eda8470",
     "model": "eleven_v4",
     "seconds": 250,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "les-elections-americaines-menacent-la-course-aux-data-center-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 813809,
+    "chars": 956,
+    "credits": 382,
+    "engine": "elevenlabs",
+    "file": "comprendre-da19b90d82.mp3",
+    "hash": "da19b90d82",
+    "model": "eleven_v4",
+    "seconds": 51,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "les-gros-cheques-de-l-ia-se-font-plus-rares-openai-n-a-leve--20261105": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1165731,
+    "chars": 1454,
+    "credits": 582,
+    "engine": "elevenlabs",
+    "file": "comprendre-92e559e1b2.mp3",
+    "hash": "92e559e1b2",
+    "model": "eleven_v4",
+    "seconds": 73,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "mistral-ai-rachete-skiplabs-sa-cinquieme-acquisition-de-l-an-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 623220,
+    "chars": 715,
+    "credits": 286,
+    "engine": "elevenlabs",
+    "file": "comprendre-fb878ecd5b.mp3",
+    "hash": "fb878ecd5b",
+    "model": "eleven_v4",
+    "seconds": 39,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "pe-sous-pression": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1383487,
+    "chars": 1574,
+    "credits": 630,
+    "engine": "elevenlabs",
+    "file": "comprendre-712403bfcb.mp3",
+    "hash": "712403bfcb",
+    "model": "eleven_v4",
+    "seconds": 86,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "qualcomm-fournira-les-equipements-5g-du-reseau-terrestre-de--20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 767834,
+    "chars": 885,
+    "credits": 354,
+    "engine": "elevenlabs",
+    "file": "comprendre-5cc3ac524f.mp3",
+    "hash": "5cc3ac524f",
+    "model": "eleven_v4",
+    "seconds": 48,
     "voice": "Patrick"
    }
   }
@@ -107,6 +294,47 @@
     "hash": "b24a98282a",
     "model": "eleven_v4",
     "seconds": 113,
+    "voice": "Patrick"
+   },
+   "comprendre": {
+    "bytes": 1429463,
+    "chars": 1716,
+    "credits": 686,
+    "engine": "elevenlabs",
+    "file": "comprendre-2c426fd075.mp3",
+    "hash": "2c426fd075",
+    "model": "eleven_v4",
+    "seconds": 89,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "shield-ai-rachete-echodyne-pour-5-3-milliards-de-dollars-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 724366,
+    "chars": 819,
+    "credits": 328,
+    "engine": "elevenlabs",
+    "file": "comprendre-84fccceb9a.mp3",
+    "hash": "84fccceb9a",
+    "model": "eleven_v4",
+    "seconds": 45,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "texas-un-moratoire-sur-les-data-centers-menace-13-3-gw-de-pr-20261106": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 834289,
+    "chars": 1015,
+    "credits": 406,
+    "engine": "elevenlabs",
+    "file": "comprendre-2a4ee51d51.mp3",
+    "hash": "2a4ee51d51",
+    "model": "eleven_v4",
+    "seconds": 52,
     "voice": "Patrick"
    }
   }
