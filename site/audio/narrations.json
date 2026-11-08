@@ -1,6 +1,88 @@
 {
+ "afrique-octobre-2026": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "approfondir": {
+    "bytes": 3148572,
+    "chars": 3738,
+    "credits": 1494,
+    "engine": "elevenlabs",
+    "file": "approfondir-4c6921d056.mp3",
+    "hash": "4c6921d056",
+    "model": "eleven_v4",
+    "seconds": 197,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "anthropic-ipo": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "approfondir": {
+    "bytes": 3076350,
+    "chars": 3681,
+    "credits": 1470,
+    "engine": "elevenlabs",
+    "file": "approfondir-a7bb682815.mp3",
+    "hash": "a7bb682815",
+    "model": "eleven_v4",
+    "seconds": 192,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "exits-afrique-octobre": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "approfondir": {
+    "bytes": 3902152,
+    "chars": 4569,
+    "credits": 1827,
+    "engine": "elevenlabs",
+    "file": "approfondir-311222ff24.mp3",
+    "hash": "311222ff24",
+    "model": "eleven_v4",
+    "seconds": 244,
+    "voice": "Patrick"
+   },
+   "express": {
+    "bytes": 549744,
+    "chars": 643,
+    "credits": 256,
+    "engine": "elevenlabs",
+    "file": "express-7539a8d948.mp3",
+    "hash": "7539a8d948",
+    "model": "eleven_v4",
+    "seconds": 34,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "ido-sum-le-mur": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "approfondir": {
+    "bytes": 4004552,
+    "chars": 4493,
+    "credits": 1796,
+    "engine": "elevenlabs",
+    "file": "approfondir-2a3eda8470.mp3",
+    "hash": "2a3eda8470",
+    "model": "eleven_v4",
+    "seconds": 250,
+    "voice": "Patrick"
+   }
+  }
+ },
  "revolut-115-milliards": {
   "el:sHDOgYycy7bpotWEX7uh": {
+   "approfondir": {
+    "bytes": 2940010,
+    "chars": 3403,
+    "credits": 1360,
+    "engine": "elevenlabs",
+    "file": "approfondir-2598f0e3bd.mp3",
+    "hash": "2598f0e3bd",
+    "model": "eleven_v4",
+    "seconds": 184,
+    "voice": "Patrick"
+   },
    "comprendre": {
     "bytes": 1681910,
     "chars": 1962,
@@ -10,6 +92,21 @@
     "hash": "66709123f5",
     "model": "eleven_v4",
     "seconds": 105,
+    "voice": "Patrick"
+   }
+  }
+ },
+ "sequoia-recentre": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "approfondir": {
+    "bytes": 1812314,
+    "chars": 2075,
+    "credits": 830,
+    "engine": "elevenlabs",
+    "file": "approfondir-b24a98282a.mp3",
+    "hash": "b24a98282a",
+    "model": "eleven_v4",
+    "seconds": 113,
     "voice": "Patrick"
    }
   }

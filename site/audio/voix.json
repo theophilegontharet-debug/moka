@@ -14,18 +14,19 @@
    "rate": 0
   },
   {
-   "id": "el:sHDOgYycy7bpotWEX7uh",
+   "id": "el:5OnMHwgTFgvPVwE8jP6B",
    "engine": "elevenlabs",
-   "voice_id": "sHDOgYycy7bpotWEX7uh",
-   "name": "Patrick - Mature and Casual",
-   "label": "Patrick · ElevenLabs",
-   "gender": "male",
+   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
+   "name": "Anaïs - Instructor",
+   "label": "Anaïs · ElevenLabs",
+   "gender": "female",
    "category": "professional",
    "rate": 1.0,
    "optimise_pour": [
+    "eleven_multilingual_v2",
     "eleven_turbo_v2_5",
     "eleven_flash_v2_5",
-    "eleven_multilingual_v2",
+    "eleven_multilingual_sts_v2",
     "eleven_v4",
     "eleven_v4_hq",
     "eleven_v4_post_trained",
@@ -34,12 +35,12 @@
    "v4": true
   },
   {
-   "id": "el:X79PkZE4sUJaUOQBlYPp",
+   "id": "el:NEjemlRxgWmL5ZGJetsB",
    "engine": "elevenlabs",
-   "voice_id": "X79PkZE4sUJaUOQBlYPp",
-   "name": "Eric CBN - Deep narrator",
-   "label": "Eric CBN · ElevenLabs",
-   "gender": "male",
+   "voice_id": "NEjemlRxgWmL5ZGJetsB",
+   "name": "Claire - Conversationnel",
+   "label": "Claire · ElevenLabs",
+   "gender": "female",
    "category": "professional",
    "rate": 1.0,
    "optimise_pour": [
@@ -75,6 +76,26 @@
    "v4": true
   },
   {
+   "id": "el:sHDOgYycy7bpotWEX7uh",
+   "engine": "elevenlabs",
+   "voice_id": "sHDOgYycy7bpotWEX7uh",
+   "name": "Patrick - Mature and Casual",
+   "label": "Patrick · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_multilingual_v2",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
    "id": "el:BVBq6HVJVdnwOMJOqvy9",
    "engine": "elevenlabs",
    "voice_id": "BVBq6HVJVdnwOMJOqvy9",
@@ -96,39 +117,18 @@
    "v4": true
   },
   {
-   "id": "el:NEjemlRxgWmL5ZGJetsB",
+   "id": "el:X79PkZE4sUJaUOQBlYPp",
    "engine": "elevenlabs",
-   "voice_id": "NEjemlRxgWmL5ZGJetsB",
-   "name": "Claire - Conversationnel",
-   "label": "Claire · ElevenLabs",
-   "gender": "female",
+   "voice_id": "X79PkZE4sUJaUOQBlYPp",
+   "name": "Eric CBN - Deep narrator",
+   "label": "Eric CBN · ElevenLabs",
+   "gender": "male",
    "category": "professional",
    "rate": 1.0,
    "optimise_pour": [
     "eleven_multilingual_v2",
     "eleven_turbo_v2_5",
     "eleven_flash_v2_5",
-    "eleven_v4",
-    "eleven_v4_hq",
-    "eleven_v4_post_trained",
-    "eleven_v4_turbo"
-   ],
-   "v4": true
-  },
-  {
-   "id": "el:5OnMHwgTFgvPVwE8jP6B",
-   "engine": "elevenlabs",
-   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
-   "name": "Anaïs - Instructor",
-   "label": "Anaïs · ElevenLabs",
-   "gender": "female",
-   "category": "professional",
-   "rate": 1.0,
-   "optimise_pour": [
-    "eleven_multilingual_v2",
-    "eleven_turbo_v2_5",
-    "eleven_flash_v2_5",
-    "eleven_multilingual_sts_v2",
     "eleven_v4",
     "eleven_v4_hq",
     "eleven_v4_post_trained",

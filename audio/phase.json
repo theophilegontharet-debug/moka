@@ -1,9 +1,10 @@
 {
  "plafond": 10000,
- "consomme": 785,
+ "consomme": 9818,
  "note": "Phase 1 ElevenLabs. Aucun crédit consommé avant cette phase (banc arrêté à 0).",
  "demandes": [
-  1
+  1,
+  2
  ],
  "fichiers": [
   {
@@ -13,6 +14,62 @@
    "fichier": "revolut-115-milliards/comprendre-66709123f5.mp3",
    "credits": 785,
    "chars": 1962
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "afrique-octobre-2026/approfondir-4c6921d056.mp3",
+   "chars": 3738,
+   "credits": 1494
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "exits-afrique-octobre/approfondir-311222ff24.mp3",
+   "chars": 4569,
+   "credits": 1827
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "ido-sum-le-mur/approfondir-2a3eda8470.mp3",
+   "chars": 4493,
+   "credits": 1796
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "revolut-115-milliards/approfondir-2598f0e3bd.mp3",
+   "chars": 3403,
+   "credits": 1360
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "sequoia-recentre/approfondir-b24a98282a.mp3",
+   "chars": 2075,
+   "credits": 830
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "anthropic-ipo/approfondir-a7bb682815.mp3",
+   "chars": 3681,
+   "credits": 1470
+  },
+  {
+   "demande": 2,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "exits-afrique-octobre/express-7539a8d948.mp3",
+   "chars": 643,
+   "credits": 256
   }
  ]
 }
