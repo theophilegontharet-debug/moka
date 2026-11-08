@@ -1,0 +1,91 @@
+{
+ "budget_credits": 6000,
+ "marge_credits": 2000,
+ "moteurs": [
+  {
+   "id": "chirp-aoede",
+   "engine": "google",
+   "voice": "fr-FR-Chirp3-HD-Aoede",
+   "label": "Google Chirp 3 HD · Aoede (référence)"
+  },
+  {
+   "id": "v4-emilie",
+   "engine": "elevenlabs",
+   "model": "eleven_v4",
+   "voice_id": "d3AXX0BlgJHYFCuH9X88",
+   "voice": "Emilie",
+   "label": "ElevenLabs v4 · Emilie"
+  },
+  {
+   "id": "v4-anais",
+   "engine": "elevenlabs",
+   "model": "eleven_v4",
+   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
+   "voice": "Anaïs",
+   "label": "ElevenLabs v4 · Anaïs"
+  },
+  {
+   "id": "v4-koraly",
+   "engine": "elevenlabs",
+   "model": "eleven_v4",
+   "voice_id": "F1toM6PcP54s45kOOAyV",
+   "voice": "Koraly",
+   "label": "ElevenLabs v4 · Koraly (Expressive)"
+  },
+  {
+   "id": "v2-anais",
+   "engine": "elevenlabs",
+   "model": "eleven_multilingual_v2",
+   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
+   "voice": "Anaïs",
+   "label": "ElevenLabs Multilingual v2 · Anaïs",
+   "variantes": false
+  }
+ ],
+ "reglages_elevenlabs": {
+  "stability": 0.45,
+  "similarity_boost": 0.8,
+  "style": 0.3,
+  "use_speaker_boost": true,
+  "speed": 1.0
+ },
+ "passages": [
+  {
+   "id": "p1",
+   "theme": "Apostrophes et élisions",
+   "commun": "Le premier jour, le titre a pris jusqu'à dix-huit pour cent. Et selon Sifted, plusieurs membres de l'équipe européenne de Sequoia vont perdre leur poste.",
+   "chirp": {
+    "label": "variante adaptée à Chirp (retenue après les essais)",
+    "text": "Le premier jour, au plus haut de la séance, le titre gagnait dix-huit pour cent. Et selon Sifted, plusieurs personnes de son équipe européenne vont perdre leur emploi."
+   }
+  },
+  {
+   "id": "p2",
+   "theme": "Chiffres, multiples, pourcentages et montants",
+   "commun": "Pour te donner une idée de l'engouement, les investisseurs ont demandé 11,2 fois le nombre de titres proposés. L'opération a rapporté 7,84 milliards de livres égyptiennes. Et Revolut ? 115 milliards de dollars, +53 % en un an.",
+   "chirp": {
+    "label": "variante adaptée à Chirp (nombres en toutes lettres)",
+    "text": "Pour te donner une idée de l'engouement, les investisseurs ont demandé un peu plus de onze fois le nombre de titres proposés. L'opération a rapporté sept milliards huit cent quarante millions de livres égyptiennes. Et Revolut ? Cent quinze milliards de dollars, cinquante-trois pour cent de plus en un an."
+   }
+  },
+  {
+   "id": "p3",
+   "theme": "Noms propres, entreprises africaines et sigles",
+   "commun": "Au programme : MNT-Halan, cotée au Caire sous le symbole HALN, OPay, LekkeSlaap, 888Africa et le fonds Admaius Capital Partners. Côté sigles : la BERD, l'EGX et a16z."
+  },
+  {
+   "id": "p4",
+   "theme": "Phrase longue, pauses et ponctuation",
+   "commun": "Au moment de la vente, l'acheteur paie la marque et la plateforme, mais il reprend le portefeuille de prêts à sa valeur comptable. Autrement dit, une valorisation construite en dollars sur des prêts en monnaie locale est difficile à dépasser."
+  },
+  {
+   "id": "p5",
+   "theme": "Ton de chroniqueuse : réaction, puis sujet grave",
+   "commun": "Revolut vaut désormais cent quinze milliards de dollars. Oui, tu as bien entendu : cent quinze milliards. C'est énorme. Mais on change de registre. Chez Sequoia, la réorganisation a un coût humain : plusieurs personnes de son équipe européenne vont perdre leur emploi.",
+   "eleven": {
+    "label": "variante adaptée à ElevenLabs v4 (indications de jeu)",
+    "text": "[warmly] Revolut vaut désormais cent quinze milliards de dollars. [amused] Oui, tu as bien entendu : cent quinze milliards. C'est énorme. [serious] Mais on change de registre. [softly] Chez Sequoia, la réorganisation a un coût humain : plusieurs personnes de son équipe européenne vont perdre leur emploi."
+   }
+  }
+ ]
+}
