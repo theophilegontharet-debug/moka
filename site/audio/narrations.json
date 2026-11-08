@@ -1,0 +1,17 @@
+{
+ "revolut-115-milliards": {
+  "el:sHDOgYycy7bpotWEX7uh": {
+   "comprendre": {
+    "bytes": 1681910,
+    "chars": 1962,
+    "credits": 785,
+    "engine": "elevenlabs",
+    "file": "comprendre-66709123f5.mp3",
+    "hash": "66709123f5",
+    "model": "eleven_v4",
+    "seconds": 105,
+    "voice": "Patrick"
+   }
+  }
+ }
+}

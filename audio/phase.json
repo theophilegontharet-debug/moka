@@ -1,7 +1,17 @@
 {
  "plafond": 10000,
- "consomme": 0,
- "note": "Phase 1 ElevenLabs. Aucun cr\u00e9dit consomm\u00e9 avant cette phase (banc arr\u00eat\u00e9 \u00e0 0).",
- "demandes": [],
- "fichiers": []
+ "consomme": 785,
+ "note": "Phase 1 ElevenLabs. Aucun crédit consommé avant cette phase (banc arrêté à 0).",
+ "demandes": [
+  1
+ ],
+ "fichiers": [
+  {
+   "demande": 1,
+   "voix": "el:sHDOgYycy7bpotWEX7uh",
+   "modele": "eleven_v4",
+   "fichier": "revolut-115-milliards/comprendre-66709123f5.mp3",
+   "credits": 785
+  }
+ ]
 }
