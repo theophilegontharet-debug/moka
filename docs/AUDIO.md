@@ -101,3 +101,11 @@ C'est aussi la base du briefing quotidien narré.
   prend 2 voix féminines + 2 masculines (ou celles indiquées), envoie la clé en en-tête uniquement.
 - Plafonds : 2 000 caractères par essai, 6 000 par exécution (environ 4 200 pour 4 voix).
 - Page d'écoute : `/audio/essais/`, lien depuis la page Sources de Moka.
+
+## Narrateurs (branche audio-elevenlabs)
+
+- Catalogue : `site/audio/voix.json`, construit par `tools/audio/voix.py` à partir des voix enregistrées dans le compte ElevenLabs (identifiants exacts) + Google Chirp 3 HD / Aoede. Narrateur initial : Patrick.
+- Dans Moka, le choix du narrateur est mémorisé (`moka.audio.narrateur`). Le navigateur ne lit que des MP3 existants : changer de voix ne déclenche jamais de génération. Si la voix choisie n'a pas de MP3 pour l'article et le format, Moka l'indique et propose une voix disponible (Aoede en priorité).
+- Génération : modifier `audio/commande.json` sur la branche (`voix` gratuit, `estimer` gratuit, `generer` payant après accord). Une seule voix par commande ; une même demande n'est jamais rejouée ; MP3 réutilisés quand texte, voix et modèle sont identiques.
+- Crédits : registre `audio/phase.json` (plafond 10 000 pour la phase 1), solde vérifié avant chaque fichier, coût réel relevé après, arrêt sur anomalie. Le solde exact n'apparaît jamais dans les journaux publics.
+- Textes : règles communes (apostrophes, nombres, sigles, pauses, ton) ; fichiers facultatifs `<format>.elevenlabs.txt` / `<format>.google.txt` pour les ajustements propres à un moteur. Les balises d'expression ElevenLabs ne sont gardées que pour Eleven v4 ; les pauses Chirp deviennent de la ponctuation pour ElevenLabs.

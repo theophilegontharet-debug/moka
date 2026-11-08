@@ -1,1 +1,2 @@
-{"mode": "voix", "demande": 1}
+{"mode": "estimer", "demande": 1, "voix": "el:sHDOgYycy7bpotWEX7uh", "modele": "eleven_v4",
+ "articles": ["revolut-115-milliards"], "formats": ["comprendre"], "scripts": "audio/scripts-v2"}

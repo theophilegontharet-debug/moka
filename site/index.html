@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#FDF9F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A120D" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Moka, votre brief quotidien : startups africaines, capital, énergie et tech.">
-<link rel="preload" href="data/articles.json?v=02dbe4f16a" as="fetch" crossorigin>
+<link rel="preload" href="data/articles.json?v=fff0c1be04" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -432,6 +432,13 @@ details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
 .player .seek::-webkit-slider-thumb{-webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--espresso); margin-top:-5px}
 .player .seek::-moz-range-thumb{width:14px; height:14px; border:0; border-radius:50%; background:var(--espresso)}
 .player .more .sp{flex:1}
+.player .more #pNarr{flex:0 1 auto; max-width:55%}
+.player .skip{white-space:nowrap}
+.narr{margin:8px 0 0; font-size:13px; color:var(--muted)}
+.narr[hidden]{display:none}
+.narr label{display:flex; align-items:center; gap:8px}
+.narr select{height:30px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--text); font:inherit; font-size:13px; padding:0 8px; max-width:100%}
+.narr .na{margin:6px 0 0; font-size:12.5px; color:var(--accent-strong)}
 .player .skip{height:28px; padding:0 10px; border-radius:var(--r-pill); background:var(--soft); color:var(--accent-strong); font-weight:700; font-size:12px; font-variant-numeric:tabular-nums}
 body.has-player{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 130px)}
 </style>
@@ -468,7 +475,7 @@ body.has-player{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom
 window.MOKA_STANDALONE = true;
 window.claude = { use: async (name) => {
   if (name !== "db") return null;            // pas d'utilisateur, de Gmail, de rédaction ni d'upload
-  const load = fetch("data/articles.json?v=02dbe4f16a").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
+  const load = fetch("data/articles.json?v=fff0c1be04").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
   const none = { exists: false, data: () => undefined };
   return {
     collection: () => ({ onSnapshot: (ok, ko) => { load.then(list => ok({ docs: list.map(a => ({ id: a.id, exists: true, data: () => a })), metadata: { fromCache: false } })).catch(e => ko && ko(e)); return () => {}; } }),
@@ -928,7 +935,9 @@ const MokaAudio = (()=>{
   const synth = window.speechSynthesis;
   const ttsOk = !!(synth && window.SpeechSynthesisUtterance);
   const RATES=[0.85,0.9,0.95,1,1.15,1.3,1.5];
-  const st={ a:null, fmt:null, mode:null, chunks:[], i:0, playing:false, done:false, voices:[], voice:null, rate:1, token:0, index:{}, entry:null };
+  const st={ a:null, fmt:null, mode:null, chunks:[], i:0, playing:false, done:false, voices:[], voice:null, rate:1, token:0, index:{}, entry:null,
+    cat:[{id:"google:Aoede", engine:"google", name:"Aoede", label:"Aoede · Google", gender:"female"}], narrIdx:{}, narr:null };
+  try{ st.narr=localStorage.getItem("moka.audio.narrateur"); }catch(e){}
   try{ const r=parseFloat(localStorage.getItem("moka.audio.rate")); st.rate=RATES.includes(r)?r:1; }catch(e){}
   const el = new Audio(); el.preload="none";
   const rateLabel=r=>String(r).replace(".",",")+"×";
@@ -936,16 +945,31 @@ const MokaAudio = (()=>{
   const mmss=s=>{ s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); };
 
   // ---- index des MP3 disponibles (version autonome) ----
-  fetch("audio/index.json",{cache:"no-cache"}).then(r=>r.ok?r.json():{}).then(j=>{ st.index=j||{}; const a=S.articles.find(x=>"#a-"+x.id===location.hash); if(a) bindButton(a); }).catch(()=>{});
+  // Narrateurs : catalogue (voix.json) + MP3 déjà produits. Le navigateur ne fait jamais d'appel de synthèse :
+  // changer de voix ne déclenche aucune génération, seulement la lecture d'un MP3 existant.
+  const getJ=u=>fetch(u,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));
+  Promise.all([getJ("audio/index.json"), getJ("audio/voix.json"), getJ("audio/narrations.json")]).then(([j,c,n])=>{
+    st.index=j||{}; st.narrIdx=n||{};
+    if(c && Array.isArray(c.voix) && c.voix.length){ st.cat=c.voix; if(!st.narr || !st.cat.some(v=>v.id===st.narr)) st.narr=c.defaut||"google:Aoede"; }
+    if(!st.narr || !st.cat.some(v=>v.id===st.narr)) st.narr="google:Aoede";
+    const a=S.articles.find(x=>"#a-"+x.id===location.hash); if(a) bindButton(a); });
+  const vInfo=id=>st.cat.find(v=>v.id===id)||{id, name:id, label:id};
+  const vShort=id=>{ const v=vInfo(id); return String(v.name||id).split(/ [-–] /)[0].trim(); };
   const usedFormat=(a,f)=>{ const x=a.formats?.express, d=a.formats?.approfondir;
     if(f==="express"&&!x) return "comprendre"; if(f==="approfondir"&&(!d||d.status==="indisponible")) return "comprendre"; return f; };
-  const mp3For=(a,f)=>{ const u=usedFormat(a,f); const e=st.index?.[a.id]?.[u]; return e?{...e, used:u, src:`audio/${a.id}/${e.file}`}:null; };
+  const entryOf=(a,u,vid)=>{ const e=st.narrIdx?.[a.id]?.[vid]?.[u] || (vid==="google:Aoede"?st.index?.[a.id]?.[u]:null);
+    return e?{...e, used:u, vid, src:`audio/${a.id}/${e.file}`}:null; };
+  const mp3For=(a,f,vid)=>entryOf(a,usedFormat(a,f),vid||st.narr);
+  const availFor=(a,f)=>st.cat.map(v=>v.id).filter(id=>mp3For(a,f,id));
+  const altFor=(a,f)=>{ const av=availFor(a,f); const cur=st.a?.id===a.id&&st.mode==="mp3"?st.entry?.vid:null;
+    return cur&&av.includes(cur)?cur:av.includes("google:Aoede")?"google:Aoede":av[0]||null; };
 
   // ---- position mémorisée (par article et par format) ----
   const POSK="moka.audio.pos";
   const posAll=()=>{ try{ return JSON.parse(localStorage.getItem(POSK)||"{}"); }catch(e){ return {}; } };
-  const posGet=(a,f)=>posAll()[a+"|"+f]||0;
-  const posSet=(a,f,t)=>{ try{ const m=posAll(); if(t>0) m[a+"|"+f]=Math.round(t); else delete m[a+"|"+f]; localStorage.setItem(POSK,JSON.stringify(m)); }catch(e){} };
+  const pk=(a,f,v)=>a+"|"+f+(v&&v!=="google:Aoede"?"|"+v:"");
+  const posGet=(a,f,v)=>posAll()[pk(a,f,v)]||0;
+  const posSet=(a,f,t,v)=>{ v=v===undefined?st.entry?.vid:v; try{ const m=posAll(); const k=pk(a,f,v); if(t>0) m[k]=Math.round(t); else delete m[k]; localStorage.setItem(POSK,JSON.stringify(m)); }catch(e){} };
 
   // ---- texte pour la synthèse du navigateur (repli) ----
   const norm = t => String(t||"")
@@ -1012,7 +1036,7 @@ const MokaAudio = (()=>{
     if(!("mediaSession" in navigator)) return;
     const art=[{src:"icons/icon-512.png", sizes:"512x512", type:"image/png"}];
     if(a.image?.src) art.unshift({src:a.image.src, sizes:`${a.image.width||1400}x${a.image.height||933}`, type:"image/jpeg"});
-    try{ navigator.mediaSession.metadata=new MediaMetadata({title:a.title, artist:"Moka · voix Aoede", album:fmtName(st.fmt), artwork:art}); }catch(e){}
+    try{ navigator.mediaSession.metadata=new MediaMetadata({title:a.title, artist:"Moka · voix "+vShort(st.entry?.vid||"google:Aoede"), album:fmtName(st.fmt), artwork:art}); }catch(e){}
     const set=(k,f)=>{ try{ navigator.mediaSession.setActionHandler(k,f); }catch(e){} };
     set("play",()=>el.play()); set("pause",()=>el.pause());
     set("seekbackward",d=>{ el.currentTime=Math.max(0,el.currentTime-(d.seekOffset||15)); });
@@ -1024,7 +1048,7 @@ const MokaAudio = (()=>{
     if(ttsOk){ st.token++; synth.cancel(); }
     st.a=a; st.fmt=e.used; st.mode="mp3"; st.entry=e; st.chunks=[]; st.done=false;
     el.src=e.src; el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; el.preload="auto";
-    const pos=posGet(a.id, e.used);
+    const pos=posGet(a.id, e.used, e.vid);
     if(pos>3){ const once=()=>{ el.removeEventListener("loadedmetadata",once); if(!el.duration||pos<el.duration-3) el.currentTime=pos; }; el.addEventListener("loadedmetadata",once); }
     mediaSession(a); render(); el.play().catch(()=>{ st.playing=false; render(); });
   }
@@ -1033,8 +1057,8 @@ const MokaAudio = (()=>{
     el.pause(); const sc=script(a,S.format); st.a=a; st.fmt=sc.used; st.mode="tts"; st.entry=null; st.chunks=sc.chunks; st.i=0; speak();
   }
   function start(a){
-    const e=mp3For(a,S.format); const used=usedFormat(a,S.format);
-    const same = st.a && st.a.id===a.id && st.fmt===used && st.mode===(e?"mp3":"tts");
+    const alt=altFor(a,S.format); const e=mp3For(a,S.format)||(alt?mp3For(a,S.format,alt):null); const used=usedFormat(a,S.format);
+    const same = st.a && st.a.id===a.id && st.fmt===used && st.mode===(e?"mp3":"tts") && (!e || st.entry?.vid===e.vid);
     if(same && (st.mode==="mp3" || st.chunks.length)){ st.playing?pause():play(); return; }
     e?startMp3(a,e):startTts(a);
   }
@@ -1048,17 +1072,34 @@ const MokaAudio = (()=>{
   }
   function setRate(r){ r=parseFloat(r); if(!RATES.includes(r)) return; st.rate=r; try{ localStorage.setItem("moka.audio.rate",st.rate); }catch(e){}
     if(st.mode==="mp3"){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; progress(); } else if(st.playing) speak(); }
+  function setNarrator(id){
+    if(!st.cat.some(v=>v.id===id)) return; st.narr=id; try{ localStorage.setItem("moka.audio.narrateur",id); }catch(e){}
+    // lecture en cours : on passe au MP3 de la nouvelle voix s'il existe déjà ; sinon on continue et on signale l'indisponibilité
+    if(st.mode==="mp3" && st.a && st.entry?.vid!==id){ const e=entryOf(st.a, st.fmt, id); if(e){ const was=st.playing; posSet(st.a.id, st.fmt, el.currentTime); startMp3(st.a, e); if(!was) el.pause(); return; } }
+    render();
+  }
+  function narrSelect(a, idAttr, playing){
+    const groups=[["female","Voix féminines"],["male","Voix masculines"],[null,"Autres voix"]];
+    const sel=playing||st.narr, ok=v=>!!entryOf(a, usedFormat(a,S.format), v.id);
+    const opt=v=>`<option value="${esc(v.id)}"${v.id===sel?" selected":""}${playing&&!ok(v)?" disabled":""}>${esc(vShort(v.id))}${playing?"":" · "+(v.engine==="google"?"Google":"ElevenLabs")}${ok(v)?"":" — indisponible"}</option>`;
+    return `<select id="${idAttr}" aria-label="Narrateur">${groups.map(([g,l])=>{ const vs=st.cat.filter(v=>g?v.gender===g:!["female","male"].includes(v.gender)); return vs.length?`<optgroup label="${l}">${vs.map(opt).join("")}</optgroup>`:""; }).join("")}</select>`;
+  }
   function setVoice(uri){ st.voice=st.voices.find(v=>v.voiceURI===uri)||st.voice; try{ localStorage.setItem("moka.audio.voice",uri); }catch(e){} if(st.playing) speak(); }
 
   // ---- bouton « Écouter » de l'article ----
   function bindButton(a){
     const b=document.getElementById("listenBtn"); if(!b) return;
-    const e=mp3For(a,S.format); const used=usedFormat(a,S.format);
-    const cur = st.a && st.a.id===a.id && st.fmt===used;
+    const mine=mp3For(a,S.format); const alt=altFor(a,S.format); const e=mine||(alt?mp3For(a,S.format,alt):null); const used=usedFormat(a,S.format);
+    const cur = st.a && st.a.id===a.id && st.fmt===used && (!e || st.mode!=="mp3" || st.entry?.vid===e.vid);
     let label="Écouter", meta;
+    let row=document.getElementById("narrRow");
+    if(!row){ row=document.createElement("div"); row.id="narrRow"; row.className="narr"; b.insertAdjacentElement("afterend", row); }
+    row.hidden=!e;
     if(e){
-      const secs=e.seconds||0; meta=`${fmtName(used)} · ${secs<60?secs+" s":Math.round(secs/60)+" min"} · voix Aoede`;
-      const pos=posGet(a.id,used);
+      row.innerHTML=`<label>Narrateur ${narrSelect(a,"narrSel")}</label>${mine?"":`<p class="na">${esc(vShort(st.narr))} n’est pas encore disponible pour ce format. Lecture proposée avec ${esc(vShort(e.vid))}.</p>`}`;
+      const ns=row.querySelector("#narrSel"); ns.onchange=()=>setNarrator(ns.value);
+      const secs=e.seconds||0; meta=`${fmtName(used)} · ${secs<60?secs+" s":Math.round(secs/60)+" min"} · voix ${vShort(e.vid)}`;
+      const pos=posGet(a.id,used,e.vid);
       if(cur && st.playing) label="Pause"; else if(cur && st.done) label="Réécouter"; else if(pos>3) label=`Reprendre à ${mmss(pos)}`;
     } else {
       const sc=script(a,S.format); const mins=Math.max(1,Math.round(sc.chunks.join(" ").split(/\s+/).length/(160*st.rate)));
@@ -1091,7 +1132,7 @@ const MokaAudio = (()=>{
         <button class="pbtn" id="pStop" type="button" aria-label="Arrêter">${I.stop}</button></div>
         ${st.mode==="mp3"
           ? `<input class="seek" id="pSeek" type="range" min="0" max="1" step="1" value="0" aria-label="Position de lecture">
-             <div class="more">${st.entry?.voice?`Voix ${esc(st.entry.voice)} · Google`:"Narration"} <span class="sp"></span><button class="skip" id="pBack" type="button" aria-label="Reculer de 15 secondes">−15 s</button><button class="skip" id="pFwd" type="button" aria-label="Avancer de 15 secondes">+15 s</button></div>`
+             <div class="more">${st.a&&st.entry?narrSelect(st.a,"pNarr",st.entry.vid):"Narration"} <span class="sp"></span><button class="skip" id="pBack" type="button" aria-label="Reculer de 15 secondes">−15 s</button><button class="skip" id="pFwd" type="button" aria-label="Avancer de 15 secondes">+15 s</button></div>`
           : `<div class="bar"><i></i></div>${st.voices.length>1?`<label class="more">Voix <select id="pVoice">${st.voices.map(v=>`<option value="${esc(v.voiceURI)}"${v===st.voice?" selected":""}>${esc(v.name.replace(/\s*\(.*\)$/,""))} · ${esc(v.lang)}</option>`).join("")}</select></label>`:""}`}`;
       box.querySelector("#pPlay").onclick=()=>st.playing?pause():play();
       box.querySelector("#pStop").onclick=stop;
@@ -1100,13 +1141,14 @@ const MokaAudio = (()=>{
       const bk=box.querySelector("#pBack"); if(bk) bk.onclick=()=>{ el.currentTime=Math.max(0,el.currentTime-15); };
       const fw=box.querySelector("#pFwd"); if(fw) fw.onclick=()=>{ el.currentTime=Math.min(el.duration||1e9,el.currentTime+15); };
       const sel=box.querySelector("#pVoice"); if(sel) sel.onchange=()=>setVoice(sel.value);
+      const pn=box.querySelector("#pNarr"); if(pn) pn.onchange=()=>setNarrator(pn.value);
       progress();
     } else box.innerHTML="";
     const a=st.a||S.articles.find(x=>"#a-"+x.id===location.hash);
     if(a && location.hash==="#a-"+a.id) bindButton(a);
   }
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden && st.mode==="tts" && st.playing && !synth.speaking){ st.playing=false; render(); } });
-  return {ok:ttsOk||true, start, play, pause, stop, bindButton, _st:st, _el:el, _script:script};
+  return {ok:ttsOk||true, setNarrator, start, play, pause, stop, bindButton, _st:st, _el:el, _script:script};
 })();
 
 /* ---------- Démarrage ---------- */
