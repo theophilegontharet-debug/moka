@@ -1,14 +1,35 @@
 [
- {"article":"anthropic-ipo","file":"File:Nasdaq Tower May 2026.jpg","name":"nasdaq-times-square","kind":"contexte","crop_y":0.55,
-  "caption":"la tour Nasdaq à Times Square, New York, en mai 2026","alt":"Façade de la tour Nasdaq couverte d'écrans"},
- {"article":"logistique-depasse-fintech","file":"File:Boda in quick transit.jpg","name":"boda-boda-ouganda","kind":"contexte",
-  "caption":"un moto-taxi (« boda boda ») en Ouganda, en 2018","alt":"Moto-taxi roulant dans une rue d'Ouganda"},
- {"article":"base-qui-samincit","file":"File:Nairobi iHub.jpg","name":"ihub-nairobi","kind":"contexte",
-  "caption":"l'iHub, lieu de rencontre des startups à Nairobi, en 2016","alt":"Espace de travail de l'iHub à Nairobi"},
- {"article":"pe-sous-pression","file":"File:Andreessen Horowitz building at night.jpg","name":"a16z-san-francisco","kind":"contexte",
-  "caption":"les bureaux d'a16z au 180 Townsend Street, San Francisco, en 2024","alt":"Immeuble d'a16z à San Francisco, de nuit"},
- {"article":"exits-afrique-octobre","file":"File:Egypt SE HQ.png","name":"bourse-egyptienne","kind":"contexte",
-  "caption":"le siège de la Bourse égyptienne (EGX), où MNT-Halan est cotée","alt":"Siège de la Bourse égyptienne"},
- {"article":"femmes-fondatrices","file":"File:The Wot-If Trust, South Africa 2.jpg","name":"wot-if-trust","kind":"contexte",
-  "caption":"une photo de l'association The Wot-If? Trust, en Afrique du Sud, en 2017","alt":"Photo de l'association The Wot-If? Trust"}
+ {
+  "article": "anthropic-ipo",
+  "file": "File:Nasdaq Tower May 2026.jpg",
+  "name": "nasdaq-times-square",
+  "kind": "contexte",
+  "crop_y": 0.55,
+  "caption": "la tour Nasdaq à Times Square, New York, en mai 2026",
+  "alt": "Façade de la tour Nasdaq couverte d'écrans"
+ },
+ {
+  "article": "logistique-depasse-fintech",
+  "file": "File:Boda in quick transit.jpg",
+  "name": "boda-boda-ouganda",
+  "kind": "contexte",
+  "caption": "un moto-taxi (« boda boda ») en Ouganda, en 2018",
+  "alt": "Moto-taxi roulant dans une rue d'Ouganda"
+ },
+ {
+  "article": "pe-sous-pression",
+  "file": "File:Andreessen Horowitz building at night.jpg",
+  "name": "a16z-san-francisco",
+  "kind": "contexte",
+  "caption": "les bureaux d'a16z au 180 Townsend Street, San Francisco, en 2024",
+  "alt": "Immeuble d'a16z à San Francisco, de nuit"
+ },
+ {
+  "article": "exits-afrique-octobre",
+  "file": "File:Egypt SE HQ.png",
+  "name": "bourse-egyptienne",
+  "kind": "contexte",
+  "caption": "le siège de la Bourse égyptienne (EGX), où MNT-Halan est cotée",
+  "alt": "Siège de la Bourse égyptienne"
+ }
 ]
