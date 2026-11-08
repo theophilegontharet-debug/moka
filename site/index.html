@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Moka</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Moka">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FDF9F4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A120D" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Moka, votre brief quotidien : startups africaines, capital, énergie et tech.">
+<link rel="preload" href="data/articles.json?v=b47cbc98a3" as="fetch" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   MOKA · design system v2
+   Layout : mobile d'abord. Une colonne fluide, barre d'onglets en bas
+   pour le pouce ; sur ordinateur, grille 12 colonnes et navigation en haut.
+   ========================================================= */
+:root{
+  /* Palette de marque (planche d'identité) */
+  --espresso:#4A2C1F; --mocha:#8B5A3C; --latte:#D7A77A; --cream:#F7E9DC; --ivory:#FDF9F4;
+  /* Usages */
+  --bg:var(--ivory);            /* fond de l'app */
+  --surface:#FFFFFF;            /* cartes */
+  --soft:var(--cream);          /* fonds doux, chiffres, encadrés */
+  --title:var(--espresso);      /* titres */
+  --text:#33241B;               /* texte courant */
+  --muted:#7D6A5D;              /* métadonnées */
+  --line:#EFE2D4;               /* filets */
+  --accent:var(--mocha);        /* liens, actions, états actifs */
+  --accent-strong:var(--espresso);
+  --on-accent:#FFFFFF;
+  --highlight:var(--latte);     /* étincelle, soulignés, focus */
+  --warn:#9A5A16; --warn-soft:#FBEBD6;
+  /* Teintes de rubriques : sourdes, pour casser la monotonie brune sans la contredire */
+  --c-afrique:#B4643C; --c-capital:#4E6B86; --c-ecoafrique:#7B8B4E; --c-energie:#C08A2E; --c-tech:#3F7A74; --c-monde:#7A5068;
+  /* Typo */
+  --font-head:"Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body:"Figtree", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  /* Échelle */
+  --t-xs:12px; --t-sm:14px; --t-md:16px; --t-lg:18px; --t-xl:22px; --t-2xl:28px; --t-3xl:34px;
+  /* Espacements (base 4) */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px; --s12:48px;
+  /* Rayons, ombres */
+  --r-sm:10px; --r-md:16px; --r-lg:22px; --r-pill:999px;
+  --shadow:0 1px 2px rgba(74,44,31,.06), 0 8px 24px -12px rgba(74,44,31,.18);
+  --shadow-lift:0 2px 4px rgba(74,44,31,.06), 0 16px 32px -14px rgba(74,44,31,.28);
+  --tabbar-h:64px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17100C; --surface:#21170F; --soft:#2C1F16; --title:#F7E9DC; --text:#EADCCD; --muted:#B19C8A; --line:#3A2B20;
+    --accent:#D7A77A; --accent-strong:#F7E9DC; --on-accent:#2A1810; --warn:#F0B878; --warn-soft:#3A2A1A;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6); --shadow-lift:var(--shadow);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17100C; --surface:#21170F; --soft:#2C1F16; --title:#F7E9DC; --text:#EADCCD; --muted:#B19C8A; --line:#3A2B20;
+  --accent:#D7A77A; --accent-strong:#F7E9DC; --on-accent:#2A1810; --warn:#F0B878; --warn-soft:#3A2A1A;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.6); --shadow-lift:var(--shadow);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:var(--t-md); line-height:1.5; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color:transparent; padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom))}
+@media (min-width:900px){ body{padding-bottom:0} }
+a{color:inherit; text-decoration:none}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer}
+img{max-width:100%; display:block}
+:focus-visible{outline:2px solid var(--highlight); outline-offset:2px; border-radius:6px}
+h1,h2,h3{font-family:var(--font-head); color:var(--title); font-weight:600; text-wrap:balance; margin:0; letter-spacing:-.01em}
+.wrap{max-width:1160px; margin:0 auto; padding:0 max(var(--s4), env(safe-area-inset-left)) 0 max(var(--s4), env(safe-area-inset-right))}
+@media (min-width:640px){ .wrap{padding:0 var(--s6)} }
+.ico{width:22px; height:22px; flex:none; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+
+/* ---------- En-tête ---------- */
+.appbar{position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:saturate(1.4) blur(14px); -webkit-backdrop-filter:saturate(1.4) blur(14px); padding-top:env(safe-area-inset-top)}
+.appbar .wrap{display:flex; align-items:center; gap:var(--s3); height:60px}
+.logo{display:flex; align-items:center; gap:10px}
+.logo img{width:38px; height:auto}
+.logo b{font-family:var(--font-head); font-weight:600; font-size:27px; letter-spacing:-.02em; color:var(--title); line-height:1}
+.logo small{display:none; font-size:10px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-left:6px; padding-top:4px}
+@media (min-width:900px){ .logo small{display:block} }
+.topnav{margin-left:auto; display:none; gap:4px}
+@media (min-width:900px){ .topnav{display:flex} }
+.topnav a{display:flex; align-items:center; gap:8px; padding:9px 14px; border-radius:var(--r-pill); font-weight:600; font-size:var(--t-sm); color:var(--muted)}
+.topnav a:hover{color:var(--title); background:var(--soft)}
+.topnav a[aria-current="page"]{color:var(--title); background:var(--soft)}
+.topnav .ico{width:19px; height:19px}
+.cnt{display:inline-grid; place-items:center; min-width:18px; height:18px; padding:0 5px; border-radius:9px; background:var(--accent); color:var(--on-accent); font-size:11px; font-weight:700; font-variant-numeric:tabular-nums}
+.appbar-date{margin-left:auto; font-size:var(--t-xs); font-weight:600; color:var(--muted); text-transform:capitalize}
+@media (min-width:900px){ .appbar-date{display:none} }
+
+/* ---------- Barre d'onglets (mobile) ---------- */
+.tabbar{position:fixed; left:0; right:0; bottom:0; z-index:40; background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom)}
+.tabbar nav{display:grid; grid-template-columns:repeat(4,1fr); height:var(--tabbar-h); max-width:560px; margin:0 auto}
+.tabbar a{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:11px; font-weight:600; color:var(--muted); position:relative}
+.tabbar a[aria-current="page"]{color:var(--accent-strong)}
+.tabbar a[aria-current="page"] .ico{stroke-width:2.2}
+.tabbar a[aria-current="page"]::before{content:""; position:absolute; top:0; width:28px; height:3px; border-radius:0 0 3px 3px; background:var(--highlight)}
+.tabbar .cnt{position:absolute; top:8px; left:calc(50% + 6px); min-width:16px; height:16px; font-size:10px}
+@media (min-width:900px){ .tabbar{display:none} }
+
+/* ---------- Rubriques ---------- */
+.cats{display:flex; gap:var(--s2); overflow-x:auto; padding:var(--s2) 0 var(--s3); scrollbar-width:none; scroll-snap-type:x proximity}
+.cats::-webkit-scrollbar{display:none}
+.chip{flex:none; display:inline-flex; align-items:center; gap:8px; height:36px; padding:0 14px; border-radius:var(--r-pill); background:var(--surface); border:1px solid var(--line); font-size:var(--t-sm); font-weight:600; color:var(--text); scroll-snap-align:start; transition:background .15s, border-color .15s}
+.chip:hover{border-color:var(--latte)}
+.chip i{width:8px; height:8px; border-radius:50%; background:var(--dot, var(--latte))}
+.chip .n{color:var(--muted); font-weight:500; font-variant-numeric:tabular-nums}
+.chip[aria-current="page"]{background:var(--espresso); border-color:var(--espresso); color:var(--ivory)}
+.chip[aria-current="page"] .n{color:var(--latte)}
+:root[data-theme="dark"] .chip[aria-current="page"]{background:var(--cream); color:#2A1810; border-color:var(--cream)}
+
+/* ---------- Typo & métadonnées ---------- */
+.eyebrow{display:inline-flex; align-items:center; gap:7px; font-size:var(--t-xs); font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--cat, var(--accent))}
+.eyebrow i{width:7px; height:7px; border-radius:50%; background:var(--cat, var(--accent))}
+.meta{display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; font-size:13px; color:var(--muted)}
+.meta span + span::before{content:""; display:inline-block; width:3px; height:3px; border-radius:50%; background:currentColor; opacity:.5; margin-right:10px; vertical-align:middle}
+.tag{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; letter-spacing:.03em; padding:3px 9px; border-radius:var(--r-pill); background:var(--soft); color:var(--muted)}
+.tag.warn{background:var(--warn-soft); color:var(--warn)}
+.tag.auto{background:var(--warn-soft); color:var(--warn)}
+.tag .ico{width:13px; height:13px; stroke-width:2.2}
+
+/* ---------- Visuels ---------- */
+.media{position:relative; overflow:hidden; background:var(--soft); border-radius:var(--r-md)}
+.media img{width:100%; height:100%; object-fit:cover}
+.media .badge-ill{position:absolute; left:10px; top:10px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:4px 8px; border-radius:var(--r-pill); background:rgba(253,249,244,.82); color:#4A2C1F; backdrop-filter:blur(6px)}
+.media .big{position:absolute; left:16px; bottom:12px; right:16px; font-family:var(--font-head); font-weight:600; color:#FFFDF9; letter-spacing:-.02em; line-height:1; text-shadow:0 2px 16px rgba(40,20,10,.25)}
+
+/* ---------- Une ---------- */
+.hello{padding:var(--s4) 0 var(--s2)}
+.hello .d{font-size:var(--t-sm); font-weight:600; color:var(--muted); text-transform:capitalize}
+.hello h1{font-size:var(--t-3xl); line-height:1.08; margin-top:2px}
+.hello p{margin:var(--s2) 0 0; color:var(--muted); max-width:56ch}
+@media (min-width:900px){ .hello{padding:var(--s8) 0 var(--s4)} .hello h1{font-size:44px} }
+
+.lead{display:grid; gap:var(--s6); margin:var(--s4) 0 var(--s8)}
+@media (min-width:900px){ .lead{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:var(--s8)} }
+.hero{display:block; border-radius:var(--r-lg); overflow:hidden; background:var(--surface); box-shadow:var(--shadow); transition:transform .2s, box-shadow .2s}
+.hero:hover{transform:translateY(-2px); box-shadow:var(--shadow-lift)}
+.hero .media{border-radius:0; aspect-ratio:4/3.5}
+@media (min-width:640px){ .hero .media{aspect-ratio:16/9.5} }
+.hero .media::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(30,15,8,0) 28%, rgba(30,15,8,.55) 62%, rgba(30,15,8,.82) 100%)}
+.hero .over h2{text-shadow:0 1px 12px rgba(20,10,5,.35)}
+.hero .over{position:absolute; z-index:2; left:var(--s5); right:var(--s5); bottom:var(--s5); display:grid; gap:var(--s2)}
+.hero .over .eyebrow{color:var(--latte)} .hero .over .eyebrow i{background:var(--latte)}
+.hero .over h2{color:#FFFDF9; font-size:23px; line-height:1.16}
+@media (min-width:640px){ .hero .over h2{font-size:34px} }
+.hero .body{padding:var(--s4) var(--s5) var(--s5); display:grid; gap:var(--s3)}
+.hero .body p{margin:0; font-size:var(--t-lg); line-height:1.5; color:var(--text)}
+.hero .media .big{display:none}
+
+.stack{display:grid; gap:0; align-content:start}
+.stack .head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:var(--s2)}
+.row{display:grid; grid-template-columns:1fr 92px; gap:var(--s4); align-items:start; padding:var(--s4) 0; border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0; padding-top:var(--s2)}
+.row h3{font-size:var(--t-lg); line-height:1.25; margin:6px 0 8px}
+.row .media{aspect-ratio:1; border-radius:var(--r-sm)}
+.row .media .big{font-size:19px; left:9px; bottom:8px}
+.row:hover h3{color:var(--accent)}
+
+.sec{margin:var(--s10) 0 0}
+.sec-head{display:flex; align-items:baseline; justify-content:space-between; gap:var(--s3); margin-bottom:var(--s4)}
+.sec-head h2{font-size:var(--t-xl)}
+.sec-head h2 .eyebrow{display:block; margin-bottom:4px}
+.sec-head a{font-size:var(--t-sm); font-weight:600; color:var(--accent); white-space:nowrap}
+.sec-head a:hover{text-decoration:underline; text-underline-offset:3px}
+
+/* carrousel « L'essentiel » */
+.rail{display:grid; grid-auto-flow:column; grid-auto-columns:78%; gap:var(--s4); overflow-x:auto; scroll-snap-type:x mandatory; padding:2px var(--s4) var(--s4); margin:0 calc(-1 * var(--s4)); scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail > *{scroll-snap-align:start}
+@media (min-width:640px){ .rail{grid-auto-columns:42%; margin:0 calc(-1 * var(--s6)); padding:2px var(--s6) var(--s4)} }
+@media (min-width:900px){ .rail{grid-auto-flow:row; grid-template-columns:repeat(4,1fr); overflow:visible; margin:0; padding:0} }
+
+.card{display:grid; gap:var(--s3); align-content:start; background:var(--surface); border-radius:var(--r-md); overflow:hidden; box-shadow:var(--shadow); transition:transform .2s, box-shadow .2s}
+.card:hover{transform:translateY(-2px); box-shadow:var(--shadow-lift)}
+.card .media{border-radius:0; aspect-ratio:16/10}
+.card .media .big{font-size:26px}
+.card .c-body{padding:0 var(--s4) var(--s4); display:grid; gap:var(--s2)}
+.card h3{font-size:var(--t-lg); line-height:1.25}
+.card p{margin:0; font-size:15px; color:var(--muted); line-height:1.45; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden}
+
+/* carte « analyse » : variation sombre */
+.card.dark{background:var(--espresso); color:var(--cream)}
+.card.dark h3{color:var(--ivory)} .card.dark p{color:#E2CBB6} .card.dark .meta{color:#CDB39C}
+.card.dark .eyebrow{color:var(--latte)} .card.dark .eyebrow i{background:var(--latte)}
+
+/* chiffre à retenir */
+.figure-card{display:grid; gap:var(--s2); padding:var(--s6) var(--s5); border-radius:var(--r-lg); background:var(--soft); position:relative; overflow:hidden}
+.figure-card .lbl{font-size:var(--t-xs); font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent)}
+.figure-card b{font-family:var(--font-head); font-weight:600; font-size:64px; line-height:1; color:var(--espresso); letter-spacing:-.03em; font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .figure-card b{color:var(--latte)}
+.figure-card p{margin:0; font-size:var(--t-lg); max-width:42ch; color:var(--text)}
+.figure-card a{font-weight:600; color:var(--accent); font-size:var(--t-sm)}
+.figure-card img.spark{position:absolute; right:-18px; top:-10px; width:150px; opacity:.16; pointer-events:none}
+@media (min-width:900px){ .figure-card{grid-template-columns:auto 1fr; align-items:center; column-gap:var(--s8); padding:var(--s8)} .figure-card .lbl{grid-column:1/-1} .figure-card b{font-size:88px} }
+
+/* sections de rubrique : une grande + des lignes */
+.mix{display:grid; gap:var(--s5)}
+@media (min-width:900px){ .mix{grid-template-columns:1.25fr 1fr; gap:var(--s8)} }
+.mix .stack .row:first-child{padding-top:0; border-top:0}
+
+.empty{padding:var(--s10) 0; color:var(--muted); font-size:var(--t-lg); max-width:52ch}
+.empty h2{font-size:var(--t-2xl); margin-bottom:var(--s2)}
+.notice{display:flex; gap:var(--s3); align-items:flex-start; background:var(--warn-soft); color:var(--text); border-radius:var(--r-md); padding:var(--s3) var(--s4); margin:var(--s3) 0; font-size:15px}
+
+/* ---------- Article ---------- */
+.reader{max-width:720px; margin:0 auto; padding-bottom:var(--s12)}
+.reader-bar{position:sticky; top:calc(60px + env(safe-area-inset-top)); z-index:20; display:flex; align-items:center; gap:var(--s2); padding:var(--s2) 0; background:color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px)}
+.icon-btn{display:inline-grid; place-items:center; width:42px; height:42px; border-radius:50%; background:var(--surface); border:1px solid var(--line); color:var(--title); transition:background .15s, border-color .15s}
+.icon-btn:hover{border-color:var(--latte)}
+.icon-btn[aria-pressed="true"]{background:var(--espresso); border-color:var(--espresso); color:var(--ivory)}
+.icon-btn[aria-pressed="true"] .ico{fill:currentColor}
+.reader-bar .grow{flex:1; min-width:0; font-size:var(--t-sm); font-weight:600; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.r-hero{margin:var(--s2) calc(-1 * var(--s4)) 0}
+.r-hero .media{border-radius:0; aspect-ratio:16/10}
+@media (min-width:640px){ .r-hero{margin:var(--s2) 0 0} .r-hero .media{border-radius:var(--r-lg)} }
+.caption{display:flex; justify-content:space-between; gap:var(--s3); font-size:12px; color:var(--muted); padding:var(--s2) var(--s4) 0}
+@media (min-width:640px){ .caption{padding:var(--s2) 0 0} }
+.caption button, .caption a{color:var(--accent); font-weight:600}
+.r-head{display:grid; gap:var(--s3); margin:var(--s6) 0 var(--s5)}
+.r-head h1{font-size:30px; line-height:1.12}
+@media (min-width:640px){ .r-head h1{font-size:40px} }
+.r-head .dek{margin:0; font-size:19px; line-height:1.5; color:var(--muted)}
+.r-meta{display:flex; flex-wrap:wrap; gap:var(--s2) var(--s4); align-items:center; padding:var(--s3) 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:13px; color:var(--muted)}
+.r-meta b{color:var(--text); font-weight:600}
+.srcdots{display:flex}
+.srcdots span{display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--soft); color:var(--espresso); font-size:11px; font-weight:700; border:2px solid var(--bg); margin-left:-8px}
+.srcdots span:first-child{margin-left:0}
+:root[data-theme="dark"] .srcdots span{color:var(--latte)}
+
+.lede{font-size:20px; line-height:1.55; color:var(--title); font-weight:500; margin:var(--s6) 0}
+.figs{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(150px, 46%); gap:var(--s3); overflow-x:auto; scroll-snap-type:x mandatory; margin:0 calc(-1 * var(--s4)) var(--s8); padding:0 var(--s4) 4px; scrollbar-width:none}
+.figs::-webkit-scrollbar{display:none}
+@media (min-width:640px){ .figs{grid-auto-flow:row; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); margin:0 0 var(--s8); padding:0; overflow:visible} }
+.figs > div{scroll-snap-align:start; background:var(--soft); border-radius:var(--r-md); padding:var(--s4); display:grid; gap:4px; align-content:start}
+.figs b{font-family:var(--font-head); font-weight:600; font-size:28px; line-height:1.05; color:var(--espresso); letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .figs b{color:var(--latte)}
+.figs span{font-size:14px; font-weight:600; color:var(--text); line-height:1.3}
+.figs small{font-size:12.5px; color:var(--muted); line-height:1.35}
+.prose{font-size:18px; line-height:1.7}
+.prose p{margin:0 0 1.1em; max-width:64ch}
+.prose h2{font-size:var(--t-xl); margin:1.6em 0 .5em}
+.blk{margin:var(--s10) 0}
+.blk-title{display:flex; align-items:center; gap:8px; font-family:var(--font-head); font-size:var(--t-lg); font-weight:600; color:var(--title); margin-bottom:var(--s3)}
+.blk-title .ico{width:20px; height:20px; color:var(--accent)}
+.why{background:var(--soft); border-radius:var(--r-lg); padding:var(--s5); position:relative}
+.why p{margin:0; font-size:var(--t-lg); line-height:1.6}
+.ctx{border-left:3px solid var(--latte); padding:2px 0 2px var(--s4)}
+.ctx p{margin:0; font-size:17px; line-height:1.6}
+.ctx .note{font-size:12.5px; color:var(--muted); margin-top:6px}
+details.q{border-bottom:1px solid var(--line)}
+details.q:first-of-type{border-top:1px solid var(--line)}
+details.q summary{cursor:pointer; padding:var(--s4) 0; font-weight:600; font-size:var(--t-md); list-style:none; display:flex; justify-content:space-between; align-items:center; gap:var(--s3); color:var(--title)}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .ico{width:18px; height:18px; color:var(--accent); transition:transform .2s}
+details.q[open] summary .ico{transform:rotate(45deg)}
+details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
+.unk ul{margin:0; padding:0; list-style:none; display:grid; gap:var(--s2)}
+.unk li{display:grid; grid-template-columns:20px 1fr; gap:var(--s2); font-size:15.5px; line-height:1.5}
+.unk li::before{content:"?"; display:grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--warn-soft); color:var(--warn); font-size:12px; font-weight:700; margin-top:1px}
+.timeline{list-style:none; margin:0; padding:0; display:grid; gap:0}
+.timeline li{display:grid; grid-template-columns:14px 1fr; gap:var(--s3); padding-bottom:var(--s4); position:relative}
+.timeline li::before{content:""; width:12px; height:12px; border-radius:50%; background:var(--bg); border:3px solid var(--accent); margin-top:4px; z-index:1}
+.timeline li:not(:last-child)::after{content:""; position:absolute; left:6px; top:16px; bottom:0; width:2px; background:var(--line)}
+.timeline time{font-size:13px; font-weight:700; color:var(--accent)}
+.timeline p{margin:2px 0 0; font-size:16px}
+.timeline small{color:var(--muted)}
+.items .it{display:grid; grid-template-columns:1fr auto; gap:2px var(--s4); padding:var(--s4) 0; border-top:1px solid var(--line)}
+.items .it:last-child{border-bottom:1px solid var(--line)}
+.items .it b{font-family:var(--font-head); font-weight:600; color:var(--title)}
+.items .it .w{color:var(--muted); font-weight:400; font-size:14px}
+.items .it .am{font-family:var(--font-head); font-weight:600; font-size:var(--t-lg); color:var(--accent); text-align:right; font-variant-numeric:tabular-nums}
+.items .it p{margin:0; grid-column:1/-1; font-size:15.5px; line-height:1.5}
+.items .it small{grid-column:1/-1; color:var(--muted); font-size:13px}
+.sources{display:grid; gap:var(--s2)}
+.src{display:grid; grid-template-columns:36px 1fr; gap:var(--s3); align-items:center; padding:var(--s3); border-radius:var(--r-md); background:var(--surface); border:1px solid var(--line)}
+.src .mono{display:grid; place-items:center; width:36px; height:36px; border-radius:10px; background:var(--soft); color:var(--espresso); font-weight:700; font-size:13px}
+:root[data-theme="dark"] .src .mono{color:var(--latte)}
+.src b{font-size:15px; color:var(--title)}
+.src .sub{font-size:13px; color:var(--muted)}
+.src .links{grid-column:2; display:flex; gap:var(--s2); flex-wrap:wrap; margin-top:2px}
+.lnk{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--accent); padding:6px 11px; border-radius:var(--r-pill); background:var(--soft)}
+.lnk:hover{background:var(--cream); color:var(--espresso)}
+.lnk .ico{width:14px; height:14px}
+.disclosure{font-size:14px; color:var(--muted); font-style:italic}
+.legend-line{display:flex; flex-wrap:wrap; gap:var(--s2); margin-top:var(--s2)}
+
+
+/* sélecteur de profondeur */
+.fmt{display:grid; grid-template-columns:repeat(3,1fr); gap:4px; padding:4px; background:var(--soft); border-radius:16px; margin:var(--s5) 0 var(--s2)}
+.fmt button{display:grid; gap:1px; justify-items:center; padding:9px 4px; border-radius:12px; color:var(--muted); transition:background .15s, box-shadow .15s}
+.fmt button b{font-family:var(--font-head); font-weight:600; font-size:15px; color:var(--title)}
+.fmt button span{font-size:12px; font-variant-numeric:tabular-nums}
+.fmt button:hover{background:color-mix(in srgb, var(--surface) 55%, transparent)}
+.fmt button[aria-checked="true"]{background:var(--surface); box-shadow:var(--shadow)}
+.fmt button[aria-checked="true"] b{color:var(--accent-strong)}
+.fmt button[aria-checked="true"] span{color:var(--accent)}
+.points{list-style:none; counter-reset:pt; margin:var(--s6) 0; padding:0; display:grid; gap:var(--s4)}
+.points li{counter-increment:pt; display:grid; grid-template-columns:30px 1fr; gap:var(--s3); font-size:19px; line-height:1.5; color:var(--title); font-weight:500}
+.points li::before{content:counter(pt); display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--cream); color:var(--mocha); font-family:var(--font-head); font-weight:600; font-size:14px; margin-top:1px}
+:root[data-theme="dark"] .points li::before{background:#3A2B20; color:var(--latte)}
+.linkbtn{color:var(--accent); font-weight:600; text-decoration:underline; text-underline-offset:3px}
+.deep{font-size:18px; line-height:1.7; margin-top:var(--s8); padding-top:var(--s6); border-top:1px solid var(--line)}
+.deep p{margin:0 0 1.1em; max-width:64ch}
+.deep h2{font-size:var(--t-xl); margin:1.4em 0 .5em}
+.deep-head{display:flex; align-items:center; gap:8px; font-size:var(--t-xs); font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accent)}
+.deep-head .ico{width:18px; height:18px}
+.refs{font-size:13px !important; color:var(--muted); margin-top:-.4em !important}
+.refs a{color:var(--accent); font-weight:700; padding:0 2px}
+.deep-na{display:grid; grid-template-columns:22px 1fr; gap:var(--s3); background:var(--soft); border-radius:var(--r-md); padding:var(--s4); margin:var(--s5) 0}
+.deep-na .ico{color:var(--accent)}
+.deep-na b{font-family:var(--font-head); font-weight:600; color:var(--title)}
+.deep-na p{margin:4px 0 0; font-size:15px; line-height:1.5}
+.blk-sub{font-size:13px; font-weight:700; color:var(--muted); margin:var(--s5) 0 var(--s2)}
+.deep-src{list-style:none; margin:0; padding:0; display:grid; gap:var(--s2)}
+.deep-src li{display:grid; grid-template-columns:24px 1fr; gap:var(--s2); align-items:start; font-size:14px; padding:6px; border-radius:8px; transition:background .4s}
+.deep-src li.flash{background:var(--cream)}
+.deep-src .n{display:grid; place-items:center; width:22px; height:22px; border-radius:6px; background:var(--soft); color:var(--accent); font-size:12px; font-weight:700}
+.deep-src a{color:var(--title); font-weight:600; display:inline-flex; gap:5px; align-items:center}
+.deep-src a .ico{width:13px; height:13px; color:var(--accent)}
+.deep-src small{display:block; color:var(--muted); font-size:12px}
+
+/* graphiques */
+.chart{display:grid; gap:var(--s3); background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s5)}
+.chart .row2{display:grid; grid-template-columns:132px 1fr; gap:var(--s3); align-items:center}
+.chart .l{font-size:14px; font-weight:600}
+.chart .bars{display:grid; gap:4px}
+.chart .bar{height:20px; border-radius:6px; display:flex; align-items:center; justify-content:flex-end; padding:0 8px; font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; min-width:44px}
+.chart .bar.a{background:var(--cream); color:var(--mocha)}
+.chart .bar.b{background:var(--mocha); color:#FFF8F1}
+:root[data-theme="dark"] .chart .bar.a{background:#3A2B20; color:var(--latte)}
+.chart .legend{display:flex; gap:var(--s4); font-size:13px; color:var(--muted)}
+.chart .legend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px}
+.chart .note{font-size:12.5px; color:var(--muted)}
+@media (max-width:520px){ .chart .row2{grid-template-columns:1fr; gap:6px} }
+
+/* boutons */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; height:44px; padding:0 18px; border-radius:var(--r-pill); font-weight:600; font-size:15px; border:1px solid var(--line); background:var(--surface); color:var(--title); transition:background .15s, border-color .15s, transform .1s}
+.btn:hover{border-color:var(--latte)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--espresso); border-color:var(--espresso); color:var(--ivory)}
+.btn.primary:hover{background:#3B2218}
+:root[data-theme="dark"] .btn.primary{background:var(--latte); border-color:var(--latte); color:#2A1810}
+.btn[disabled]{opacity:.5; cursor:not-allowed}
+.btn .ico{width:18px; height:18px}
+
+/* panneaux (Sources, photo) */
+.page{max-width:760px; padding:var(--s4) 0 var(--s12)}
+.page h1{font-size:var(--t-3xl); line-height:1.1; margin:var(--s2) 0}
+.page > p{font-size:var(--t-lg); color:var(--muted); max-width:58ch; margin:0 0 var(--s6)}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--s5); margin:0 0 var(--s5)}
+.panel h2{font-size:var(--t-xl); margin-bottom:var(--s2)}
+.panel p{margin:0 0 var(--s3); font-size:15px; line-height:1.6}
+.panel ul{margin:0; padding-left:20px; font-size:15px; line-height:1.6}
+.srclist .s{display:flex; justify-content:space-between; align-items:center; gap:var(--s3); padding:11px 0; border-top:1px solid var(--line); font-size:15px}
+.srclist .s:first-child{border-top:0}
+.status{font-size:12px; font-weight:700; padding:4px 10px; border-radius:var(--r-pill); white-space:nowrap}
+.status.ok{background:color-mix(in srgb, var(--c-tech) 14%, transparent); color:var(--c-tech)}
+.status.wait{background:var(--warn-soft); color:var(--warn)}
+.status.off{background:var(--soft); color:var(--muted)}
+.log{font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12.5px; background:var(--bg); border:1px solid var(--line); border-radius:var(--r-sm); padding:var(--s3); max-height:280px; overflow:auto; white-space:pre-wrap; margin-top:var(--s3)}
+.note-line{font-size:13px; color:var(--muted)}
+.field{display:grid; gap:6px; margin-bottom:var(--s3)}
+.field label{font-size:13px; font-weight:600; color:var(--title)}
+.field input[type=text], .field input[type=url], .field select{height:44px; border-radius:var(--r-sm); border:1px solid var(--line); background:var(--bg); padding:0 12px; font:inherit; color:var(--text)}
+.check{display:flex; gap:10px; align-items:flex-start; font-size:14px; margin:var(--s2) 0 var(--s4)}
+.check input{width:18px; height:18px; margin-top:2px; accent-color:var(--mocha)}
+
+/* rubriques */
+.catgrid{display:grid; gap:var(--s3); grid-template-columns:repeat(auto-fill, minmax(min(100%, 320px), 1fr)); margin-top:var(--s4)}
+.catcard{display:grid; grid-template-columns:76px 1fr auto; gap:var(--s4); align-items:center; padding:var(--s3); background:var(--surface); border-radius:var(--r-md); box-shadow:var(--shadow)}
+.catcard .media{aspect-ratio:1; border-radius:var(--r-sm)}
+.catcard h3{font-size:var(--t-lg)}
+.catcard p{margin:2px 0 0; font-size:13px; color:var(--muted)}
+.catcard .ico{color:var(--muted)}
+
+.foot{margin-top:var(--s12); padding:var(--s6) 0 var(--s8); border-top:1px solid var(--line); color:var(--muted); font-size:13px; line-height:1.6; display:grid; gap:var(--s3)}
+.foot .logo img{width:26px} .foot .logo b{font-size:19px}
+.foot p{margin:0; max-width:78ch}
+.skeleton{border-radius:var(--r-md); background:linear-gradient(90deg, var(--soft), var(--surface), var(--soft)); background-size:200% 100%}
+@media (prefers-reduced-motion: no-preference){
+  .skeleton{animation:sh 1.4s linear infinite} @keyframes sh{to{background-position:-200% 0}}
+  ::view-transition-old(root){animation:vt-out .16s ease both}
+  ::view-transition-new(root){animation:vt-in .22s ease both}
+  @keyframes vt-out{to{opacity:0; transform:translateY(-6px)}}
+  @keyframes vt-in{from{opacity:0; transform:translateY(8px)}}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Moka, accueil"><img id="logoImg" alt="" width="38" height="33"><b>Moka</b><small>Votre brief quotidien</small></a>
+    <span class="appbar-date" id="appDate"></span>
+    <nav class="topnav" aria-label="Navigation principale">
+      <a href="#" data-tab="home"><svg class="ico" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>À la une</a>
+      <a href="#rubriques" data-tab="cats"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg>Rubriques</a>
+      <a href="#saved" data-tab="saved"><svg class="ico" viewBox="0 0 24 24"><path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.8L6 20V5a1 1 0 0 1 1-1z"/></svg>Sauvegardés <span class="cnt" data-savedcount hidden></span></a>
+      <a href="#sources" data-tab="sources"><svg class="ico" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></svg>Sources</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="app" aria-live="polite">
+  <div class="hello"><div class="d" id="today"></div><h1>Votre brief arrive</h1></div>
+  <div class="skeleton" style="aspect-ratio:4/3;margin-top:16px"></div>
+</main>
+
+<div class="tabbar"><nav aria-label="Navigation">
+  <a href="#" data-tab="home"><svg class="ico" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/></svg>À la une</a>
+  <a href="#rubriques" data-tab="cats"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg>Rubriques</a>
+  <a href="#saved" data-tab="saved"><svg class="ico" viewBox="0 0 24 24"><path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.8L6 20V5a1 1 0 0 1 1-1z"/></svg>Sauvegardés<span class="cnt" data-savedcount hidden></span></a>
+  <a href="#sources" data-tab="sources"><svg class="ico" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></svg>Sources</a>
+</nav></div>
+
+<script>
+/* Moka autonome : remplace window.claude (Claude Artifacts) par une lecture de fichiers statiques. */
+window.MOKA_STANDALONE = true;
+window.claude = { use: async (name) => {
+  if (name !== "db") return null;            // pas d'utilisateur, de Gmail, de rédaction ni d'upload
+  const load = fetch("data/articles.json?v=b47cbc98a3").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
+  const none = { exists: false, data: () => undefined };
+  return {
+    collection: () => ({ onSnapshot: (ok, ko) => { load.then(list => ok({ docs: list.map(a => ({ id: a.id, exists: true, data: () => a })), metadata: { fromCache: false } })).catch(e => ko && ko(e)); return () => {}; } }),
+    doc: () => ({ onSnapshot: (ok) => { setTimeout(() => ok(none), 0); return () => {}; }, get: async () => none, set: async () => {}, update: async () => {} })
+  };
+}};
+if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+</script>
+<script>
+/* ============ Moka ============
+   Données : base de l'artifact (collection "articles", document "meta/ingest"), état perso dans data/users/<id>/state.
+   Collecte : page Sources → connecteur Gmail de claude.ai (lecture seule : search_threads + get_thread)
+   → rédaction par Claude (sample) → écriture dans la base.
+   Photos : le propriétaire ajoute une photo créditée à un article (capacité assets) ; sinon illustration Moka.
+*/
+const INGEST_PAUSED=true; /* phase de test : relève désactivée (bug de mémoire des emails traités) */
+const SYMBOL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 112"><defs><linearGradient id="mk-dark" x1="0.1" y1="0.9" x2="0.8" y2="0.1"><stop offset="0" stop-color="#4A2C1F"/><stop offset="0.6" stop-color="#6B3F2A"/><stop offset="1" stop-color="#8B5A3C"/></linearGradient><linearGradient id="mk-light" x1="0.2" y1="0" x2="0.8" y2="1"><stop offset="0" stop-color="#9C6440"/><stop offset="0.5" stop-color="#C48A58"/><stop offset="1" stop-color="#D7A77A"/></linearGradient><linearGradient id="mk-spark" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#C08250"/><stop offset="1" stop-color="#D7A77A"/></linearGradient><clipPath id="mk-bean"><ellipse cx="58" cy="62" rx="52" ry="38" transform="rotate(-30 58 62)"/></clipPath><clipPath id="mk-page"><path d="M0 0 H101 C 104 50, 100 80, 84 102 L0 112 Z"/></clipPath><mask id="mk-gaps" maskUnits="userSpaceOnUse" x="0" y="0" width="128" height="112"><rect width="128" height="112" fill="#fff"/><path d="M12 100 C 34 88, 40 56, 104 34" fill="none" stroke="#000" stroke-width="5.5" stroke-linecap="round"/><path d="M28 103 C 50 84, 68 66, 106 56" fill="none" stroke="#000" stroke-width="2.6"/><path d="M32 105 C 54 88, 72 76, 106 68" fill="none" stroke="#000" stroke-width="2.6"/><path d="M36 107 C 58 93, 76 85, 106 80" fill="none" stroke="#000" stroke-width="2.6"/></mask></defs><g mask="url(#mk-gaps)"><g clip-path="url(#mk-bean)"><path d="M12 100 C 34 88, 40 56, 104 34 L128 0 L0 0 L0 112 Z" fill="url(#mk-dark)"/></g><g clip-path="url(#mk-bean)"><g clip-path="url(#mk-page)"><path d="M12 100 C 34 88, 40 56, 104 34 L128 112 L0 112 Z" fill="url(#mk-light)"/><path d="M28 103 C 50 84, 68 66, 106 56 L128 112 L20 112 Z" fill="#E8C6A1"/><path d="M32 105 C 54 88, 72 76, 106 68 L128 112 L20 112 Z" fill="#F1D9BF"/><path d="M36 107 C 58 93, 76 85, 106 80 L128 112 L20 112 Z" fill="#F9EADB"/></g></g></g><g stroke="url(#mk-spark)" stroke-width="5.4" stroke-linecap="round" fill="none"><path d="M94 5 L91.5 17"/><path d="M112 11 L103.5 19.5"/><path d="M122 28 L109.5 30.5"/></g></svg>`;
+const APPICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#FDF9F4"/><svg x="7" y="10" width="50" height="44" viewBox="0 0 128 112">${SYMBOL.replace(/^<svg[^>]*>/,"").replace(/<\/svg>$/,"")}</svg></svg>`;
+const svgURL = s => "data:image/svg+xml;charset=utf-8," + encodeURIComponent(s);
+const SYMBOL_URL = svgURL(SYMBOL);
+document.getElementById("logoImg").src = SYMBOL_URL;
+(()=>{ const l=document.createElement("link"); l.rel="icon"; l.type="image/svg+xml"; l.href=svgURL(APPICON); document.head.appendChild(l);
+       const a=document.createElement("link"); a.rel="apple-touch-icon"; a.href=svgURL(APPICON); document.head.appendChild(a); })();
+
+const CATS = [
+  {id:"afrique-vc", name:"Startups & VC Afrique", short:"VC Afrique", color:"var(--c-afrique)", tint:[180,100,60]},
+  {id:"capital", name:"PE, M&A & financements", short:"Capital", color:"var(--c-capital)", tint:[78,107,134]},
+  {id:"economie-afrique", name:"Économie africaine", short:"Économie Afrique", color:"var(--c-ecoafrique)", tint:[123,139,78]},
+  {id:"energie-industrie", name:"Énergie & industrie", short:"Énergie", color:"var(--c-energie)", tint:[192,138,46]},
+  {id:"tech", name:"Tech & innovation", short:"Tech", color:"var(--c-tech)", tint:[63,122,116]},
+  {id:"monde", name:"Monde & macro", short:"Monde", color:"var(--c-monde)", tint:[122,80,104]},
+];
+const CAT = Object.fromEntries(CATS.map(c=>[c.id,c]));
+const KIND = {actu:"Actualité", analyse:"Analyse", brief:"En bref"};
+const VERIF = {
+  "rapporte": {t:"Rapporté par la source", cls:""},
+  "non-confirme": {t:"Non confirmé", cls:"warn"},
+  "analyse": {t:"Point de vue d'auteur", cls:""},
+  "auto": {t:"Rédigé automatiquement · à relire", cls:"auto"},
+};
+const I = { // icônes 24px, trait 1.8
+  back:'<svg class="ico" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+  save:'<svg class="ico" viewBox="0 0 24 24"><path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.8L6 20V5a1 1 0 0 1 1-1z"/></svg>',
+  ext:'<svg class="ico" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg>',
+  mail:'<svg class="ico" viewBox="0 0 24 24"><rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/></svg>',
+  spark:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 3v4M18.4 5.6l-2.8 2.8M21 12h-4M5.6 5.6l2.8 2.8M3 12h4"/><path d="M7 19a5 5 0 0 1 10 0"/></svg>',
+  book:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7.5 4.5 4 5v13c3.5-.5 6 0 8 1.5 2-1.5 4.5-2 8-1.5V5c-3.5-.5-6 0-8 1.5zM12 6.5V19"/></svg>',
+  help:'<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 17h.01"/></svg>',
+  plus:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  clock:'<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  chev:'<svg class="ico" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>',
+  check:'<svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  trend:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 18 10 12l4 4 6-8"/><path d="M15 8h5v5"/></svg>',
+  camera:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+};
+
+const S = { articles:[], loaded:false, loadErr:null, stale:false, db:null, user:null, uid:null, isOwner:false,
+            saved:new Set(), format:"comprendre", meta:null, ingest:{running:false, log:[]}, assets:null, photoFor:null };
+
+const $app = document.getElementById("app");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDate = (iso, opts={day:"numeric", month:"long", year:"numeric"}) => {
+  if(!iso) return ""; const d = new Date(iso.length===10 ? iso+"T12:00:00Z" : iso);
+  return isNaN(d) ? esc(iso) : d.toLocaleDateString("fr-FR", opts);
+};
+const todayLabel = () => new Date().toLocaleDateString("fr-FR",{weekday:"long", day:"numeric", month:"long"});
+document.getElementById("today").textContent = todayLabel();
+document.getElementById("appDate").textContent = new Date().toLocaleDateString("fr-FR",{weekday:"short", day:"numeric", month:"short"});
+const catStyle = a => `--cat:${(CAT[a.category]||CATS[0]).color}`;
+
+/* ---------- Illustrations Moka : paysage au lever du jour, teinté par rubrique ---------- */
+function hash(s){ let h=2166136261; for(const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619);} return h>>>0; }
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const coverCache = new Map();
+function mixc(a,b,k){ return a.map((v,i)=>Math.round(v+(b[i]-v)*k)); }
+const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+function coverURL(a, w=960, h=640){
+  const key=a.id+":"+w+":"+h; if(coverCache.has(key)) return coverCache.get(key);
+  const c=document.createElement("canvas"); c.width=w; c.height=h; const g=c.getContext("2d");
+  const r=rng(hash(a.id)); const tint=(CAT[a.category]||CATS[0]).tint;
+  const IV=[253,249,244], CR=[247,233,220], LA=[215,167,122], MO=[139,90,60], ES=[74,44,31];
+  const style=hash(a.id+"s")%3;
+  // ciel
+  const sky=g.createLinearGradient(0,0,0,h);
+  sky.addColorStop(0, rgb(mixc(CR,tint,.30))); sky.addColorStop(.7, rgb(mixc(IV,LA,.22))); sky.addColorStop(1, rgb(mixc(LA,tint,.30)));
+  g.fillStyle=sky; g.fillRect(0,0,w,h);
+  // soleil
+  const sx=w*(.25+r()*.5), sy=h*(.42+r()*.12), sr=h*(.16+r()*.08);
+  const sun=g.createRadialGradient(sx,sy,0,sx,sy,sr*2.6); sun.addColorStop(0,"rgba(255,226,180,.9)"); sun.addColorStop(.35,"rgba(240,190,130,.55)"); sun.addColorStop(1,"rgba(240,190,130,0)");
+  g.fillStyle=sun; g.fillRect(0,0,w,h);
+  g.beginPath(); g.arc(sx,sy,sr,0,Math.PI*2); g.fillStyle="rgba(250,212,160,.95)"; g.fill();
+  if(style===1){ // rayons, comme l'étincelle du logo
+    g.strokeStyle="rgba(200,130,80,.55)"; g.lineCap="round"; g.lineWidth=h*.022;
+    for(let i=0;i<3;i++){ const ang=-Math.PI*(.62-i*.17); const r1=sr*1.35, r2=sr*1.85; g.beginPath(); g.moveTo(sx+Math.cos(ang)*r1, sy+Math.sin(ang)*r1); g.lineTo(sx+Math.cos(ang)*r2, sy+Math.sin(ang)*r2); g.stroke(); }
+  }
+  // collines superposées, comme les pages du logo
+  const layers=4+(style===2?1:0);
+  for(let i=0;i<layers;i++){
+    const k=i/(layers-1); const base=h*(.55+k*.32); const amp=h*(.06+r()*.07);
+    const col = i===layers-1 ? mixc(ES,tint,.42) : mixc(mixc(LA,MO,k), tint, .46+.16*k);
+    g.beginPath(); g.moveTo(0,h); g.lineTo(0,base);
+    const ph=r()*Math.PI*2, fr=1+r()*1.4;
+    for(let x=0;x<=w;x+=8){ g.lineTo(x, base - Math.sin(x/w*Math.PI*fr+ph)*amp - Math.sin(x/w*Math.PI*3.1+ph*2)*amp*.25); }
+    g.lineTo(w,h); g.closePath(); g.fillStyle=rgb(col); g.fill();
+  }
+  // grain léger
+  const img=g.getImageData(0,0,w,h), d=img.data; for(let i=0;i<d.length;i+=4){ const n=(r()-.5)*10; d[i]+=n; d[i+1]+=n; d[i+2]+=n; } g.putImageData(img,0,0);
+  const url=c.toDataURL("image/jpeg",.84); coverCache.set(key,url); return url;
+}
+function photoSrc(a){ const im=a.image; if(!im) return null; if(im.asset) return "/_blob/"+im.asset; if(im.src) return im.src; return null; }
+function mediaHTML(a, {w=960,h=640, big=true, badge=true}={}){
+  const p=photoSrc(a);
+  if(p) return `<div class="media"><img src="${esc(p)}" alt="${esc(a.image.alt||"")}" loading="lazy" decoding="async" onerror="this.closest('.media').classList.add('broken');this.remove()">${badge&&a.image.kind==="contexte"?`<span class="badge-ill">Photo d'illustration</span>`:""}</div>`;
+  const cv=a.cover||{};
+  return `<div class="media"><img src="${coverURL(a,w,h)}" alt="" loading="lazy">${badge?`<span class="badge-ill">Illustration</span>`:""}${big&&cv.big?`<span class="big">${esc(cv.big)}</span>`:""}</div>`;
+}
+
+/* ---------- Helpers éditoriaux ---------- */
+const byScore = (a,b)=> (b.score||0)-(a.score||0) || String(b.published_date).localeCompare(String(a.published_date));
+const srcNames = a => [...new Set((a.sources||[]).map(s=>s.name))];
+function readMin(a){ const t=[a.brief, ...(a.body||[]).map(b=>b.p), a.why, ...(a.items||[]).map(i=>i.what)].join(" "); return Math.max(1, Math.round(t.split(/\s+/).length/210)); }
+function eyebrow(a){ const c=CAT[a.category]; return `<span class="eyebrow" style="${catStyle(a)}"><i></i>${esc(c?c.short:a.category)}${a.kind==="analyse"?" · Analyse":a.kind==="brief"?" · En bref":""}</span>`; }
+function flags(a){
+  const v=VERIF[a.origin==="auto"?"auto":a.verification];
+  return `${v&&v.cls?`<span class="tag ${v.cls}">${esc(v.t)}</span>`:""}`;
+}
+function metaHTML(a, short=false){
+  const n=srcNames(a);
+  return `<div class="meta"><span>${n.length>1?`${n.length} sources`:esc(n[0]||"")}</span>${short?"":`<span>${esc(a.event_label||fmtDate(a.event_date))}</span>`}<span>${readMin(a)} min</span>${S.saved.has(a.id)?`<span style="color:var(--accent);font-weight:600">Sauvegardé</span>`:""}</div>`;
+}
+function rowCard(a){
+  return `<a class="row" href="#a-${esc(a.id)}"><div>${eyebrow(a)}<h3>${esc(a.title)}</h3>${metaHTML(a,true)}</div>${mediaHTML(a,{w:320,h:320,badge:false,big:false})}</a>`;
+}
+function card(a){
+  const dark = a.kind==="analyse";
+  return `<a class="card${dark?" dark":""}" href="#a-${esc(a.id)}">${mediaHTML(a,{w:800,h:500})}<div class="c-body">${eyebrow(a)}<h3>${esc(a.title)}</h3><p>${esc(a.dek)}</p>${flags(a)}${metaHTML(a)}</div></a>`;
+}
+function footer(){
+  const m=S.meta; const auto = m && m.last_run ? `Dernière relève automatique : ${fmtDate(m.last_run,{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}.` : `Édition rédigée par Claude le 7 novembre 2026 à partir de vos newsletters ; la relève automatique n'a pas encore été lancée.`;
+  return `<footer class="foot"><div class="logo"><img src="${SYMBOL_URL}" alt=""><b>Moka</b></div><p>Moka sélectionne et explique ; il ne remplace pas les sources. Chaque chiffre renvoie à une newsletter de votre libellé Moka/Newsletters.</p><p>${auto} Les visuels marqués « Illustration » sont générés par Moka et ne montrent pas les entreprises ni les événements cités.</p></footer>`;
+}
+
+/* ---------- Navigation ---------- */
+function setNav(tab){
+  document.querySelectorAll("[data-tab]").forEach(a=>{ a.dataset.tab===tab ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"); });
+  const n=S.saved.size; document.querySelectorAll("[data-savedcount]").forEach(el=>{ el.hidden=!n; el.textContent=n; });
+}
+function catsBar(active){
+  const counts={}; for(const a of S.articles) counts[a.category]=(counts[a.category]||0)+1;
+  return `<div class="cats" role="navigation" aria-label="Rubriques"><a class="chip" href="#" ${!active?'aria-current="page"':""}>Tout <span class="n">${S.articles.length}</span></a>${
+    CATS.filter(c=>counts[c.id]).map(c=>`<a class="chip" style="--dot:${c.color}" href="#cat-${c.id}" ${active===c.id?'aria-current="page"':""}><i></i>${esc(c.short)} <span class="n">${counts[c.id]}</span></a>`).join("")}</div>`;
+}
+function statusNotice(){
+  if(S.loadErr) return `<div class="notice">${esc(S.loadErr)}</div>`;
+  if(S.stale) return `<div class="notice">La base de Moka ne répond pas encore. Ce qui s'affiche peut ne pas être à jour.</div>`;
+  return "";
+}
+
+/* ---------- Vues ---------- */
+function viewHome(){
+  setNav("home"); if(!S.loaded) return;
+  if(!S.articles.length){ $app.innerHTML = catsBar()+statusNotice()+`<div class="empty"><h2>Pas encore d'actualités</h2>La base est vide. Ouvrez la page <a href="#sources" style="color:var(--accent);font-weight:600">Sources</a> pour relever vos newsletters.</div>`+footer(); return; }
+  const arts=[...S.articles].sort(byScore);
+  const hero=arts[0]; const side=arts.slice(1,4); const rail=arts.slice(4,8);
+  const used=new Set([hero,...side,...rail].map(a=>a.id));
+  const nSrc=new Set(arts.flatMap(a=>srcNames(a))).size;
+  const h=new Date().getHours(); const hi = h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir";
+  let html = `<section class="hello"><div class="d">${esc(todayLabel())}</div><h1>${hi}, voici votre brief</h1><p>${arts.length} actualités tirées de ${nSrc} newsletters. L'Afrique d'abord, puis ce qui compte ailleurs.</p></section>`
+   + catsBar() + statusNotice() + `
+  <section class="lead" aria-label="À la une">
+    <a class="hero" href="#a-${esc(hero.id)}"><div style="position:relative">${mediaHTML(hero,{w:1200,h:760})}<div class="over">${eyebrow(hero)}<h2>${esc(hero.title)}</h2></div></div>
+      <div class="body"><p>${esc(hero.dek)}</p>${flags(hero)}${metaHTML(hero)}</div></a>
+    <div class="stack"><div class="head"><span class="eyebrow">À suivre aussi</span></div>${side.map(rowCard).join("")}</div>
+  </section>`;
+  if(rail.length) html += `<section class="sec"><div class="sec-head"><h2>L'essentiel</h2></div><div class="rail">${rail.map(card).join("")}</div></section>`;
+  const pick = arts.find(a=>a.kind==="analyse" && a.figures?.length) || hero;
+  const f = pick.figures?.[pick.figures.length>3?3:0];
+  if(f) html += `<section class="sec"><div class="figure-card"><img class="spark" src="${SYMBOL_URL}" alt=""><span class="lbl">Le chiffre à retenir</span><b>${esc(f.v)}</b><div><p>${esc(f.l)}${f.n?`, ${esc(f.n)}`:""}.</p><a href="#a-${esc(pick.id)}">${esc(pick.title)} →</a></div></div></section>`;
+  for(const c of CATS){
+    const list=arts.filter(a=>a.category===c.id && !used.has(a.id)); if(!list.length) continue;
+    const [first,...more]=list;
+    html += `<section class="sec"><div class="sec-head"><h2><span class="eyebrow" style="--cat:${c.color}"><i></i>Rubrique</span>${esc(c.name)}</h2><a href="#cat-${c.id}">Tout voir</a></div>
+      <div class="mix">${card(first)}${more.length?`<div class="stack">${more.slice(0,4).map(rowCard).join("")}</div>`:""}</div></section>`;
+  }
+  $app.innerHTML = html + footer();
+}
+function viewCats(){
+  setNav("cats"); if(!S.loaded) return;
+  const groups=CATS.map(c=>({c, list:S.articles.filter(a=>a.category===c.id).sort(byScore)}));
+  $app.innerHTML = `<section class="hello"><div class="d">Explorer</div><h1>Rubriques</h1><p>Classées selon vos priorités éditoriales.</p></section><div class="catgrid">${
+    groups.map(({c,list})=>`<a class="catcard" href="#cat-${c.id}">${list[0]?mediaHTML(list[0],{w:240,h:240,big:false,badge:false}):`<div class="media"></div>`}<div><span class="eyebrow" style="--cat:${c.color}"><i></i>${list.length} article${list.length>1?"s":""}</span><h3>${esc(c.name)}</h3><p>${list[0]?esc(list[0].title):"Pas encore d'actualité : sources à venir (Agence Ecofin…)"}</p></div>${I.chev}</a>`).join("")}</div>`+footer();
+}
+function viewCat(id){
+  setNav("cats"); if(!S.loaded) return;
+  const c=CAT[id]; const list=S.articles.filter(a=>a.category===id).sort(byScore);
+  const [first,...more]=list;
+  $app.innerHTML = `<section class="hello"><div class="d"><span class="eyebrow" style="--cat:${c?c.color:"var(--accent)"}"><i></i>Rubrique</span></div><h1>${esc(c?c.name:id)}</h1></section>`+catsBar(id)+statusNotice()+
+    (first?`<div class="mix" style="margin-top:8px">${card(first)}<div class="stack">${more.map(rowCard).join("")}</div></div>`:`<div class="empty">Rien dans cette rubrique pour l'instant.</div>`)+footer();
+}
+function viewSaved(){
+  setNav("saved"); if(!S.loaded) return;
+  const list=S.articles.filter(a=>S.saved.has(a.id)).sort(byScore);
+  $app.innerHTML = `<section class="hello"><div class="d">Votre sélection</div><h1>Sauvegardés</h1><p>${S.uid?"Synchronisés avec votre compte, sur téléphone comme sur ordinateur.":"Enregistrés sur cet appareil."}</p></section>`+
+    (list.length?`<div class="stack" style="max-width:760px">${list.map(rowCard).join("")}</div>`:`<div class="empty"><h2>Rien de sauvegardé</h2>Dans un article, touchez l'icône marque-page pour le retrouver ici.</div>`)+footer();
+}
+function chartHTML(ch){
+  const two = ch.a_label!=null; const rows=ch.rows||[]; const fmt=v=>String(v).replace(".",",");
+  const gmax = two?null:Math.max(...rows.map(r=>r.b));
+  return `<div class="chart">${two?`<div class="legend"><span><i style="background:var(--cream);border:1px solid var(--latte)"></i>${esc(ch.a_label)}</span><span><i style="background:var(--mocha)"></i>${esc(ch.b_label)}</span></div>`:""}
+  ${rows.map(r=>{ const mx=two?Math.max(r.a,r.b):gmax; return `<div class="row2"><div class="l">${esc(r.label)}</div><div class="bars">${two?`<div class="bar a" style="width:${(r.a/mx*100).toFixed(1)}%">${fmt(r.a)}</div>`:""}<div class="bar b" style="width:${(r.b/mx*100).toFixed(1)}%">${fmt(r.b)}</div></div></div>`;}).join("")}
+  ${ch.note?`<div class="note">${esc(ch.note)}</div>`:""}</div>`;
+}
+const initials = n => n.replace(/^Africa:\s*/,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const FORMATS = [{id:"express", name:"Express"}, {id:"comprendre", name:"Comprendre"}, {id:"approfondir", name:"Approfondir"}];
+const words = arr => arr.filter(Boolean).join(" ").split(/\s+/).filter(Boolean).length;
+function fmtMinutes(a, f){
+  const base=[a.brief, ...(a.body||[]).map(b=>b.p), a.why, ...(a.items||[]).map(i=>i.what), ...(a.explain||[]).map(e=>e.a), a.moka_context];
+  if(f==="express") return 1;
+  if(f==="approfondir"){ const d=a.formats?.approfondir; if(!d||d.status==="indisponible") return null;
+    return Math.max(2, Math.round(words([...base, ...d.sections.flatMap(s=>s.p)])/200)); }
+  return Math.max(1, Math.round(words(base)/200));
+}
+function figsHTML(list){ return list.length?`<div class="figs" aria-label="Chiffres clés">${list.map(f=>`<div><b>${esc(f.v)}</b><span>${esc(f.l)}</span>${f.n?`<small>${esc(f.n)}</small>`:""}</div>`).join("")}</div>`:""; }
+function sourcesHTML(a, extra){
+  return `<section class="blk"><div class="blk-title">${I.mail}Sources</div><div class="sources">${(a.sources||[]).map(s=>`<div class="src"><span class="mono">${esc(initials(s.name))}</span><div><b>${esc(s.name)}</b>${s.via?` <span class="sub">via ${esc(s.via)}</span>`:""}<div class="sub">Reçue le ${fmtDate(s.date)}</div></div><div class="links">${s.web?`<a class="lnk" href="${esc(s.web)}" target="_blank" rel="noopener">${esc(s.web_label||"Article original")}${I.ext}</a>`:""}${s.gmail?`<a class="lnk" href="${esc(s.gmail)}" target="_blank" rel="noopener">Dans Gmail${I.ext}</a>`:""}</div></div>`).join("")}</div>
+  ${extra&&extra.length?`<div class="blk-sub">Sources de l'analyse approfondie</div><ol class="deep-src">${extra.map((s,i)=>`<li id="ds-${esc(s.id)}"><span class="n">${i+1}</span><div><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}${I.ext}</a>${s.date?`<small>${esc(fmtDate(s.date.length>=10?s.date:s.date+"-01",{month:"long",year:"numeric",...(s.date.length>=10?{day:"numeric"}:{})}))}</small>`:""}</div></li>`).join("")}</ol>`:""}</section>`;
+}
+function relatedHTML(a){ const rel=(a.related||[]).map(r=>S.articles.find(x=>x.id===r)).filter(Boolean);
+  return rel.length?`<section class="blk"><div class="blk-title">À lire ensuite</div><div class="rail">${rel.map(card).join("")}</div></section>`:""; }
+function comprendreParts(a){
+  return {
+    lede:`<p class="lede">${esc(a.brief)}</p>`,
+    figs:figsHTML(a.figures||[]),
+    prose:`<div class="prose">${(a.body||[]).map(b=>`${b.h?`<h2>${esc(b.h)}</h2>`:""}<p>${esc(b.p)}</p>`).join("")}</div>`,
+    items:a.items?.length?`<section class="blk"><div class="blk-title">${I.trend}Les opérations</div><div class="items">${a.items.map(i=>`<div class="it"><b>${esc(i.name)} <span class="w">· ${esc(i.where)}</span></b><span class="am">${esc(i.amount)}</span><p>${esc(i.what)}</p><small>${esc(i.who)}</small></div>`).join("")}</div></section>`:"",
+    chart:a.chart?`<section class="blk"><div class="blk-title">${I.trend}${esc(a.chart.title)}</div>${chartHTML(a.chart)}</section>`:"",
+    why:a.why?`<section class="blk why"><div class="blk-title">${I.spark}Pourquoi ça compte</div><p>${esc(a.why)}</p></section>`:"",
+    explain:a.explain?.length?`<section class="blk"><div class="blk-title">${I.book}Pour comprendre</div>${a.explain.map(e=>`<details class="q"><summary>${esc(e.q)}${I.plus}</summary><p>${esc(e.a)}</p></details>`).join("")}</section>`:"",
+    ctx:a.moka_context?`<section class="blk ctx"><div class="blk-title">${I.book}Contexte Moka</div><p>${esc(a.moka_context)}</p><div class="note">Connaissances générales ajoutées par Moka ; absent de la newsletter.</div></section>`:"",
+    timeline:a.timeline?.length?`<section class="blk"><div class="blk-title">${I.clock}Suivi de l'histoire</div><ol class="timeline">${a.timeline.map(t=>`<li><div><time>${fmtDate(t.date)}</time><p>${esc(t.text)}</p><small>${esc(t.source||"")}</small></div></li>`).join("")}</ol></section>`:"",
+    disclosure:a.disclosure?`<p class="disclosure">${esc(a.disclosure)}</p>`:"",
+  };
+}
+const unkHTML = list => list.length?`<section class="blk unk"><div class="blk-title">${I.help}Ce qu'on ne sait pas encore</div><ul>${list.map(u=>`<li><span>${esc(u)}</span></li>`).join("")}</ul></section>`:"";
+function bodyExpress(a){
+  const x=a.formats?.express;
+  if(!x) return `<div class="notice">La version Express n'existe pas encore pour cet article ; voici la version Comprendre.</div>`+bodyComprendre(a);
+  const figs=(x.figures||[]).map(i=>(a.figures||[])[i]).filter(Boolean).slice(0,3);
+  return `<ol class="points">${x.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ol>
+    ${figsHTML(figs)}
+    <section class="blk why" style="margin-top:8px"><div class="blk-title">${I.spark}Pourquoi ça compte</div><p>${esc(x.why)}</p></section>
+    <p class="note-line" style="margin:-16px 0 24px">Sources : ${srcNames(a).map(esc).join(", ")}. <button class="linkbtn" type="button" data-goto="comprendre">Lire la version Comprendre</button></p>
+    ${a.disclosure?`<p class="disclosure">${esc(a.disclosure)}</p>`:""}`;
+}
+function bodyComprendre(a){
+  const c=comprendreParts(a);
+  return c.lede+c.figs+c.prose+c.items+c.chart+c.why+c.explain+c.ctx+c.timeline+unkHTML(a.unknowns||[])+c.disclosure+sourcesHTML(a)+relatedHTML(a);
+}
+function bodyApprofondir(a){
+  const d=a.formats?.approfondir;
+  if(!d || d.status==="indisponible"){
+    return `<div class="deep-na">${I.help}<div><b>Pas de version approfondie pour cet article</b><p>${esc(d?.reason||"Les sources disponibles ne permettent pas encore une analyse plus longue.")} Plutôt que d'allonger artificiellement le texte, Moka affiche la version Comprendre.</p></div></div>`+bodyComprendre(a);
+  }
+  const c=comprendreParts(a);
+  const idx=Object.fromEntries((d.sources||[]).map((s,i)=>[s.id,i+1]));
+  const deep=`<section class="deep"><div class="deep-head">${I.spark}<span>Analyse approfondie</span></div>
+    ${(d.status==="court"||(fmtMinutes(a,"approfondir")||0)<5)?`<p class="note-line" style="margin:0 0 16px">${esc(d.note||"Version plus courte que prévu : les sources disponibles ne permettent pas une analyse de 5 à 10 minutes.")}</p>`:""}
+    ${d.sections.map(sec=>`<h2>${esc(sec.h)}</h2>${sec.p.map(p=>`<p>${esc(p)}</p>`).join("")}${sec.refs?.length?`<p class="refs">D'après ${sec.refs.filter(r=>idx[r]).map(r=>`<a href="#ds-${esc(r)}" data-ref="${esc(r)}">[${idx[r]}]</a>`).join(" ")}</p>`:""}`).join("")}
+  </section>`;
+  return c.lede+c.figs+c.prose+deep+c.items+c.chart+c.why+c.explain+c.ctx+c.timeline+unkHTML([...(a.unknowns||[]), ...(d.limits||[])])+c.disclosure+sourcesHTML(a, d.sources)+relatedHTML(a);
+}
+function renderFormat(a){
+  const f=S.format; const box=document.getElementById("fmtBody"); if(!box) return;
+  box.innerHTML = f==="express"?bodyExpress(a):f==="approfondir"?bodyApprofondir(a):bodyComprendre(a);
+  document.querySelectorAll(".fmt [role=radio]").forEach(b=>{ const on=b.dataset.f===f; b.setAttribute("aria-checked",on); b.tabIndex=on?0:-1; });
+  box.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>setFormat(b.dataset.goto, a));
+  box.querySelectorAll("[data-ref]").forEach(l=>l.onclick=(e)=>{ e.preventDefault(); const t=document.getElementById("ds-"+l.dataset.ref); if(t){ t.scrollIntoView({behavior:"smooth",block:"center"}); t.classList.add("flash"); setTimeout(()=>t.classList.remove("flash"),1600);} });
+}
+function setFormat(f, a){
+  if(!FORMATS.some(x=>x.id===f)) return;
+  S.format=f; try{ localStorage.setItem("moka.format", f); }catch(e){}
+  renderFormat(a); saveState();
+}
+function viewArticle(id){
+  setNav(""); if(!S.loaded) return;
+  const a=S.articles.find(x=>x.id===id);
+  if(!a){ $app.innerHTML=`<div class="reader"><div class="reader-bar"><a class="icon-btn" href="#" aria-label="Retour">${I.back}</a></div><div class="empty"><h2>Article introuvable</h2>Il a peut-être été retiré de la base.</div></div>`; return; }
+  const saved=S.saved.has(a.id); const v=VERIF[a.origin==="auto"?"auto":a.verification]||{};
+  const pubs=[...new Set((a.sources||[]).map(s=>s.date))].sort();
+  const names=srcNames(a);
+  const first=a.sources?.[0];
+  const im=a.image;
+  const caption = im && photoSrc(a)
+    ? `<span>${im.kind==="contexte"?`Photo d'illustration${im.caption?` : ${esc(im.caption)}`:""} · `:`Photo${im.caption?` : ${esc(im.caption)}`:""} · `}${esc(im.credit||"")}${im.license?` · ${im.license_url?`<a href="${esc(im.license_url)}" target="_blank" rel="noopener">${esc(im.license)}</a>`:esc(im.license)}`:""}${im.modifications?` · ${esc(im.modifications)}`:""}${im.source_url?` · <a href="${esc(im.source_url)}" target="_blank" rel="noopener">source</a>`:""}</span>`
+    : `<span>Illustration Moka, sans lien avec une photo réelle de l'événement.</span>`;
+  const deepNA = !a.formats?.approfondir || a.formats.approfondir.status==="indisponible";
+  $app.innerHTML = `<article class="reader">
+    <div class="reader-bar">
+      <a class="icon-btn" id="backBtn" href="#" aria-label="Retour">${I.back}</a>
+      <span class="grow">${esc(CAT[a.category]?.name||"")}</span>
+      ${first?.web||first?.gmail?`<a class="icon-btn" href="${esc(first.web||first.gmail)}" target="_blank" rel="noopener" aria-label="Ouvrir la source originale">${I.ext}</a>`:""}
+      <button class="icon-btn" id="saveBtn" type="button" aria-pressed="${saved}" aria-label="${saved?"Retirer des sauvegardés":"Sauvegarder"}">${I.save}</button>
+    </div>
+    <div class="r-hero">${mediaHTML(a,{w:1200,h:750,big:false,badge:!photoSrc(a)})}<div class="caption">${caption}${S.assets&&S.isOwner?`<button type="button" id="photoBtn">${im&&photoSrc(a)?"Changer la photo":"Ajouter une photo"}</button>`:""}</div></div>
+    <div id="photoForm"></div>
+    <header class="r-head">${eyebrow(a)}<h1>${esc(a.title)}</h1><p class="dek">${esc(a.dek)}</p></header>
+    <div class="r-meta"><div class="srcdots">${names.slice(0,3).map(n=>`<span title="${esc(n)}">${esc(initials(n))}</span>`).join("")}</div>
+      <span><b>${esc(names.join(", "))}</b></span><span>Événement : <b>${esc(a.event_label||fmtDate(a.event_date))}</b></span><span>Reçu le ${pubs.map(d=>fmtDate(d,{day:"numeric",month:"short"})).join(", ")}</span></div>
+    <div class="legend-line" style="margin-top:12px"><span class="tag ${v.cls||""}">${a.verification==="rapporte"&&a.origin!=="auto"?I.check:""}${esc(v.t||"")}</span>${a.moka_context?`<span class="tag">${I.book}Contexte Moka ajouté</span>`:""}${a.unknowns?.length?`<span class="tag">${I.help}${a.unknowns.length} inconnue${a.unknowns.length>1?"s":""}</span>`:""}</div>
+    <div class="fmt" role="radiogroup" aria-label="Profondeur de lecture">${FORMATS.map(f=>{ const m=fmtMinutes(a,f.id); return `<button type="button" role="radio" data-f="${f.id}" aria-checked="false" tabindex="-1"><b>${f.name}</b><span>${f.id==="approfondir"&&deepNA?"indisponible":`${m} min`}</span></button>`; }).join("")}</div>
+    <div id="fmtBody"></div>
+  </article>`;
+  renderFormat(a);
+  const group=document.querySelector(".fmt");
+  group.querySelectorAll("[role=radio]").forEach(b=>b.onclick=()=>setFormat(b.dataset.f, a));
+  group.addEventListener("keydown",e=>{
+    const i=FORMATS.findIndex(f=>f.id===S.format);
+    const k={ArrowRight:1, ArrowDown:1, ArrowLeft:-1, ArrowUp:-1}[e.key];
+    if(k){ e.preventDefault(); const n=FORMATS[(i+k+3)%3].id; setFormat(n,a); group.querySelector(`[data-f="${n}"]`).focus(); }
+  });
+  document.getElementById("saveBtn").onclick=()=>toggleSave(a.id);
+  document.getElementById("backBtn").onclick=(e)=>{ if(S.navDepth>0){ e.preventDefault(); history.back(); } };
+  const pb=document.getElementById("photoBtn"); if(pb) pb.onclick=()=>openPhotoForm(a);
+}
+
+/* ---------- Ajout d'une photo (propriétaire) ---------- */
+function openPhotoForm(a){
+  const box=document.getElementById("photoForm"); const im=a.image||{};
+  box.innerHTML=`<form class="panel" id="pf" style="margin-top:16px"><h2>Photo de l'article</h2>
+    <p class="note-line">Utilisez une photo que vous avez le droit de publier : visuel officiel d'une entreprise, photo sous licence libre (Wikimedia Commons…), ou votre propre photo. Elle remplace l'illustration.</p>
+    <div class="field"><label for="pf-file">Fichier (JPEG, PNG ou WebP)</label><input id="pf-file" type="file" accept="image/jpeg,image/png,image/webp" required></div>
+    <div class="field"><label for="pf-alt">Description de l'image</label><input id="pf-alt" type="text" value="${esc(im.alt||"")}" placeholder="Ex. Le siège de l'Egyptian Exchange au Caire" required></div>
+    <div class="field"><label for="pf-credit">Crédit</label><input id="pf-credit" type="text" value="${esc(im.credit||"")}" placeholder="Ex. Jean Dupont / MNT-Halan" required></div>
+    <div class="field"><label for="pf-license">Licence ou autorisation</label><input id="pf-license" type="text" value="${esc(im.license||"")}" placeholder="Ex. CC BY-SA 4.0, kit presse officiel" required></div>
+    <div class="field"><label for="pf-url">Lien vers la source de la photo</label><input id="pf-url" type="url" value="${esc(im.source_url||"")}" placeholder="https://…"></div>
+    <label class="check"><input id="pf-ok" type="checkbox" required> Cette photo montre bien le sujet de l'article, et j'ai le droit de l'utiliser.</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">Enregistrer la photo</button><button class="btn" type="button" id="pf-cancel">Annuler</button>${im.asset?`<button class="btn" type="button" id="pf-remove">Revenir à l'illustration</button>`:""}</div>
+    <p class="note-line" id="pf-msg" style="margin-top:10px"></p></form>`;
+  box.scrollIntoView({behavior:"smooth", block:"start"});
+  document.getElementById("pf-cancel").onclick=()=>{ box.innerHTML=""; };
+  const rm=document.getElementById("pf-remove"); if(rm) rm.onclick=async()=>{ try{ await S.db.doc("articles/"+a.id).update({image:null}); }catch(e){ document.getElementById("pf-msg").textContent="Impossible de modifier l'article ("+e.code+")."; } };
+  document.getElementById("pf").onsubmit=async(ev)=>{
+    ev.preventDefault(); const msg=document.getElementById("pf-msg"); const file=document.getElementById("pf-file").files[0];
+    if(!file){ msg.textContent="Choisissez un fichier."; return; }
+    msg.textContent="Envoi de la photo…";
+    try{
+      const up=await S.assets.upload(file);
+      await S.db.doc("articles/"+a.id).update({image:{asset:up.id, kind:"photo", alt:document.getElementById("pf-alt").value.trim(), credit:document.getElementById("pf-credit").value.trim(), license:document.getElementById("pf-license").value.trim(), source_url:document.getElementById("pf-url").value.trim()||null, added_at:new Date().toISOString()}});
+      box.innerHTML="";
+    }catch(e){
+      const m={too_large:"Fichier trop lourd (20 Mo maximum).", unsupported_type:"Format non accepté : utilisez JPEG, PNG ou WebP.", quota_or_state:"L'espace de stockage de Moka est plein.", rate_limited:"Trop d'envois d'un coup ; réessayez dans un instant."};
+      msg.textContent = m[e.code] || `L'envoi a échoué (${e.code||"erreur"}).`;
+    }
+  };
+}
+
+/* ---------- Sources & relève Gmail ---------- */
+const SOURCE_LIST = [
+  ["Africa: The Big Deal","ok","Reçue"],["Ido Sum","ok","Reçue"],["The Daily Pitch (PitchBook)","wait","Reçue, sans version texte"],
+  ["Sifted","ok","Reçue"],["Leap of Scale","off","Aucun email récent"],["The Next Big Sh*t","ok","Reçue"],
+  ["TLDR, TLDR Fintech","ok","Reçue"],["TLDR Africa","ok","Inscription du 7 nov."],["Green Rising","ok","Inscription du 7 nov."],
+  ["Publications de la BEI","ok","Reçue"],["France Digitale","ok","Reçue"],["Agence Ecofin","wait","Expéditeur à identifier"],["Energy Investor Weekly","wait","Premier email attendu"],
+];
+function viewSources(){
+  setNav("sources");
+  const m=S.meta||{}; const ing=S.ingest;
+  $app.innerHTML = `<section class="page">
+    <div class="hello" style="padding-bottom:0"><div class="d">Coulisses</div></div>
+    <h1>Sources et collecte</h1>
+    <p>Moka lit les newsletters de votre libellé Gmail <b>Moka/Newsletters</b>, en garde l'essentiel et le réécrit en français. Chaque chiffre renvoie à son email d'origine.</p>
+    ${window.MOKA_STANDALONE?`<div class="panel"><h2>Édition de lecture</h2>
+      <p>Cette version de Moka est indépendante de claude.ai : elle affiche l'édition du 7 novembre 2026, enregistrée dans des fichiers statiques. La collecte des newsletters n'y est pas encore active.</p>
+      <p>Vos articles sauvegardés restent sur cet appareil. Ils ne sont pas synchronisés avec vos autres appareils.</p></div>`:`<div class="panel"><h2>Relever les newsletters</h2>
+      <p>Moka passe par votre connecteur Gmail sur claude.ai, avec deux outils de lecture seulement : <b>rechercher</b> dans le libellé et <b>lire</b> un fil. Il ne peut ni envoyer, ni supprimer, ni modifier vos emails, et la page ne voit jamais vos identifiants.</p>
+      <p>À chaque relève, Moka lit au plus 6 newsletters des 3 derniers jours qu'il n'a pas encore traitées, les fait résumer par Claude avec la consigne de n'utiliser que leur contenu, puis les ajoute avec la mention « Rédigé automatiquement ».</p>
+      ${S.isOwner?"":`<p class="note-line">La relève est réservée au propriétaire de Moka.</p>`}
+      ${INGEST_PAUSED?`<p class="note-line"><b>Collecte en pause.</b> La relève est désactivée le temps de la phase de test : les articles déjà enregistrés restent tous lisibles.</p>`:""}
+      <button class="btn primary" id="ingestBtn" type="button" ${INGEST_PAUSED||ing.running||!S.isOwner?"disabled":""}>${I.mail}${INGEST_PAUSED?"Collecte en pause":ing.running?"Relève en cours…":"Relever les newsletters"}</button>
+      <p class="note-line" style="margin-top:12px">${m.last_run?`Dernière relève : ${fmtDate(m.last_run,{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}${m.last_report?` · ${esc(m.last_report)}`:""}`:"Aucune relève automatique pour l'instant. L'édition actuelle a été préparée par Claude le 7 novembre."}</p>
+      ${ing.log.length?`<div class="log" id="log">${esc(ing.log.join("\n"))}</div>`:""}
+    </div>`}
+    <div class="panel"><h2>Vos sources</h2><div class="srclist">${SOURCE_LIST.map(([n,st,t])=>`<div class="s"><span>${esc(n)}</span><span class="status ${st}">${esc(t)}</span></div>`).join("")}</div>
+      <p class="note-line" style="margin-top:12px">PitchBook n'envoie qu'une version HTML ; Moka ne sait pas encore la lire proprement. Médias, sites institutionnels et flux RSS pourront s'ajouter ensuite.</p></div>
+    <div class="panel"><h2>Sauvegarder mes données</h2>
+      <p>Copie l'ensemble des articles, vos favoris et votre format de lecture au format JSON, pour une sauvegarde ou une migration. Vos favoris ne sont lisibles que par vous : cette copie est le seul moyen de les récupérer.</p>
+      <button class="btn" id="exportBtn" type="button">Copier mes données</button> <span class="note-line" id="exportMsg"></span></div>
+    <div class="panel"><h2>Comment Moka écrit</h2><ul>
+      <li>Les informations viennent des newsletters ; le contexte général ajouté par Moka est signalé à part.</li>
+      <li>Les chiffres non confirmés et les inconnues sont listés dans « Ce qu'on ne sait pas encore ».</li>
+      <li>Quand plusieurs newsletters traitent du même sujet, l'article regroupe toutes les sources.</li>
+      <li>Une illustration n'est jamais présentée comme une photo ; une photo porte toujours son crédit.</li></ul></div>
+  </section>`+footer();
+  const b=document.getElementById("ingestBtn"); if(b) b.onclick=runIngest;
+  const ex=document.getElementById("exportBtn"); if(ex) ex.onclick=async()=>{
+    const data={app:"moka", exported_at:new Date().toISOString(), articles:S.articles, user_state:{saved:[...S.saved], format:S.format}, meta:S.meta};
+    const msg=document.getElementById("exportMsg");
+    try{ await navigator.clipboard.writeText(JSON.stringify(data,null,1)); msg.textContent=`Copié : ${S.articles.length} articles, ${S.saved.size} favoris. Collez-le dans un fichier .json.`; }
+    catch(e){ msg.textContent="Le navigateur a refusé la copie. Réessayez depuis claude.ai sur ordinateur."; }
+  };
+  const lg=document.getElementById("log"); if(lg) lg.scrollTop=lg.scrollHeight;
+}
+
+/* ---------- Routeur (avec transition douce) ---------- */
+function route(){
+  const h=location.hash.replace(/^#/,"");
+  if(h.startsWith("a-")) return viewArticle(h.slice(2));
+  if(h.startsWith("cat-")) return viewCat(h.slice(4));
+  if(h==="rubriques") return viewCats();
+  if(h==="saved") return viewSaved();
+  if(h==="sources") return viewSources();
+  return viewHome();
+}
+const scrollMemo = {};
+let lastHash = location.hash;
+window.addEventListener("hashchange",()=>{
+  scrollMemo[lastHash]=window.scrollY; S.navDepth=(S.navDepth||0)+(location.hash.startsWith("#a-")?1:0); if(!location.hash.startsWith("#a-")) S.navDepth=0; lastHash=location.hash;
+  const go=()=>{ route(); window.scrollTo({top: location.hash.startsWith("#a-") ? 0 : (scrollMemo[location.hash]||0)}); };
+  if(document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(go); else go();
+});
+function rerender(){
+  const y=window.scrollY;
+  const pf=document.getElementById("photoForm"); if(pf && pf.innerHTML.trim()) return; // ne pas écraser un formulaire en cours
+  route(); window.scrollTo({top:y});
+}
+
+/* ---------- Sauvegarde ---------- */
+function loadLocalSaved(){ try{ const v=JSON.parse(localStorage.getItem("moka.saved")||"[]"); S.saved=new Set(v);}catch(e){} try{ const f=localStorage.getItem("moka.format"); if(f) S.format=f; }catch(e){} }
+let saveTimer=null;
+function saveState(){
+  try{ localStorage.setItem("moka.saved",JSON.stringify([...S.saved])); }catch(e){}
+  if(!(S.db && S.uid)) return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{ try{ await S.db.doc(`data/users/${S.uid}/state`).set({saved:[...S.saved], format:S.format, updated:new Date().toISOString()}); }catch(e){ console.warn("state", e); } }, 400);
+}
+function toggleSave(id){
+  S.saved.has(id)?S.saved.delete(id):S.saved.add(id);
+  const btn=document.getElementById("saveBtn");
+  if(btn){ const on=S.saved.has(id); btn.setAttribute("aria-pressed",on); btn.setAttribute("aria-label",on?"Retirer des sauvegardés":"Sauvegarder"); setNav(""); }
+  else rerender();
+  saveState();
+}
+
+/* ---------- Démarrage ---------- */
+async function boot(){
+  loadLocalSaved(); setNav("home");
+  const use = (n)=> (window.claude && typeof window.claude.use==="function") ? window.claude.use(n).catch(()=>null) : Promise.resolve(null);
+  const [db,user] = await Promise.all([use("db"),use("user")]);
+  S.db=db; S.user=user;
+  if(user){ try{ S.uid=await user.id(); }catch(e){} try{ S.isOwner=!!(await user.isOwner()); }catch(e){} }
+  use("assets").then(a=>{ S.assets=a; if(a && location.hash.startsWith("#a-")) rerender(); });
+  if(!db){ S.loaded=true; S.loadErr="Moka ne peut pas joindre sa base dans cet affichage. Ouvrez-le depuis claude.ai, connecté à votre compte."; route(); return; }
+  const timer=setTimeout(()=>{ if(!S.loaded){ S.loaded=true; S.stale=true; S.loadErr="Les actualités mettent du temps à arriver. Vérifiez votre connexion ; la page se mettra à jour toute seule."; route(); } },10000);
+  db.collection("articles").onSnapshot(snap=>{
+    S.articles=snap.docs.map(d=>({...d.data(), id:d.id})).filter(a=>a.title);
+    if(!snap.metadata.fromCache){ clearTimeout(timer); S.stale=false; S.loadErr=null; }
+    S.loaded=true; rerender();
+  }, err=>{ clearTimeout(timer); S.loaded=true; S.loadErr="Impossible de lire les actualités ("+err.code+")."; route(); });
+  db.doc("meta/ingest").onSnapshot(d=>{ S.meta=d.exists?d.data():null; if(location.hash==="#sources") viewSources(); }, ()=>{});
+  if(S.uid){ db.doc(`data/users/${S.uid}/state`).onSnapshot(d=>{
+      if(d.exists && Array.isArray(d.data().saved)){ S.saved=new Set(d.data().saved); if(d.data().format && d.data().format!==S.format){ S.format=d.data().format; try{ localStorage.setItem("moka.format", S.format); }catch(e){} } }
+      else if(S.saved.size || S.format!=="comprendre"){ saveState(); }
+      if(S.loaded){ if(location.hash.startsWith("#a-")){ setNav(""); const a=S.articles.find(x=>"#a-"+x.id===location.hash); if(a) renderFormat(a); } else rerender(); }
+    }, ()=>{}); }
+}
+
+/* ---------- Relève : Gmail (lecture) → Claude → base ---------- */
+function log(msg){ S.ingest.log.push(msg); const lg=document.getElementById("log"); if(lg){ lg.textContent=S.ingest.log.join("\n"); lg.scrollTop=lg.scrollHeight; } else if(location.hash==="#sources") viewSources(); }
+const MCP_FIX = {
+  server_not_connected:"Le connecteur Gmail n'est pas ajouté à votre compte. Ajoutez-le dans claude.ai → Paramètres → Connecteurs, puis relancez.",
+  needs_reauth:"La connexion Gmail a expiré. Reconnectez Gmail dans claude.ai → Paramètres → Connecteurs.",
+  selection_required:"Plusieurs connecteurs Gmail existent : choisissez-en un dans la fenêtre proposée par claude.ai.",
+  not_in_manifest:"L'accès Gmail a été refusé pour Moka. Vous pouvez l'autoriser à nouveau depuis les réglages de l'artifact.",
+  approval_required:"claude.ai attend votre accord pour que Moka lise Gmail. Relancez la relève et acceptez la demande.",
+  blocked_by_policy:"Votre organisation bloque cet outil Gmail.",
+  server_unavailable:"Gmail ne répond pas pour le moment. Réessayez dans quelques minutes.",
+};
+const slugify = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);
+/* Testé le 7 nov. 2026 sur un vrai numéro de The Daily Pitch : 192 Ko de HTML → 13 Ko de texte propre. */
+function htmlToText(html){
+  const doc=new DOMParser().parseFromString(String(html||""),"text/html");
+  doc.querySelectorAll("script,style,head,title,img,svg,picture,video,noscript").forEach(n=>n.remove());
+  doc.querySelectorAll('[style*="display:none"],[style*="display: none"],[style*="max-height:0"],[style*="mso-hide:all"]').forEach(n=>n.remove());
+  doc.querySelectorAll("a").forEach(a=>{ const t=a.textContent.trim(); if(!t) a.remove(); });
+  doc.querySelectorAll("br").forEach(n=>n.replaceWith("\n"));
+  doc.querySelectorAll("p,div,tr,li,h1,h2,h3,h4,h5,table,section,article,blockquote").forEach(n=>{ n.prepend("\n"); n.append("\n"); });
+  return (doc.body?doc.body.textContent:"").replace(/[ \t ͏​‌ ­]+/g," ").replace(/ *\n */g,"\n").replace(/\n{3,}/g,"\n\n").trim();
+}
+function cleanBody(t){
+  return String(t||"").replace(/https?:\/\/\S+/g,"").replace(/\[\s*\]/g,"").replace(/\(\s*\)/g,"").replace(/[ \t͏ ]+/g," ").replace(/\n{3,}/g,"\n\n").trim().slice(0,24000);
+}
+async function runIngest(){
+  if(INGEST_PAUSED||S.ingest.running) return;
+  S.ingest={running:true, log:[]}; viewSources();
+  const use=(n)=> (window.claude && window.claude.use) ? window.claude.use(n).catch(()=>null) : Promise.resolve(null);
+  const [mcp,sample]=await Promise.all([use("mcp"),use("sample")]);
+  const done=(report)=>{ S.ingest.running=false; log(report); viewSources(); };
+  if(!mcp){ return done("Le connecteur Gmail n'est pas disponible dans cet affichage. Ouvrez Moka dans claude.ai."); }
+  if(!sample){ return done("La rédaction par Claude n'est pas disponible dans cet affichage."); }
+  if(!S.db || !S.isOwner){ return done("Seul le propriétaire de Moka peut ajouter des actualités."); }
+  const metaRef=S.db.doc("meta/ingest"); let meta={threads:{}};
+  try{ const d=await metaRef.get(); if(d.exists) meta={threads:{}, ...d.data()}; }catch(e){}
+  let threads=[];
+  try{
+    log("Recherche des newsletters des 3 derniers jours…");
+    const r=await mcp.callTool("Gmail","search_threads",{query:"label:moka-newsletters newer_than:3d", pageSize:25, view:"THREAD_VIEW_SUMMARY"});
+    const p=r.payload||{}; threads=(p.threads||[]).filter(t=>!meta.threads[t.id]);
+    log(`${(p.threads||[]).length} fils trouvés, ${threads.length} nouveaux.`);
+  }catch(e){ return done(MCP_FIX[e.code] || `Recherche Gmail impossible (${e.code||"erreur"}) : ${e.message||""}`); }
+  threads=threads.slice(0,6);
+  let created=0, merged=0, skipped=0;
+  for(const t of threads){
+    const m0=(t.messages||[])[0]||{}; const sender=(m0.addressDisplayNames||[])[0]?.displayName || m0.sender || "Newsletter";
+    log(`\n· ${sender} — ${m0.subject||""}`);
+    let msg;
+    try{ const r=await mcp.callTool("Gmail","get_thread",{threadId:t.id, messageFormat:"PLAIN_TEXT"}); msg=((r.payload||{}).messages||[])[0]; }
+    catch(e){ log(`  lecture impossible (${e.code}).`); if(MCP_FIX[e.code] && e.code!=="tool_error") return done(MCP_FIX[e.code]); continue; }
+    let body=cleanBody(msg?.plaintextBody);
+    const markDone=(why)=>{ meta.threads[t.id]={at:new Date().toISOString(), why}; };
+    if(body.length<600){
+      // Newsletters HTML (ex. PitchBook) : la version texte ne contient qu'un lien « voir dans le navigateur ».
+      try{ const r2=await mcp.callTool("Gmail","get_thread",{threadId:t.id, messageFormat:"FULL_CONTENT"}); const m2=((r2.payload||{}).messages||[])[0];
+           if(m2?.htmlBody){ body=cleanBody(htmlToText(m2.htmlBody)); log(`  version HTML convertie en texte (${Math.round(body.length/1000)} k caractères).`); } }
+      catch(e){ log(`  lecture HTML impossible (${e.code}).`); }
+    }
+    if(body.length<600){ log("  pas de texte exploitable, ignorée."); markDone("no-text"); skipped++; continue; }
+    const index=S.articles.map(a=>({id:a.id, title:a.title, date:a.event_date||a.published_date, entities:(a.entities||[]).slice(0,8)}));
+    const prompt=`Tu es le rédacteur de Moka, une application d'actualité en français pour un lecteur qui suit l'investissement et l'économie africaine (priorités : 1 startups africaines/VC/levées/exits/fonds, 2 private equity/M&A/financements, 3 économie et entreprises africaines, 4 énergie/oil & gas/logistique/assurance/industrie, 5 tech mondiale, 6 macro internationale).
+À partir de la NEWSLETTER ci-dessous, sélectionne au plus 3 informations qui méritent vraiment l'attention (ignore publicités, sponsors, événements, offres d'emploi). S'il n'y a rien d'important, renvoie une liste vide.
+RÈGLES ABSOLUES : n'utilise QUE des faits présents dans la newsletter. N'invente jamais un chiffre, une valorisation, un investisseur, une date. Si une information est présentée comme une rumeur ou "reportedly", indique verification:"non-confirme". Liste dans unknowns ce que la source ne dit pas et qu'un lecteur voudrait savoir.
+STYLE : français naturel, vivant, pédagogique, phrases courtes, aucun jargon inutile, pas de formules d'IA ni de tirets cadratins.
+DATES : la newsletter a été reçue le ${(m0.date||"").slice(0,10)}. event_date est la date de l'événement lui-même, jamais postérieure à la réception. Si l'information concerne un événement de plus de 30 jours, mets old:true (Moka ne la publiera pas comme une actualité).
+REGROUPEMENT : si l'information correspond au même événement qu'un article existant (liste INDEX), mets son id dans merge_into et donne seulement update (une phrase sur ce que cette source ajoute).
+Réponds en JSON strict : {"stories":[{"merge_into":null|"id","update":"","title":"","dek":"1 phrase","brief":"2 phrases","category":"afrique-vc|capital|economie-afrique|energie-industrie|tech|monde","kind":"actu|analyse|brief","priority":1-6,"event_label":"ex. 4 novembre 2026","event_date":"AAAA-MM-JJ ou null","figures":[{"v":"","l":"","n":""}],"body":[{"h":null,"p":""}],"why":"","unknowns":[""],"verification":"rapporte|non-confirme|analyse","entities":[""],"cover_big":"chiffre ou mot court","cover_small":"2 mots","express_points":["3 phrases courtes : les faits essentiels"],"express_why":"1 phrase","old":false}]}
+INDEX : ${JSON.stringify(index)}
+NEWSLETTER (${sender}, reçue le ${m0.date||""}, objet : ${m0.subject||""}) :
+${body}`;
+    let out;
+    try{ out=await sample.json(prompt,{modelTier:"default"}); }
+    catch(e){ if(e.code==="not_granted") return done("Vous n'avez pas autorisé Moka à utiliser Claude pour rédiger."); if(e.code==="rate_limited") return done("Trop de demandes à Claude pour l'instant. Réessayez dans quelques minutes."); log(`  rédaction impossible (${e.code||"erreur"}).`); continue; }
+    const stories=Array.isArray(out?.stories)?out.stories:[];
+    if(!stories.length){ log("  rien d'assez important."); markDone("empty"); continue; }
+    const source={name:sender, date:(m0.date||"").slice(0,10), gmail:msg?.viewUrl||t.viewUrl||null};
+    for(const st of stories){
+      try{
+        const target = st.merge_into && S.articles.find(a=>a.id===st.merge_into);
+        if(target){
+          const ref=S.db.doc("articles/"+target.id); const cur=(await ref.get()).data()||target;
+          const sources=[...(cur.sources||[]), source].filter((s,i,arr)=>arr.findIndex(x=>x.gmail===s.gmail&&x.name===s.name)===i);
+          const timeline=[...(cur.timeline||[]), {date:source.date, text:String(st.update||"Nouvelle source sur ce sujet."), source:sender}];
+          await ref.update({sources, timeline}); merged++; log(`  regroupé avec « ${target.title} »`);
+        } else {
+          if(!st.title || !st.dek) continue;
+          const recv=(m0.date||"").slice(0,10);
+          if(st.old===true || (st.event_date && recv && (new Date(recv)-new Date(st.event_date))/864e5 > 30 && st.kind!=="analyse")){ log(`  ancienne information ignorée : ${st.title}`); continue; }
+          if(st.event_date && recv && st.event_date>recv) st.event_date=recv;
+          const id=slugify(st.title)+"-"+(source.date||"").replace(/-/g,"");
+          const cat = CAT[st.category]?st.category:"monde";
+          const pr = Math.min(6,Math.max(1,Number(st.priority)||6));
+          await S.db.doc("articles/"+id).set({
+            title:String(st.title), dek:String(st.dek), brief:String(st.brief||st.dek), category:cat, kind:KIND[st.kind]?st.kind:"actu",
+            score: 70-(pr-1)*6, event_label:st.event_label||null, event_date:st.event_date||null, published_date:source.date,
+            figures:(st.figures||[]).filter(f=>f&&f.v).slice(0,4), body:(st.body||[]).filter(b=>b&&b.p).slice(0,6), why:st.why||"",
+            unknowns:(st.unknowns||[]).filter(Boolean).slice(0,4), verification:st.verification==="non-confirme"?"non-confirme":(st.verification==="analyse"?"analyse":"rapporte"),
+            sources:[source], entities:(st.entities||[]).slice(0,12), related:[], explain:[], timeline:[], items:[], chart:null, moka_context:null, disclosure:null, image:null,
+            formats:{express:{points:(st.express_points||[]).filter(Boolean).slice(0,3), why:String(st.express_why||st.why||""), figures:[0,1].filter(i=>(st.figures||[])[i]?.v)},
+                     approfondir:{status:"indisponible", reason:"Article rédigé automatiquement à partir d'une seule newsletter ; aucune recherche complémentaire n'a encore été faite."}},
+            cover:{big:String(st.cover_big||"").slice(0,14), small:String(st.cover_small||"").slice(0,24)},
+            origin:"auto", collected_at:new Date().toISOString()
+          });
+          created++; log(`  + ${st.title}`);
+        }
+      }catch(e){ if(e.code==="quota_exceeded") return done("La base de Moka est pleine. Il faudra archiver d'anciens articles."); log(`  écriture impossible (${e.code||"erreur"}).`); }
+    }
+    markDone("ok");
+  }
+  const ent=Object.entries(meta.threads).sort((a,b)=>String(b[1].at).localeCompare(String(a[1].at))).slice(0,300);
+  const report=`${created} nouvelle(s), ${merged} regroupée(s), ${skipped} ignorée(s)`;
+  try{ await metaRef.set({threads:Object.fromEntries(ent), last_run:new Date().toISOString(), last_report:report}); }catch(e){}
+  done(threads.length?`\nTerminé : ${report}.`:"\nAucune nouvelle newsletter à traiter.");
+}
+
+route();
+boot();
+</script>
+</body>
+</html>
