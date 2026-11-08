@@ -29,7 +29,7 @@ for a in ARTICLES:
     for f in FORMATS:
         p = SCRIPTS / a / f"{f}.txt"
         if not p.exists(): continue                      # format inexistant : rien à générer
-        text = p.read_text().strip()
+        text = p.read_text().strip().replace("'", "\u2019")   # apostrophes typographiques (docs/AUDIO-SCRIPTS.md)
         h = hashlib.sha256((VOICE + "\n" + text).encode()).hexdigest()[:10]
         cur = index.get(a, {}).get(f)
         if cur and cur.get("hash") == h and (OUT / a / cur["file"]).exists():
