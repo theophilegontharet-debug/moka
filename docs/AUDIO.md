@@ -94,3 +94,10 @@ C'est aussi la base du briefing quotidien narré.
    vitesse, barre de progression, reprise là où l'on s'était arrêté. Repli sur la voix du navigateur
    quand un article n'a pas encore de fichier.
 4. Génération déclenchée à la main (GitHub Actions), avec un plafond de caractères par lancement.
+
+### Choix actuel : Google Chirp 3 HD (essai)
+- Secret GitHub : `GOOGLE_TTS_API_KEY` (clé d'API Google Cloud limitée à « Cloud Text-to-Speech API »).
+- Action « Essais de voix Moka », service `google` : lit la liste officielle des voix fr-FR Chirp 3 HD,
+  prend 2 voix féminines + 2 masculines (ou celles indiquées), envoie la clé en en-tête uniquement.
+- Plafonds : 2 000 caractères par essai, 6 000 par exécution (environ 4 200 pour 4 voix).
+- Page d'écoute : `/audio/essais/`, lien depuis la page Sources de Moka.

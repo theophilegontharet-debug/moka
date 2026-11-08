@@ -56,7 +56,11 @@ assert len(arts) == 32, len(arts)
 assert sum(1 for a in arts if a.get("image")) == len(photos)
 
 # ---------- Fichiers ----------
-if site.exists(): shutil.rmtree(site)
+# on reconstruit tout sauf site/audio (fichiers audio générés une seule fois, à conserver)
+if site.exists():
+    for x in site.iterdir():
+        if x.name == "audio": continue
+        shutil.rmtree(x) if x.is_dir() else x.unlink()
 (site / "data").mkdir(parents=True)
 (site / "data/articles.json").write_text(blob)
 shutil.copytree(root / "photos", site / "photos")

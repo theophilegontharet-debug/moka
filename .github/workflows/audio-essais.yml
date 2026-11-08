@@ -6,6 +6,14 @@ name: Essais de voix Moka
 on:
   workflow_dispatch:
     inputs:
+      providers:
+        description: "Services à essayer : google, elevenlabs, openai (séparés par des virgules)"
+        required: false
+        default: "google"
+      google_voices:
+        description: "Voix Google à essayer, ex. Aoede,Charon (facultatif ; sinon 2 féminines + 2 masculines)"
+        required: false
+        default: ""
       elevenlabs_voice_ids:
         description: "IDs de voix ElevenLabs de votre compte, séparés par des virgules (facultatif)"
         required: false
@@ -30,7 +38,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
           ELEVENLABS_VOICE_IDS: ${{ inputs.elevenlabs_voice_ids }}
+          PROVIDERS: ${{ inputs.providers }}
+          GOOGLE_VOICES: ${{ inputs.google_voices }}
           MAX_CHARS: "2000"
+          MAX_TOTAL_CHARS: "6000"
         run: python3 tools/audio/essais.py
       - name: Publier les essais
         run: |

@@ -814,7 +814,8 @@ function viewSources(){
     <p>Moka lit les newsletters de votre libellé Gmail <b>Moka/Newsletters</b>, en garde l'essentiel et le réécrit en français. Chaque chiffre renvoie à son email d'origine.</p>
     ${window.MOKA_STANDALONE?`<div class="panel"><h2>Édition de lecture</h2>
       <p>Cette version de Moka est indépendante de claude.ai : elle affiche l'édition du 7 novembre 2026, enregistrée dans des fichiers statiques. La collecte des newsletters n'y est pas encore active.</p>
-      <p>Vos articles sauvegardés restent sur cet appareil. Ils ne sont pas synchronisés avec vos autres appareils.</p></div>`:`<div class="panel"><h2>Relever les newsletters</h2>
+      <p>Vos articles sauvegardés restent sur cet appareil. Ils ne sont pas synchronisés avec vos autres appareils.</p>
+      <p><a class="linkbtn" href="audio/essais/">Moka Audio : écouter les essais de voix</a></p></div>`:`<div class="panel"><h2>Relever les newsletters</h2>
       <p>Moka passe par votre connecteur Gmail sur claude.ai, avec deux outils de lecture seulement : <b>rechercher</b> dans le libellé et <b>lire</b> un fil. Il ne peut ni envoyer, ni supprimer, ni modifier vos emails, et la page ne voit jamais vos identifiants.</p>
       <p>À chaque relève, Moka lit au plus 6 newsletters des 3 derniers jours qu'il n'a pas encore traitées, les fait résumer par Claude avec la consigne de n'utiliser que leur contenu, puis les ajoute avec la mention « Rédigé automatiquement ».</p>
       ${S.isOwner?"":`<p class="note-line">La relève est réservée au propriétaire de Moka.</p>`}
