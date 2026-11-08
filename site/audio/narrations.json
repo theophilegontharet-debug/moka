@@ -2,7 +2,7 @@
  "afrique-octobre-2026": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
-    "bytes": 3148572,
+    "bytes": 3148112,
     "chars": 3738,
     "credits": 1494,
     "engine": "elevenlabs",
@@ -17,7 +17,7 @@
  "anthropic-ipo": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
-    "bytes": 3076350,
+    "bytes": 3074968,
     "chars": 3681,
     "credits": 1470,
     "engine": "elevenlabs",
@@ -32,7 +32,7 @@
  "exits-afrique-octobre": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
-    "bytes": 3902152,
+    "bytes": 3901692,
     "chars": 4569,
     "credits": 1827,
     "engine": "elevenlabs",
@@ -43,7 +43,7 @@
     "voice": "Patrick"
    },
    "express": {
-    "bytes": 549744,
+    "bytes": 548823,
     "chars": 643,
     "credits": 256,
     "engine": "elevenlabs",
@@ -58,7 +58,7 @@
  "ido-sum-le-mur": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
-    "bytes": 4004552,
+    "bytes": 4004092,
     "chars": 4493,
     "credits": 1796,
     "engine": "elevenlabs",
@@ -73,7 +73,7 @@
  "revolut-115-milliards": {
   "el:sHDOgYycy7bpotWEX7uh": {
    "approfondir": {
-    "bytes": 2940010,
+    "bytes": 2939550,
     "chars": 3403,
     "credits": 1360,
     "engine": "elevenlabs",

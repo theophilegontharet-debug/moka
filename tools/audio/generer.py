@@ -14,7 +14,7 @@ Garde-fous ElevenLabs (registre public audio/phase.json, sans solde du compte) :
   - MP3 déjà produit pour le même texte, la même voix et le même modèle : réutilisé, rien n'est payé.
 Le solde exact du compte n'est jamais affiché (journaux publics).
 """
-import hashlib, json, os, pathlib, re, sys
+import hashlib, json, os, pathlib, re, shutil, subprocess, sys, tempfile
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from engines import APOS, EngineError, el_models, el_subscription, el_tts, google_tts
 
@@ -66,6 +66,17 @@ def chunks(text, limit):
         if cur and len(cur) + len(par) + 2 > limit: out.append(cur); cur = par
         else: cur = f"{cur}\n\n{par}" if cur else par
     return out + ([cur] if cur else [])
+
+def joindre(parts):
+    """Assemble les MP3 de plusieurs requêtes en un seul fichier propre (en-têtes d'origine retirés)."""
+    if len(parts) == 1 or not shutil.which("ffmpeg"): return b"".join(parts)
+    with tempfile.TemporaryDirectory() as d:
+        names = []
+        for i, b in enumerate(parts):
+            n = f"{d}/p{i}.mp3"; open(n, "wb").write(b); names.append(n)
+        open(f"{d}/l.txt", "w").write("".join(f"file '{n}'\n" for n in names))
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", f"{d}/l.txt", "-c", "copy", f"{d}/o.mp3"], check=True)
+        return open(f"{d}/o.mp3", "rb").read()
 
 mult = (CAT.get("modeles") or {}).get(modele) if eng == "elevenlabs" else 0
 if eng == "elevenlabs" and mult is None:
@@ -166,7 +177,7 @@ try:
         else:
             for c in chunks(x["text"], 4000):
                 parts.append(google_tts(markup=c, voice=voix["voice"]) if "[pause" in c else google_tts(text=c, voice=voix["voice"]))
-        mp3 = b"".join(parts); name = f"{x['fmt']}-{x['hash']}.mp3"
+        mp3 = joindre(parts); name = f"{x['fmt']}-{x['hash']}.mp3"
         (root / "site/audio" / x["art"]).mkdir(parents=True, exist_ok=True)
         (root / "site/audio" / x["art"] / name).write_bytes(mp3)
         kbps = 128000 if eng == "elevenlabs" else 32000
