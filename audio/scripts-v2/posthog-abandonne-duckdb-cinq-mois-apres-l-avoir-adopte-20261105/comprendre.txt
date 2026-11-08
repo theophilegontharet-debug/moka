@@ -1,0 +1,9 @@
+PostHog abandonne DuckDB, cinq mois seulement après l'avoir adopté.
+
+PostHog est un éditeur d'outils d'analyse de données. Il y a cinq mois, il avait reconstruit son produit d'entrepôt de données sur DuckDB, un moteur très populaire. Et il en sort déjà.
+
+Pourquoi ? Deux blocages. D'abord, chaque instance devait être dimensionnée avant même l'arrivée de la requête. Ensuite, le volume. Son entrepôt contient environ mille milliards de lignes. Et une simple écriture sur une seule table pouvait prendre plus de trois minutes.
+
+La suite, c'est Trino, un autre moteur de requêtes, avec un format de tables maison, baptisé HogLake.
+
+Pourquoi ça compte ? C'est un retour d'expérience précieux. Il montre les limites d'un outil populaire quand les volumes deviennent vraiment très grands. On ne sait pas encore, en revanche, combien coûte la migration, ni quel impact elle aura pour les clients de PostHog.

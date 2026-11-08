@@ -1,0 +1,11 @@
+Aux États-Unis, les mesures locales contre les data centers gagnent presque partout.
+
+Selon un article relayé par la newsletter, presque tous les référendums locaux qui s'opposent aux data centers ont été gagnés, ou sont en passe de l'être. Une seule exception, le Dakota du Nord.
+
+L'auteur en tire une conclusion forte. La contrainte sur la diffusion de l'intelligence artificielle devient politique. Et si les Américains ne changent pas d'avis, l'IA pourrait rester un bien rare bien plus longtemps qu'on ne le croit.
+
+Un autre lien de la même newsletter donne un ordre de grandeur. La capacité américaine dédiée à l'IA passerait de trente-huit gigawatts aujourd'hui à un plafond de quatre-vingt-un gigawatts en 2027.
+
+Pourquoi ça compte ? Si l'électricité et l'opposition locale freinent les data centers, ça pèse sur les valorisations et sur les plans des acteurs de l'IA.
+
+Attention, plusieurs points restent flous. On ne connaît ni le nombre exact de référendums, ni les localités concernées, ni la méthode de comptage de l'auteur.

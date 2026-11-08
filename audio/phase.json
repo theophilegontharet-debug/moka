@@ -1,7 +1,7 @@
 {
- "plafond": 25000,
+ "plafond": 35000,
  "consomme": 18505,
- "note": "Phase 1 ElevenLabs : plafond porté à 25 000 le 8 nov. 2026, limité par la clé API (20 000 crédits cumulés). « consomme » = toute la consommation de la clé depuis sa création (banc arrêté à 0).",
+ "note": "Phase 1 ElevenLabs : plafond 25 000 (8 nov. 2026), limité par la clé API, relevée à 35 000 crédits cumulés le 8 nov. « consomme » = toute la consommation de la clé depuis sa création.",
  "demandes": [
   1,
   2,
@@ -201,5 +201,5 @@
    "credits": 485
   }
  ],
- "plafond_cle": 20000
+ "plafond_cle": 35000
 }
