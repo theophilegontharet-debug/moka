@@ -75,3 +75,22 @@ Pour une écoute écran verrouillé, avec les contrôles du centre de contrôle 
 article et par format (API de synthèse vocale : OpenAI TTS, ElevenLabs, Google Cloud TTS, Azure),
 le stocker avec le site ou sur Vercel Blob, et le lire avec un élément `<audio>` + Media Session API.
 C'est aussi la base du briefing quotidien narré.
+
+## Version 2 (en préparation) : voix naturelle, fichiers MP3
+
+### Essais de voix
+- Passage de test : `audio/essais/octobre-afrique.txt` (réécrit pour l'oral, sans fait nouveau).
+- Générateur : `tools/audio/essais.py`, lancé par l'action GitHub « Essais de voix Moka »
+  (onglet Actions → Run workflow). Utilise les clés présentes dans les secrets du dépôt :
+  `ELEVENLABS_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_TTS_API_KEY`. Plafond : 2 000 caractères par essai.
+- Résultat : `site/audio/essais/` et la page `/audio/essais/` du site.
+
+### Système complet (après choix de la voix)
+1. Script oral par article et par format (réécriture pour l'oral, une seule fois).
+2. Génération MP3 une seule fois (mono 64 kbit/s ≈ 0,5 Mo par minute), stockée dans
+   `site/audio/<article>/<format>.mp3` avec un `site/audio/index.json` (durées, empreinte du texte).
+   Un fichier n'est régénéré que si son texte change.
+3. Lecteur `<audio>` + Media Session API : lecture en arrière-plan, commandes sur l'écran verrouillé,
+   vitesse, barre de progression, reprise là où l'on s'était arrêté. Repli sur la voix du navigateur
+   quand un article n'a pas encore de fichier.
+4. Génération déclenchée à la main (GitHub Actions), avec un plafond de caractères par lancement.

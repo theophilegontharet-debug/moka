@@ -1,0 +1,30 @@
+name: Photos Commons (aperçu)
+
+# Lancement manuel. Importe les photos listées dans data/photos-candidats.json et publie le
+# résultat sur la branche « photos-candidats » : Vercel en fait un aperçu séparé, sans toucher
+# au site principal. On fusionne ensuite dans main ce qui a été validé.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install --quiet pillow
+      - name: Importer les photos
+        run: python3 tools/images/commons_import.py data/photos-candidats.json
+      - name: Reconstruire le site
+        run: python3 tools/build_site.py
+      - name: Publier sur la branche d'aperçu
+        run: |
+          git config user.name "moka-photos[bot]"
+          git config user.email "moka-photos@users.noreply.github.com"
+          git checkout -B photos-candidats
+          git add -A photos data/photos.json site
+          git commit -m "Photos candidates (aperçu)" || echo "Rien de nouveau"
+          git push -f origin photos-candidats
