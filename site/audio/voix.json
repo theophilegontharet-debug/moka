@@ -1,0 +1,144 @@
+{
+ "defaut": "el:sHDOgYycy7bpotWEX7uh",
+ "voix": [
+  {
+   "id": "google:Aoede",
+   "engine": "google",
+   "voice": "fr-FR-Chirp3-HD-Aoede",
+   "name": "Aoede",
+   "label": "Aoede · Google",
+   "gender": "female",
+   "models": [
+    "chirp3-hd"
+   ],
+   "rate": 0
+  },
+  {
+   "id": "el:sHDOgYycy7bpotWEX7uh",
+   "engine": "elevenlabs",
+   "voice_id": "sHDOgYycy7bpotWEX7uh",
+   "name": "Patrick - Mature and Casual",
+   "label": "Patrick · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_multilingual_v2",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:X79PkZE4sUJaUOQBlYPp",
+   "engine": "elevenlabs",
+   "voice_id": "X79PkZE4sUJaUOQBlYPp",
+   "name": "Eric CBN - Deep narrator",
+   "label": "Eric CBN · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_multilingual_v2",
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:NyxenPOqNyllHIzSoPbJ",
+   "engine": "elevenlabs",
+   "voice_id": "NyxenPOqNyllHIzSoPbJ",
+   "name": "Theo - Warm and Young",
+   "label": "Theo · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 2.0,
+   "optimise_pour": [
+    "eleven_turbo_v2_5",
+    "eleven_multilingual_sts_v2",
+    "eleven_multilingual_v2",
+    "eleven_flash_v2_5",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:BVBq6HVJVdnwOMJOqvy9",
+   "engine": "elevenlabs",
+   "voice_id": "BVBq6HVJVdnwOMJOqvy9",
+   "name": "Nova - Deep and Calm",
+   "label": "Nova · ElevenLabs",
+   "gender": "male",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_multilingual_v2",
+    "eleven_multilingual_sts_v2",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:NEjemlRxgWmL5ZGJetsB",
+   "engine": "elevenlabs",
+   "voice_id": "NEjemlRxgWmL5ZGJetsB",
+   "name": "Claire - Conversationnel",
+   "label": "Claire · ElevenLabs",
+   "gender": "female",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_multilingual_v2",
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  },
+  {
+   "id": "el:5OnMHwgTFgvPVwE8jP6B",
+   "engine": "elevenlabs",
+   "voice_id": "5OnMHwgTFgvPVwE8jP6B",
+   "name": "Anaïs - Instructor",
+   "label": "Anaïs · ElevenLabs",
+   "gender": "female",
+   "category": "professional",
+   "rate": 1.0,
+   "optimise_pour": [
+    "eleven_multilingual_v2",
+    "eleven_turbo_v2_5",
+    "eleven_flash_v2_5",
+    "eleven_multilingual_sts_v2",
+    "eleven_v4",
+    "eleven_v4_hq",
+    "eleven_v4_post_trained",
+    "eleven_v4_turbo"
+   ],
+   "v4": true
+  }
+ ],
+ "modeles": {
+  "eleven_v4": 1.0,
+  "eleven_multilingual_v2": 1.0
+ }
+}
