@@ -1,0 +1,80 @@
+{
+ "exits-afrique-octobre": {
+  "approfondir": {
+   "bytes": 1001664,
+   "chars": 4569,
+   "file": "approfondir-b709105d9b.mp3",
+   "hash": "b709105d9b",
+   "seconds": 250,
+   "voice": "Aoede"
+  },
+  "comprendre": {
+   "bytes": 376704,
+   "chars": 1666,
+   "file": "comprendre-838d0b3c94.mp3",
+   "hash": "838d0b3c94",
+   "seconds": 94,
+   "voice": "Aoede"
+  },
+  "express": {
+   "bytes": 154464,
+   "chars": 643,
+   "file": "express-9c41e2a652.mp3",
+   "hash": "9c41e2a652",
+   "seconds": 39,
+   "voice": "Aoede"
+  }
+ },
+ "revolut-115-milliards": {
+  "approfondir": {
+   "bytes": 726336,
+   "chars": 3403,
+   "file": "approfondir-865b14229b.mp3",
+   "hash": "865b14229b",
+   "seconds": 182,
+   "voice": "Aoede"
+  },
+  "comprendre": {
+   "bytes": 365664,
+   "chars": 1725,
+   "file": "comprendre-7e5af2633c.mp3",
+   "hash": "7e5af2633c",
+   "seconds": 91,
+   "voice": "Aoede"
+  },
+  "express": {
+   "bytes": 141504,
+   "chars": 649,
+   "file": "express-90bdab5ac7.mp3",
+   "hash": "90bdab5ac7",
+   "seconds": 35,
+   "voice": "Aoede"
+  }
+ },
+ "sequoia-recentre": {
+  "approfondir": {
+   "bytes": 448416,
+   "chars": 2075,
+   "file": "approfondir-446d8b0502.mp3",
+   "hash": "446d8b0502",
+   "seconds": 112,
+   "voice": "Aoede"
+  },
+  "comprendre": {
+   "bytes": 341184,
+   "chars": 1581,
+   "file": "comprendre-d460e35f89.mp3",
+   "hash": "d460e35f89",
+   "seconds": 85,
+   "voice": "Aoede"
+  },
+  "express": {
+   "bytes": 111744,
+   "chars": 525,
+   "file": "express-51d2deb99f.mp3",
+   "hash": "51d2deb99f",
+   "seconds": 28,
+   "voice": "Aoede"
+  }
+ }
+}
