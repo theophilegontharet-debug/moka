@@ -137,7 +137,7 @@ self.addEventListener("fetch", e => {
         {"source": "/icons/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]},
         {"source": "/sw.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
         {"source": "/audio/(.*).mp3", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
-        {"source": "/audio/index.json", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
+        {"source": "/audio/(index|voix|narrations).json", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
         {"source": "/(.*)", "headers": [{"key": "X-Content-Type-Options", "value": "nosniff"}, {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}]}]
 }, indent=1))
 

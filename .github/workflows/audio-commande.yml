@@ -1,12 +1,12 @@
-name: Moka Audio — commande (branche audio-elevenlabs)
+name: Moka Audio — commande
 
-# Déclenché uniquement sur la branche audio-elevenlabs, quand audio/commande.json change.
+# Déclenché uniquement quand audio/commande.json change (main ou audio-elevenlabs).
 # mode "voix"     : gratuit, relit le catalogue des voix du compte ElevenLabs.
 # mode "estimer"  : gratuit, calcule le coût prévisionnel d'une génération (aucun appel de synthèse).
 # mode "generer"  : payant, uniquement après accord explicite ; plafond de phase dans audio/phase.json.
 on:
   push:
-    branches: [audio-elevenlabs]
+    branches: [main, audio-elevenlabs]
     paths: [audio/commande.json]
 
 permissions:
@@ -39,7 +39,7 @@ jobs:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
         run: python3 tools/audio/generer.py
-      - name: Publier sur la branche
+      - name: Publier les MP3 et le registre
         if: always()
         run: |
           git config user.name "moka-audio[bot]"
@@ -48,4 +48,4 @@ jobs:
           [ -f audio/phase.json ] && git add audio/phase.json
           git diff --cached --quiet && { echo "Rien de nouveau"; exit 0; }
           git commit -m "Moka Audio : ${{ steps.cmd.outputs.mode }}"
-          git push origin HEAD:audio-elevenlabs
+          git push origin HEAD:${GITHUB_REF_NAME}

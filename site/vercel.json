@@ -37,7 +37,7 @@
    ]
   },
   {
-   "source": "/audio/index.json",
+   "source": "/audio/(index|voix|narrations).json",
    "headers": [
     {
      "key": "Cache-Control",
