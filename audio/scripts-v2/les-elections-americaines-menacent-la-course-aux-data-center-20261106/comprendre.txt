@@ -1,0 +1,9 @@
+Les élections américaines menacent la course aux data centers.
+
+Selon un article relayé par la newsletter TLDR, les résultats électoraux récents montrent un rejet massif des data centers. Les électeurs seraient très majoritairement opposés au déploiement à grande échelle de capacités de calcul, celui que veut la Silicon Valley.
+
+Concrètement, ça veut dire quoi ? Si les chantiers s'arrêtent, les entreprises de la tech pourraient en souffrir. Elles ont déjà du mal à trouver assez de puissance de calcul. Et l'article estime que l'économie américaine, au sens large, pourrait aussi être touchée.
+
+Pourquoi ça compte ? Le rythme de construction des data centers conditionne la croissance de l'intelligence artificielle, et tous les investissements qui vont avec.
+
+Mais attention, l'article reste général. On ne sait pas précisément quels États ou quels élus sont concernés, ni combien de projets sont menacés, ni quelles mesures concrètes sont envisagées.

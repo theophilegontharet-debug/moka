@@ -29,6 +29,8 @@ GOOGLE_MAX_CHARS = 25000
 
 phase = json.loads(PHASE_F.read_text()) if PHASE_F.exists() else {"plafond": 10000, "consomme": 0, "demandes": [], "fichiers": []}
 narr = json.loads(NARR_F.read_text()) if NARR_F.exists() else {}
+# plafond effectif : celui de la phase, sans jamais dépasser la limite propre à la clé API
+LIM = min(phase["plafond"], phase.get("plafond_cle") or phase["plafond"])
 
 voix = next((v for v in CAT["voix"] if v["id"] == CMD["voix"]), None)
 if not voix:
@@ -121,8 +123,8 @@ for x in plan:
     print(f"  {x['art']}/{x['fmt']:11} {len(x['text']):5} caractères  "
           + ("déjà généré, réutilisé" if x["reuse"] else f"≈ {x['est']} crédits" if eng == "elevenlabs" else "Google (gratuit dans le quota)")
           + f"  [{x['src']}]")
-reste_phase = phase["plafond"] - phase["consomme"]
-print(f"Total prévisionnel : {total} crédits · phase : {phase['consomme']} consommés sur {phase['plafond']} (reste {reste_phase})")
+reste_phase = LIM - phase["consomme"]
+print(f"Total prévisionnel : {total} crédits · consommés : {phase['consomme']} · plafond effectif {LIM} (phase {phase['plafond']}, clé {phase.get('plafond_cle')}) · reste {reste_phase}")
 
 if eng == "elevenlabs" and any(x["est"] is None for x in plan):
     sys.exit("Coût prévisionnel inconnu (tarif ou multiplicateur absent) : arrêt.")
@@ -159,11 +161,11 @@ try:
         if x["reuse"]: continue
         parts, cost = [], 0
         if eng == "elevenlabs":
-            reste = phase["plafond"] - phase["consomme"]; cs = decoupe(x["text"], reste)
+            reste = LIM - phase["consomme"]; cs = decoupe(x["text"], reste)
             if cs is None:
                 print(f"  — {x['art']}/{x['fmt']} : ne tient pas dans le reste du plafond ({reste}), non généré"); restants.append(x); continue
             for c in cs:
-                if phase["plafond"] - phase["consomme"] < len(c) * pire: raise EngineError("plafond de phase atteint (pire cas)")
+                if LIM - phase["consomme"] < len(c) * pire: raise EngineError("plafond de phase atteint (pire cas)")
                 b = el_subscription()
                 if (b["limit"] or 0) - (b["used"] or 0) < len(c) * pire + MARGE: raise EngineError("solde insuffisant")
                 mp3, annonce = el_tts(c, voix["voice_id"], modele, SET, "fr")
@@ -194,5 +196,5 @@ except EngineError as e:
         if not x["reuse"] and not (root / "site/audio" / x["art"] / f"{x['fmt']}-{x['hash']}.mp3").exists(): print(f"  reste à faire : {x['art']}/{x['fmt']}")
     sys.exit(1)
 save()
-print(f"Terminé. Phase : {phase['consomme']} crédits consommés sur {phase['plafond']}.")
+print(f"Terminé. {phase['consomme']} crédits consommés sur un plafond effectif de {LIM}.")
 for x in restants: print(f"  reste à faire : {x['art']}/{x['fmt']}")

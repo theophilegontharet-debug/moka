@@ -1,0 +1,7 @@
+Mistral AI rachète SkipLabs. C'est sa cinquième acquisition de l'année.
+
+SkipLabs conçoit des outils pour que le code généré par l'intelligence artificielle soit plus rapide, plus fiable, et plus sûr. Son fondateur, Julien Verlaguet, est un ancien ingénieur de Meta. Son équipe rejoint celle de Guillaume Lample, l'un des cofondateurs de Mistral.
+
+Et c'est là que ça devient intéressant. Après le cloud, l'industrie, la publicité et le design, Mistral ajoute la programmation à ses domaines. Autrement dit, la startup française multiplie les rachats pour élargir son offre, bien au-delà des seuls modèles d'IA.
+
+Ce qu'on ne sait pas, en revanche, c'est le prix de l'acquisition, ni les conditions de la transaction.

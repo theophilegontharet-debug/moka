@@ -1,0 +1,9 @@
+Qualcomm va équiper le futur réseau 5G terrestre de Starlink Mobile.
+
+SpaceX a signé un contrat pluriannuel avec Qualcomm. Il porte sur des équipements de sa gamme Dragonwing : une unité radio et une unité distribuée, pour les stations de base. Ils intègrent une technologie d'antennes à grand nombre d'émetteurs, appelée massive MIMO, et un logiciel de réseau d'accès radio.
+
+Le déploiement est prévu à partir de 2027, sur ce qui devrait représenter des dizaines de milliers de sites aux États-Unis. Ces équipements viendront compléter le service par satellite de Starlink. Et Qualcomm affirme qu'il s'agit de son plus gros contrat 5G à ce jour.
+
+Pourquoi ça compte ? Avec un réseau terrestre en plus du satellite, Starlink se rapproche des opérateurs mobiles classiques.
+
+On ne connaît pas encore le montant du contrat, ni sa durée exacte, ni d'éventuels projets hors des États-Unis.

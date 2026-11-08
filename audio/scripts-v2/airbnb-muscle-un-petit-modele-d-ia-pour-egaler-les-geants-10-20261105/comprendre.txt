@@ -1,0 +1,9 @@
+Airbnb a entraîné un petit modèle d'IA qui égale les géants. Pour cent fois moins cher.
+
+Le problème de départ est très concret. Airbnb voulait repérer automatiquement les annonces qui ne respectent pas sa politique de prix. Plutôt que d'appeler un grand modèle du marché, l'entreprise a affiné un petit modèle, avec environ deux milliards de paramètres effectifs.
+
+Et le résultat est impressionnant. La qualité de détection, mesurée par un indicateur appelé score F1, est passée d'environ cinquante-six sur cent à quatre-vingt-dix sur cent. C'est le niveau des meilleurs modèles de pointe. Et il répond beaucoup plus vite. Trente-cinq millisecondes en valeur médiane, contre environ neuf cents pour les grands modèles.
+
+Côté coût, la différence est énorme. À plusieurs milliers de requêtes par minute, les modèles de pointe coûtent environ cent fois plus cher qu'un seul processeur graphique hébergé par l'entreprise elle-même.
+
+La leçon ? Pour une tâche précise et répétitive, un petit modèle bien entraîné peut remplacer un grand modèle payé à l'usage, pour une fraction du prix. On ne sait pas, en revanche, sur quel modèle de base Airbnb s'est appuyé, ni si la méthode marche aussi bien pour d'autres tâches.
