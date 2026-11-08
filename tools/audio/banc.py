@@ -73,8 +73,12 @@ except EngineError as e:
 
 voice_rate, to_add = {}, []
 for vid, name in sorted({(m["voice_id"], m["voice"]) for m in el_needed}):
-    if vid in mine:
-        voice_rate[vid] = 1; say(f"✓ voix {name} : déjà dans le compte"); continue
+    acct = mine.get(vid) or next((v for v in mine.values() if v.get("category") != "premade"
+                                  and (v.get("name", "").startswith(name) or v.get("name", "") == f"Moka {name}")), None)
+    if acct:
+        for m in CFG["moteurs"]:
+            if m.get("voice_id") == vid: m["voice_id_compte"] = acct["voice_id"]
+        voice_rate[vid] = None; say(f"✓ voix {name} : déjà dans le compte, aucun ajout nécessaire"); continue
     try:
         sv = el_find_shared(vid, name)
     except EngineError as e:
@@ -92,7 +96,7 @@ for p, m, var, text in renditions():
     done = f in manifest["fichiers"] and (OUT / f).exists()
     if m["engine"] == "google":
         n_google += 0 if done else 1; plan.append((p, m, var, text, f, 0, done)); continue
-    est = 0 if done else round(len(APOS(text)) * (mult.get(m["model"]) or 1) * voice_rate.get(m["voice_id"], 1))
+    est = 0 if done else round(len(APOS(text)) * (mult.get(m["model"]) or 1) * (voice_rate.get(m["voice_id"]) or m.get("tarif", 1)))
     est_total += est; plan.append((p, m, var, text, f, est, done))
 deja = manifest["credits_depenses"]
 say(f"Plan : {sum(1 for x in plan if x[1]['engine']=='elevenlabs' and not x[6])} rendus ElevenLabs à produire, "
@@ -103,6 +107,9 @@ if sub and sub.get("limit") is not None and sub.get("used") is not None:
     say(f"{'✓' if ok else '✗'} solde suffisant pour la campagne et la marge de {MARGE} crédits : {'oui' if ok else 'non'}")
     if not ok: problems.append("solde insuffisant pour la campagne avec la marge de sécurité")
 
+if to_add:
+    say(f"! {len(to_add)} voix à ajouter au compte : il faut la permission « Voix : écriture » sur la clé, "
+        "ou un ajout manuel depuis la bibliothèque ElevenLabs (non vérifiable sans action).")
 if problems:
     say("== BLOQUÉ =="); [say(" -", x) for x in problems]
 else:
