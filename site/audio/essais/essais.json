@@ -1,0 +1,30 @@
+[
+ {
+  "file": "google-aoede.mp3",
+  "label": "Google Chirp 3 HD · Aoede",
+  "provider": "Google Cloud",
+  "note": "Voix féminine française (fr-FR-Chirp3-HD-Aoede).",
+  "chars": 1049
+ },
+ {
+  "file": "google-leda.mp3",
+  "label": "Google Chirp 3 HD · Leda",
+  "provider": "Google Cloud",
+  "note": "Voix féminine française (fr-FR-Chirp3-HD-Leda).",
+  "chars": 1049
+ },
+ {
+  "file": "google-charon.mp3",
+  "label": "Google Chirp 3 HD · Charon",
+  "provider": "Google Cloud",
+  "note": "Voix masculine française (fr-FR-Chirp3-HD-Charon).",
+  "chars": 1049
+ },
+ {
+  "file": "google-achird.mp3",
+  "label": "Google Chirp 3 HD · Achird",
+  "provider": "Google Cloud",
+  "note": "Voix masculine française (fr-FR-Chirp3-HD-Achird).",
+  "chars": 1049
+ }
+]
