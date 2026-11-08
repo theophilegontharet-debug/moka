@@ -1,0 +1,50 @@
+name: Moka Audio — commande (branche audio-elevenlabs)
+
+# Déclenché uniquement sur la branche audio-elevenlabs, quand audio/commande.json change.
+# mode "voix"     : gratuit, relit le catalogue des voix du compte ElevenLabs.
+# mode "estimer"  : gratuit, calcule le coût prévisionnel d'une génération (aucun appel de synthèse).
+# mode "generer"  : payant, uniquement après accord explicite ; plafond de phase dans audio/phase.json.
+on:
+  push:
+    branches: [audio-elevenlabs]
+    paths: [audio/commande.json]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: audio-commande
+  cancel-in-progress: false
+
+jobs:
+  commande:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lire la commande
+        id: cmd
+        run: |
+          MODE=$(python3 -c "import json;print(json.load(open('audio/commande.json'))['mode'])")
+          case "$MODE" in voix|estimer|generer) ;; *) echo "mode inconnu"; exit 1;; esac
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+      - name: Catalogue des voix (gratuit)
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python3 tools/audio/voix.py
+      - name: Génération (${{ steps.cmd.outputs.mode }})
+        if: steps.cmd.outputs.mode != 'voix'
+        env:
+          MODE: ${{ steps.cmd.outputs.mode }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+        run: python3 tools/audio/generer.py
+      - name: Publier sur la branche
+        if: always()
+        run: |
+          git config user.name "moka-audio[bot]"
+          git config user.email "moka-audio@users.noreply.github.com"
+          git add site/audio audio/phase.json 2>/dev/null || true
+          git diff --cached --quiet && { echo "Rien de nouveau"; exit 0; }
+          git commit -m "Moka Audio : ${{ steps.cmd.outputs.mode }}"
+          git push origin HEAD:audio-elevenlabs
