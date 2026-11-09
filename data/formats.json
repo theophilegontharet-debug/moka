@@ -663,8 +663,102 @@
    ]
   },
   "approfondir": {
-   "status": "indisponible",
-   "reason": "Les raisons du recul de la dette dans l'énergie ne sont détaillées dans aucune source disponible."
+   "status": "ok",
+   "sections": [
+    {
+     "h": "D'année record à année noire",
+     "refs": [
+      "bd_q3",
+      "ntu_h1"
+     ],
+     "p": [
+      "En 2025, l'énergie était l'un des moteurs du financement des startups africaines : 721 M$ levés sur neuf mois, 32 % du total. Ce record tenait à quelques très grosses opérations dans le solaire hors réseau et l'énergie dite productive, celle qui alimente des activités économiques comme l'irrigation ou la transformation agricole.",
+      "En 2026, sur la même période, le secteur tombe à 187 M$, soit 9 % des fonds. La baisse était visible dès le premier trimestre : selon The Big Deal, l'énergie est passée de 84 M$ à 34 M$ d'un premier trimestre à l'autre, alors même que l'ensemble des startups liées au climat progressait, de 124 M$ à 184 M$."
+     ]
+    },
+    {
+     "h": "Pourquoi l'énergie dépend autant de la dette",
+     "refs": [
+      "gogla",
+      "nairametrics_sep"
+     ],
+     "p": [
+      "Une grande partie des startups énergétiques africaines vend des kits solaires en paiement progressif, le modèle dit pay-as-you-go : le client paie quelques dollars par semaine, souvent par mobile, jusqu'à devenir propriétaire de l'équipement. L'entreprise avance donc le prix des panneaux et des batteries, et se rembourse sur plusieurs mois ou plusieurs années. Pour financer ce décalage, elle emprunte.",
+      "C'est pourquoi le secteur vit au rythme de la dette, souvent apportée par des institutions de développement et des fonds à impact. Et il est très concentré : selon l'association Gogla, sept entreprises, dont Sun King, M-Kopa, d.light, Bboxx, Zola, Engie Energy Access et Lumos, ont capté 72 % des 2,3 Md$ levés en dix ans par le solaire hors réseau. Quand quelques-unes de ces entreprises lèvent moins une année donnée, tout le secteur plonge dans les statistiques."
+     ]
+    },
+    {
+     "h": "La dette n'a pas disparu, elle change de forme",
+     "refs": [
+      "launchbase_h1",
+      "nairametrics_sep",
+      "nairametrics_jul"
+     ],
+     "p": [
+      "Les financements continuent, mais souvent sous des formes plus structurées. Au premier semestre, African Frontier Capital, partenaire de d.light pour la titrisation, a coté une obligation verte de 50 M$ à la Bourse de Londres. En septembre, SunCulture, spécialiste kényan de l'irrigation solaire, a conclu une titrisation de 10 M$ avec Mirova : un véhicule dédié rachète les créances des petits agriculteurs clients, ce qui permet à l'entreprise de récupérer tout de suite l'argent qu'ils lui doivent.",
+      "D'autres opérations restent des prêts classiques : 10,7 M$ de l'Africa Go Green Fund en juillet pour BioLite, afin de distribuer plus de 160 000 cuiseurs améliorés en Zambie, ou 5 M$ investis par Acumen dans Sun King. En octobre, Afreenergy Solar au Sénégal (13 M$) et Beacon Power Services au Nigeria (10 M$, prêtés par la BERD) ont aussi levé de la dette."
+     ]
+    },
+    {
+     "h": "Un marché tiré par la dette, mais pas partout",
+     "refs": [
+      "techinafrica",
+      "bd_q3"
+     ],
+     "p": [
+      "Le paradoxe de 2026, c'est que la dette domine l'ensemble du financement des startups africaines, alors qu'elle recule dans l'énergie. En juillet, par exemple, les prises de participation sont tombées à 25 M$, leur plus bas niveau mensuel depuis avril 2019, et la dette a représenté l'essentiel des montants. Mais sur les dix premiers mois de l'année, la dette recule d'un tiers au total, et l'énergie, qui en dépend le plus, en paie le prix fort.",
+      "La santé connaît une chute encore plus brutale, avec 21 M$ pour 35 startups, son plus bas niveau depuis 2019. Point commun des deux secteurs : ils dépendent de financeurs spécialisés, et beaucoup moins des fonds de capital-risque généralistes."
+     ]
+    }
+   ],
+   "limits": [
+    "The Big Deal n'explique pas précisément le recul de la dette dans l'énergie (taux d'intérêt, appétit des bailleurs, fin de grands programmes).",
+    "Les chiffres de Gogla couvrent dix ans de financement du solaire hors réseau et ne se comparent pas directement aux montants annuels de The Big Deal."
+   ],
+   "sources": [
+    {
+     "id": "bd_q3",
+     "name": "Africa: The Big Deal : bilan Q1-Q3 2026",
+     "url": "https://thebigdeal.substack.com/p/q32026c",
+     "date": "2026-10-20"
+    },
+    {
+     "id": "ntu_h1",
+     "name": "NTU / The Big Deal : le climat au premier trimestre 2026",
+     "url": "https://www.ntu.edu.sg/cas/news-events/news/detail/start-ups-funding-dynamics-continue-to-shift",
+     "date": "2026-05-26"
+    },
+    {
+     "id": "gogla",
+     "name": "TechCrunch : sept entreprises captent 72 % du financement du solaire hors réseau",
+     "url": "https://techcrunch.com/?p=2429699"
+    },
+    {
+     "id": "launchbase_h1",
+     "name": "Launch Base Africa : le premier semestre 2026",
+     "url": "https://launchbaseafrica.com/2026/07/01/african-startups-surpass-1bn-in-first-half-funding-despite-slower-equity-flows/",
+     "date": "2026-07-01"
+    },
+    {
+     "id": "nairametrics_sep",
+     "name": "Nairametrics : les levées de septembre 2026",
+     "url": "https://nairametrics.com/2026/10/08/african-startups-raise-260-3-million-as-top-10-account-for-85-5-in-september-2026/",
+     "date": "2026-10-08"
+    },
+    {
+     "id": "nairametrics_jul",
+     "name": "Nairametrics : les levées de juillet 2026",
+     "url": "https://nairametrics.com/2026/08/07/these-startups-are-still-raising-money-as-africas-funding-crashes-80/",
+     "date": "2026-08-07"
+    },
+    {
+     "id": "techinafrica",
+     "name": "TechInAfrica : la dette domine, l'equity au plus bas",
+     "url": "https://www.techinafrica.com/debt-now-drives-nearly-three-quarters-of-african-startup-funding-as-equity-hits-a-multi-year-low/",
+     "date": "2026-08"
+    }
+   ],
+   "note": "Décryptage d'environ 4 minutes de lecture, établi à partir de 7 sources."
   }
  },
  "femmes-fondatrices": {
