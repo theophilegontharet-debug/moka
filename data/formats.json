@@ -365,8 +365,133 @@
    ]
   },
   "approfondir": {
-   "status": "indisponible",
-   "reason": "Pas de source complémentaire vérifiée sur les tours de Spiro et Moove dans cette édition."
+   "status": "ok",
+   "sections": [
+    {
+     "h": "Un record qui tient à deux noms",
+     "refs": [
+      "bd_q3",
+      "businessday"
+     ],
+     "p": [
+      "Selon The Big Deal, la logistique et le transport ont levé 780 M$ de janvier à septembre 2026, soit 36 % de tout l'argent levé par les startups africaines. La fintech, numéro un depuis sept ans, est à 760 M$. C'est une première : le précédent record du secteur sur neuf mois était de 17 %, en 2019.",
+      "Mais la base de données le montre aussi : Spiro (345 M$) et Moove (250 M$) représentent à elles deux les trois quarts de ces 780 M$. Sans elles, le secteur aurait levé environ 185 M$, un niveau proche des années précédentes. La fintech reste par ailleurs de loin le secteur qui compte le plus de startups financées (80)."
+     ]
+    },
+    {
+     "h": "Spiro : des motos électriques et un réseau d'échange de batteries",
+     "refs": [
+      "condia_spiro",
+      "launchbase_spiro",
+      "pulse2_spiro",
+      "ap_spiro"
+     ],
+     "p": [
+      "Spiro vend des motos électriques, surtout à des chauffeurs de moto-taxi, et exploite un réseau de stations où le conducteur échange une batterie vide contre une batterie chargée en quelques minutes, sans attendre une recharge. L'entreprise, créée en 2022, est présente au Kenya, en Ouganda, au Rwanda, au Nigeria, au Togo, au Bénin et au Cameroun.",
+      "Son année 2026 a été rythmée par deux opérations. En février, 50 M$ de dette apportés par Afreximbank, la plateforme américaine Nithio et l'Africa Go Green Fund. En juin, un tour de 215 M$ en capital, soutenu notamment par Impact Fund Denmark, Equitane et le FEDA, le bras d'investissement d'Afreximbank. L'entreprise revendique plus de 135 000 motos déployées et plus de 50 millions d'échanges de batteries à fin septembre, avec plus de 2 500 stations.",
+      "Pourquoi autant d'argent ? Parce que le modèle est lourd en actifs : chaque nouvelle ville demande des motos, des batteries en surnombre pour assurer la rotation, des stations et de l'électricité. C'est une entreprise de réseau, plus proche d'un distributeur d'énergie que d'une application.",
+      "La demande suit : au Kenya, les motos électriques ont représenté 15,3 % des nouvelles immatriculations en 2025, contre 0,5 % en 2021, selon les chiffres cités par Condia. Pour un chauffeur de moto-taxi, l'intérêt est d'abord économique, car l'électricité et l'abonnement aux batteries coûtent moins cher que l'essence."
+     ]
+    },
+    {
+     "h": "Moove : de la voiture de VTC aux robotaxis",
+     "refs": [
+      "techcrunch_moove",
+      "launchbase_moove",
+      "allafrica_moove",
+      "tnw_moove"
+     ],
+     "p": [
+      "Moove a été fondée à Lagos en 2020 par Ladi Delano et Jide Odunsi. Le principe de départ : financer des voitures pour des chauffeurs de VTC qui n'ont pas accès au crédit bancaire, et se faire rembourser sur une part de leurs revenus. L'entreprise est ensuite partie aux Émirats, en Inde, aux États-Unis et au Royaume-Uni.",
+      "En août 2026, elle a levé 250 M$ en Série C, menée par le fonds souverain d'Abu Dhabi Mubadala, avec Woven Capital (Toyota) et Ion Pacific, pour une valorisation de 2,1 Md$, contre 750 M$ lors de son tour de 2024 mené par Uber. Moove exploite environ 42 000 véhicules et gère déjà des flottes de robotaxis Waymo à Phoenix et Miami. L'argent doit surtout financer cette activité autonome : dépôts, recharge et équipes, qui doivent passer d'environ 150 à 500 personnes d'ici fin 2026.",
+      "L'échelle a changé : Moove revendique environ 420 M$ de revenus récurrents annuels, sur 29 villes dans 13 pays, et plus de 3 300 salariés. Elle continue aussi de financer des véhicules pour des chauffeurs indépendants.",
+      "Point important pour lire le record africain : l'activité de Moove est désormais largement mondiale. The Big Deal la rattache au Nigeria, son pays d'origine, mais l'usage des fonds vise surtout les États-Unis et les robotaxis."
+     ]
+    },
+    {
+     "h": "Pourquoi ces levées gonflent un secteur",
+     "refs": [
+      "bd_q3",
+      "ido"
+     ],
+     "p": [
+      "Spiro et Moove financent toutes deux des actifs physiques : motos, batteries, voitures, dépôts. Dans des écosystèmes plus mûrs, ce type d'actifs est souvent financé par de la dette adossée aux véhicules, et le capital sert surtout à la technologie et à la croissance. C'est l'un des points soulevés par l'investisseur Ido Sum : en Afrique, une partie du capital-risque finance des flottes que d'autres marchés financeraient avec du crédit local.",
+      "Conséquence pratique : un record sectoriel construit sur deux entreprises dit surtout quelque chose de ces deux entreprises. Il ne signifie pas que des dizaines de startups logistiques lèvent plus facilement qu'avant. Pour juger la santé du secteur, il faut regarder le nombre de startups financées et les montants hors méga-tours, qui restent dans la moyenne."
+     ]
+    }
+   ],
+   "limits": [
+    "Les montants attribués à Spiro et Moove sont ceux de la base The Big Deal ; la répartition exacte entre capital et dette de leurs tours 2026 n'y est pas détaillée.",
+    "Les chiffres d'activité (motos, échanges de batteries, véhicules) sont communiqués par les entreprises elles-mêmes."
+   ],
+   "sources": [
+    {
+     "id": "bd_q3",
+     "name": "Africa: The Big Deal : bilan Q1-Q3 2026",
+     "url": "https://thebigdeal.substack.com/p/q32026c",
+     "date": "2026-10-20"
+    },
+    {
+     "id": "businessday",
+     "name": "BusinessDay : le Nigeria repasse en tête, la logistique devant la fintech",
+     "url": "https://businessday.ng/?p=1207641",
+     "date": "2026-10"
+    },
+    {
+     "id": "condia_spiro",
+     "name": "Condia : Spiro lève 215 M$",
+     "url": "https://thecondia.com/spiro-raises-215m-ev-battery-network/",
+     "date": "2026-06-01"
+    },
+    {
+     "id": "launchbase_spiro",
+     "name": "Launch Base Africa : Spiro et les moto-taxis",
+     "url": "https://launchbaseafrica.com/2026/06/01/spiro-lands-215m-to-expand-its-battery-swapping-network-for-africas-motorcycle-taxis/",
+     "date": "2026-06-01"
+    },
+    {
+     "id": "ap_spiro",
+     "name": "AP (via WTOP) : 50 M$ de dette pour Spiro",
+     "url": "https://wtop.com/world/2026/02/spiro-secures-50-million-from-afreximbank-others-to-expand-africa-battery-swapping-network/",
+     "date": "2026-02-24"
+    },
+    {
+     "id": "pulse2_spiro",
+     "name": "Pulse 2.0 : Spiro et l'Africa Go Green Fund",
+     "url": "https://pulse2.com/spiro-secures-additional-18-million-from-africa-go-green-fund-bringing-its-commitment-to-36-million/",
+     "date": "2026-10"
+    },
+    {
+     "id": "techcrunch_moove",
+     "name": "TechCrunch : Moove lève 250 M$",
+     "url": "https://techcrunch.com/?p=3150298",
+     "date": "2026-08-05"
+    },
+    {
+     "id": "launchbase_moove",
+     "name": "Launch Base Africa : la Série C de Moove",
+     "url": "https://launchbaseafrica.com/2026/08/05/moove-series-c/",
+     "date": "2026-08-05"
+    },
+    {
+     "id": "allafrica_moove",
+     "name": "AllAfrica : Moove valorisée 2,1 Md$",
+     "url": "https://allafrica.com/stories/202608060012.html",
+     "date": "2026-08-06"
+    },
+    {
+     "id": "ido",
+     "name": "Ido Sum : « Adolescence »",
+     "url": "https://idosum.substack.com/p/adolescence-a-different-take-on-african",
+     "date": "2026-09-29"
+    },
+    {
+     "id": "tnw_moove",
+     "name": "TNW : Moove et les robotaxis",
+     "url": "https://thenextweb.com/news/moove-250m-series-c-2-1bn-autonomous-mobility",
+     "date": "2026-08-05"
+    }
+   ]
   }
  },
  "nigeria-en-tete": {
@@ -383,8 +508,128 @@
    ]
   },
   "approfondir": {
-   "status": "indisponible",
-   "reason": "Les chiffres par pays viennent d'une seule source ; Moka n'a pas encore de données complémentaires."
+   "status": "ok",
+   "sections": [
+    {
+     "h": "D'où vient le rebond nigérian",
+     "refs": [
+      "bd_q3",
+      "businessday",
+      "bd_h1"
+     ],
+     "p": [
+      "Avec 635 M$ levés en neuf mois, le Nigeria retrouve la première place du continent, 2,6 fois plus qu'en 2025. Le contraste est fort : sur l'ensemble de 2025, le pays n'avait levé que 343 M$, quatrième des grands marchés derrière le Kenya, l'Égypte et l'Afrique du Sud. Au premier semestre 2026, l'Égypte était encore devant en montant total, mais le Nigeria menait déjà en capital (equity) : 214 M$ contre 183 M$.",
+      "Hors entreprises panafricaines, le Nigeria capte 37 % des fonds, sa part la plus élevée depuis 2021. Et ce n'est pas qu'une affaire de gros chèques : 77 startups nigérianes ont levé au moins 100 000 $, plus que dans n'importe quel autre pays. Le Nigeria est le seul des quatre grands marchés où ce nombre augmente."
+     ]
+    },
+    {
+     "h": "Les quatre gros tours, et ce qu'ils racontent",
+     "refs": [
+      "techcrunch_moove",
+      "techsoma",
+      "launchbase_yc",
+      "bd_q3",
+      "graphic_yc",
+      "tc_flw"
+     ],
+     "p": [
+      "Moove (250 M$), d'abord : née à Lagos pour financer des voitures de chauffeurs VTC, elle gère aujourd'hui des flottes de robotaxis Waymo aux États-Unis. Sa levée, menée par Mubadala, la valorise 2,1 Md$.",
+      "Flutterwave (100 M$ selon The Big Deal) : le spécialiste des paiements a bouclé en juin une Série E avec Ripple comme investisseur stratégique, pour une valorisation d'environ 3,2 Md$, à peine au-dessus des 3 Md$ de 2022. Le montant n'a pas été officiellement communiqué. L'entreprise a racheté en janvier la startup d'open banking Mono, ce qui lui a apporté une licence de banque de microfinance au Nigeria. Flutterwave prépare aussi l'arrivée des stablecoins, ces cryptomonnaies adossées au dollar : intégration au réseau de paiement de Circle en 2025, portefeuilles en stablecoins en janvier 2026, puis l'entrée de Ripple à son capital.",
+      "Jumia (50 M$), le site de commerce en ligne coté à New York, et Yellow Card (40 M$), spécialiste des paiements en stablecoins fondé au Nigeria en 2019 et aujourd'hui basé à Atlanta. Yellow Card a levé en août auprès de SC Ventures (Standard Chartered), Sony Innovation Fund, Polychain et Blockchain Capital, pour développer des comptes en dollars destinés aux entreprises. L'entreprise a cessé de servir les particuliers au 1er janvier 2026 pour se consacrer uniquement aux entreprises.",
+      "Point commun : ce sont surtout des entreprises nées au Nigeria mais dont l'activité dépasse largement le pays. Le rebond reflète donc aussi la capacité de ces champions à attirer des investisseurs mondiaux."
+     ]
+    },
+    {
+     "h": "Le Kenya et l'Afrique du Sud au plus bas",
+     "refs": [
+      "bd_q3",
+      "businessday",
+      "guardian_2025"
+     ],
+     "p": [
+      "Le Kenya avait dominé 2025, avec 984 M$ selon The Big Deal, porté par de très gros tours. En 2026, il recule nettement. Une partie de l'écart est comptable : Spiro, très présente au Kenya, est désormais classée panafricaine. Mais même en tenant compte de ce changement, le pays est loin derrière l'an dernier.",
+      "Kenya (45 startups financées) et Afrique du Sud (34, en baisse de 36 %) enregistrent leurs plus faibles nombres depuis 2021, date à laquelle The Big Deal a commencé à suivre les tours de 100 000 $ et plus. Ensemble, les quatre grands marchés concentrent toujours environ 85 % des fonds levés par des startups rattachées à un pays."
+     ]
+    },
+    {
+     "h": "Hors des quatre grands",
+     "refs": [
+      "bd_q3",
+      "apen_gocab"
+     ],
+     "p": [
+      "Les autres pays ont levé 260 M$ (−29 %), répartis entre 106 startups dans 19 pays. Les classements y dépendent souvent d'une seule opération. La Tanzanie mène avec 53 M$, surtout grâce à une facilité de dette de 50 M$ pour NALA, spécialiste des transferts d'argent. La Côte d'Ivoire suit avec 48 M$, presque entièrement grâce à GoCab : cette fintech de la mobilité a levé 45 M$ en février, 15 M$ en capital mené par Janngo Capital et 30 M$ de dette, pour permettre à des chauffeurs de devenir propriétaires de leur véhicule.",
+      "Viennent ensuite la Zambie (32 M$), le Maroc (30 M$) et le Ghana (21 M$). Le Sénégal, premier marché hors des quatre grands l'an dernier avec 153 M$, n'a levé que 5 M$ en 2026. Ces écarts montrent surtout que, hors des grands hubs, un ou deux tours suffisent à faire ou défaire une année."
+     ]
+    }
+   ],
+   "limits": [
+    "Le montant de la Série E de Flutterwave n'a pas été communiqué par l'entreprise ; le chiffre de 100 M$ est celui de The Big Deal.",
+    "Les classements par pays dépendent des règles de rattachement de The Big Deal (siège, entreprises panafricaines), qui peuvent différer d'autres bases de données."
+   ],
+   "sources": [
+    {
+     "id": "bd_q3",
+     "name": "Africa: The Big Deal : bilan Q1-Q3 2026",
+     "url": "https://thebigdeal.substack.com/p/q32026c",
+     "date": "2026-10-20"
+    },
+    {
+     "id": "bd_h1",
+     "name": "Africa: The Big Deal : H1 2026, Mapping the money",
+     "url": "https://thebigdeal.substack.com/p/h12026c",
+     "date": "2026-07-20"
+    },
+    {
+     "id": "businessday",
+     "name": "BusinessDay : le Nigeria reprend la tête avec 635 M$",
+     "url": "https://businessday.ng/?p=1207641",
+     "date": "2026-10"
+    },
+    {
+     "id": "guardian_2025",
+     "name": "The Guardian Nigeria : bilan 2025 par pays",
+     "url": "https://guardian.ng/?p=2765332",
+     "date": "2026-01"
+    },
+    {
+     "id": "techcrunch_moove",
+     "name": "TechCrunch : Moove lève 250 M$",
+     "url": "https://techcrunch.com/?p=3150298",
+     "date": "2026-08-05"
+    },
+    {
+     "id": "techsoma",
+     "name": "Techsoma : la Série E de Flutterwave",
+     "url": "https://techsoma.africa/flutterwave-3-2-billion-valuation-ripple-series-e/",
+     "date": "2026-06-16"
+    },
+    {
+     "id": "launchbase_yc",
+     "name": "Launch Base Africa : Yellow Card lève 40 M$",
+     "url": "https://launchbaseafrica.com/2026/08/04/yellow-card-stablecoin",
+     "date": "2026-08-04"
+    },
+    {
+     "id": "apen_gocab",
+     "name": "Africa Private Equity News : GoCab lève 45 M$",
+     "url": "https://www.africaprivateequitynews.com/p/mobility-finance-platform-gocab-raises",
+     "date": "2026-02"
+    },
+    {
+     "id": "graphic_yc",
+     "name": "Graphic Online : Yellow Card recentrée sur les entreprises",
+     "url": "https://www.graphic.com.gh/business/business-news/yellow-card-raises-40million-from-standard-chartered-and-sony-to-scale-stablecoin-infrastructure.html",
+     "date": "2026-08"
+    },
+    {
+     "id": "tc_flw",
+     "name": "TechCabal : Flutterwave et les stablecoins",
+     "url": "https://techcabal.beehiiv.com/p/a-ripple-in-flutterwave",
+     "date": "2026-06-17"
+    }
+   ],
+   "note": "Décryptage d'environ 4 minutes de lecture, établi à partir de 10 sources."
   }
  },
  "base-qui-samincit": {
@@ -723,8 +968,78 @@
    ]
   },
   "approfondir": {
-   "status": "indisponible",
-   "reason": "L'essai d'a16z n'a pas pu être lu directement ; Moka ne s'appuie que sur le résumé de TLDR."
+   "status": "ok",
+   "sections": [
+    {
+     "h": "Le diagnostic d'a16z",
+     "refs": [
+      "a16z"
+     ],
+     "p": [
+      "L'essai « Is private equity cooked? » est signé Jen Kha, d'Andreessen Horowitz, le 4 novembre. À lire en sachant d'où il vient : a16z est un fonds de capital-risque, qui plaide ici pour son propre métier face au private equity (PE). Mais les chiffres cités sont parlants.",
+      "La valeur des sorties d'entreprises tech détenues par des fonds de PE a chuté de 77 % en un an. Au premier semestre 2026, les fonds de capital-risque ont réévalué leurs participations tech de +16 %, quand les fonds de rachat ont déprécié les leurs de 4 %. Sur dix ans, les rachats américains ont rapporté 14,5 % par an, moins que l'indice boursier Russell 3000, contre 17,6 % pour le capital-risque."
+     ]
+    },
+    {
+     "h": "Pourquoi la recette des années 2010 ne marche plus",
+     "refs": [
+      "a16z"
+     ],
+     "p": [
+      "Le modèle classique du rachat avec effet de levier (LBO) : acheter une entreprise rentable en empruntant beaucoup, améliorer ses marges, puis la revendre plus cher. Dans les années 2010, trois moteurs l'ont porté : une dette bon marché, des multiples de valorisation en hausse, et un vaste stock d'éditeurs de logiciels par abonnement (SaaS), aux revenus réguliers et faciles à financer. Selon Bain, cité par a16z, la seule hausse des multiples a fait plus de la moitié des rendements des rachats sur la décennie.",
+      "Ces moteurs se sont grippés. Les taux sont plus élevés, les multiples ne montent plus, et la croissance des logiciels ralentit : chez les emprunteurs du prêteur Golub Capital, elle est passée de 9 % à moins de 3 % en deux ans. Pour obtenir 2,5 fois la mise en cinq ans, il faut désormais une croissance de l'excédent brut d'exploitation de 10 à 12 % par an, contre environ 5 % pour les opérations de 2015. Et la durée moyenne de détention atteint environ sept ans.",
+      "Un chiffre résume le basculement : en mai, Anthropic a levé 65 Md$ en un seul tour, plus que le rachat d'Electronic Arts (56,6 Md$), que Bain présente comme le plus gros LBO jamais réalisé. Le centre de gravité des marchés privés s'est déplacé vers les entreprises d'IA en forte croissance, qui ne se prêtent pas au modèle du rachat endetté."
+     ]
+    },
+    {
+     "h": "Le mur de dette de 2028-2029",
+     "refs": [
+      "a16z"
+     ],
+     "p": [
+      "C'est le cœur du risque. Environ 140 Md$ de prêts risqués liés au PE arrivent à échéance en 2028, puis 160 Md$ en 2029, alors que la moyenne de 2023 à 2025 tournait autour de 60 Md$ à deux ans. Environ un tiers concerne le logiciel, et un quart est noté CCC+ ou moins, c'est-à-dire dans la zone la plus spéculative.",
+      "Un exemple concret : Thoma Bravo, l'un des spécialistes les plus réputés du logiciel, avait racheté Medallia environ 6,4 Md$ en 2021. En 2026, l'entreprise a été cédée à ses prêteurs, menés par Blackstone, effaçant environ 5,1 Md$ de capital pour Thoma Bravo et ses co-investisseurs. Selon l'essai, 70 % des dettes saisies en 2025-2026 venaient d'opérations conclues en 2021-2022, au sommet des prix.",
+      "Pour gagner du temps, l'industrie multiplie les montages : fonds de continuation (un fonds revend une entreprise à un autre véhicule du même gérant), prêts adossés à la valeur du portefeuille, intérêts payés en nature. Ces outils peuvent embellir les rendements affichés tout en ajoutant une couche de dette.",
+      "Malgré tout, l'argent continue d'affluer, mais moins vite : les levées des fonds de rachat ont reculé de 16 % en 2025, à 395 Md$, et les investisseurs institutionnels réinvestissent souvent chez les mêmes gérants. Les fonds de continuation représentaient 14 % de la valeur des sorties du PE au premier semestre 2026, contre 5 % en 2020, selon Jefferies."
+     ]
+    },
+    {
+     "h": "Le crédit privé, nouveau banquier de l'IA",
+     "refs": [
+      "moodys",
+      "bis"
+     ],
+     "p": [
+      "En parallèle, l'agence Moody's observe que l'intelligence artificielle transforme le crédit privé. Les dépenses d'investissement des cinq plus grands acteurs américains du cloud et de CoreWeave devraient approcher 1 000 Md$ en 2027, financées par leur trésorerie, de la dette, des coentreprises et des véhicules dédiés. Le crédit privé ne prête plus seulement à des entreprises : il finance des terrains, de l'électricité, des puces et de la capacité de calcul.",
+      "Moody's identifie deux fragilités. Les échéances se concentrent entre 2027 et 2029, ce qui pourrait gêner les emprunteurs les plus faibles, notamment ceux qui paient leurs intérêts en nature. Et les financements deviennent circulaires : fabricants de puces, développeurs d'IA et fournisseurs d'infrastructure investissent les uns dans les autres, se prêtent et s'achètent mutuellement, avec un risque de pertes simultanées en cas de retournement. La Banque des règlements internationaux s'inquiétait déjà en mars des montages hors bilan des géants du cloud.",
+      "Pour les fonds actifs en Afrique et au Moyen-Orient, l'enjeu est indirect mais réel : quand les grands investisseurs institutionnels doivent gérer des refinancements difficiles chez eux, ils deviennent plus prudents sur les marchés jugés plus risqués."
+     ]
+    }
+   ],
+   "limits": [
+    "L'essai émane d'un fonds de capital-risque, concurrent du private equity : ses conclusions sont en partie un plaidoyer.",
+    "Les chiffres sur le crédit et l'IA sont des projections de Moody's, pas des montants constatés."
+   ],
+   "sources": [
+    {
+     "id": "a16z",
+     "name": "a16z : Is Private Equity Cooked?",
+     "url": "https://a16z.com/is-private-equity-cooked/",
+     "date": "2026-11-04"
+    },
+    {
+     "id": "moodys",
+     "name": "Finimize (d'après Moody's) : le boom du crédit privé et son échéance",
+     "url": "https://finimize.com/content/ais-private-credit-boom-has-a-refinancing-deadline",
+     "date": "2026-10-27"
+    },
+    {
+     "id": "bis",
+     "name": "BRI : financer le boom des infrastructures d'IA",
+     "url": "https://www.bis.org/publications/financing-ai-infrastructure-boom-on-and-off-balance-sheet-borrowing",
+     "date": "2026-03-16"
+    }
+   ]
   }
  },
  "europe-levees-semaine": {
