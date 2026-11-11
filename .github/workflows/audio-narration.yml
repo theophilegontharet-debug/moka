@@ -24,8 +24,10 @@ concurrency:
   group: audio-narration
   cancel-in-progress: false
 
+# DÉSACTIVÉ (novembre 2026) : Google Chirp est retiré de Moka. Le job ne s'exécute plus.
 jobs:
   narrate:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -39,7 +41,6 @@ jobs:
         run: python3 tools/audio/narrate.py
       - name: Générer les narrations
         env:
-          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
           ARTICLES: ${{ inputs.articles }}
           FORMATS: ${{ inputs.formats }}
           MAX_TOTAL_CHARS: ${{ inputs.max_total_chars }}

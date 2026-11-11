@@ -17,7 +17,7 @@ TEXT = (root / "audio/essais/octobre-afrique.txt").read_text().strip()
 OUT = root / "site/audio/essais"; OUT.mkdir(parents=True, exist_ok=True)
 MAX_CHARS = int(os.environ.get("MAX_CHARS", "2000"))          # par essai
 MAX_TOTAL = int(os.environ.get("MAX_TOTAL_CHARS", "6000"))    # pour toute l'exécution
-PROVIDERS = {p.strip() for p in os.environ.get("PROVIDERS", "google").split(",") if p.strip()}
+PROVIDERS = {p.strip() for p in os.environ.get("PROVIDERS", "elevenlabs").split(",") if p.strip()} - {"google"}  # Google Chirp retiré de Moka
 assert len(TEXT) <= MAX_CHARS, f"texte trop long ({len(TEXT)} > {MAX_CHARS})"
 spent = 0
 def budget():

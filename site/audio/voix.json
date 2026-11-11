@@ -2,18 +2,6 @@
  "defaut": "el:sHDOgYycy7bpotWEX7uh",
  "voix": [
   {
-   "id": "google:Aoede",
-   "engine": "google",
-   "voice": "fr-FR-Chirp3-HD-Aoede",
-   "name": "Aoede",
-   "label": "Aoede · Google",
-   "gender": "female",
-   "models": [
-    "chirp3-hd"
-   ],
-   "rate": 0
-  },
-  {
    "id": "el:5OnMHwgTFgvPVwE8jP6B",
    "engine": "elevenlabs",
    "voice_id": "5OnMHwgTFgvPVwE8jP6B",

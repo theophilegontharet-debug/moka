@@ -28,7 +28,9 @@ for a in arts:
     if a["id"] in patch["timeline"]:
         a["timeline"] = patch["timeline"][a["id"]]
     a["sources"] = a["sources"] + patch["add_sources"].get(a["id"], [])
-arts += json.loads((D / "auto-2026-11-07.json").read_text())
+# relèves automatiques : un fichier par jour, data/auto-AAAA-MM-JJ.json (les précédents ne sont jamais réécrits)
+for f in sorted(D.glob("auto-*.json")):
+    arts += json.loads(f.read_text())
 
 photos = json.loads((D / "photos.json").read_text())
 by_id = {a["id"]: a for a in arts}
@@ -52,7 +54,30 @@ for a in arts:
 
 blob = json.dumps(arts, ensure_ascii=False, separators=(",", ":"))
 assert "mail.google.com" not in blob and "@gmail" not in blob, "lien Gmail ou email dans les données"
-assert len(arts) == 32, len(arts)
+import re as _re, unicodedata as _ud
+from datetime import datetime as _dt, timezone as _tz
+try:
+    from zoneinfo import ZoneInfo as _ZI
+    _ABJ = _ZI("Africa/Abidjan")
+except Exception:
+    _ABJ = _tz.utc          # Abidjan = UTC+0, sans heure d'été
+ids = [a["id"] for a in arts]
+assert len(ids) == len(set(ids)), "identifiants en double"
+norm = lambda t: _re.sub(r"[^a-z0-9]+", " ", _ud.normalize("NFD", t.lower()).encode("ascii", "ignore").decode()).strip()
+tt = [norm(a["title"]) for a in arts]
+assert len(tt) == len(set(tt)), "titres en double"
+assert len(arts) >= 32, len(arts)
+# jour d'ajout dans Moka (fuseau Africa/Abidjan). Date seule : prise telle quelle.
+for a in arts:
+    c = a.get("collected_at") or ""
+    if len(c) <= 10:
+        a["added"] = c
+    else:
+        d = _dt.fromisoformat(c.replace("Z", "+00:00"))
+        if d.tzinfo is None: d = d.replace(tzinfo=_tz.utc)
+        a["added"] = d.astimezone(_ABJ).date().isoformat()
+    assert a["added"], a["id"]
+blob = json.dumps(arts, ensure_ascii=False, separators=(",", ":"))
 assert sum(1 for a in arts if a.get("image")) == len(photos)
 
 # ---------- Fichiers ----------

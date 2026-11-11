@@ -1,0 +1,6 @@
+{
+ "patrick": true,
+ "google_chirp": "retiré",
+ "depuis": "2026-11-11",
+ "note": "Génération et déclenchements automatiques de Patrick en pause. Intégration et fichiers existants conservés. Reprise : mettre patrick à false, sur accord explicite du propriétaire."
+}

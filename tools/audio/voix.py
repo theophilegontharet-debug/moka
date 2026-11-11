@@ -1,7 +1,7 @@
 """Catalogue des narrateurs de Moka (gratuit : aucune génération).
 
 Lit les voix enregistrées dans le compte ElevenLabs (identifiants exacts) et écrit site/audio/voix.json,
-avec Google Chirp 3 HD / Aoede en alternative. Les voix par défaut d'ElevenLabs (« premade », anglaises)
+(Google Chirp / Aoede est retiré de Moka depuis novembre 2026). Les voix par défaut d'ElevenLabs (« premade », anglaises)
 sont ignorées. Le tarif d'une voix de la bibliothèque (×1, ×2…) est relevé quand l'API le donne.
 """
 import json, pathlib, sys
@@ -12,8 +12,7 @@ root = pathlib.Path(__file__).resolve().parents[2]
 OUT = root / "site/audio/voix.json"
 PREFERE = "Patrick"          # narrateur initial souhaité
 
-cat = [{"id": "google:Aoede", "engine": "google", "voice": "fr-FR-Chirp3-HD-Aoede", "name": "Aoede",
-        "label": "Aoede · Google", "gender": "female", "models": ["chirp3-hd"], "rate": 0}]
+cat = []   # aucune voix Google : seules les voix ElevenLabs du compte sont proposées
 models = {}
 try:
     models = {m["model_id"]: m for m in el_models()}
@@ -43,11 +42,11 @@ for v in voices:
                 "category": v.get("category"), "rate": rate, "optimise_pour": hq,
                 "v4": ("eleven_v4" in hq) if hq else None})
 
-default = next((c["id"] for c in cat if c["engine"] == "elevenlabs" and c["name"].lower().startswith(PREFERE.lower())), "google:Aoede")
+default = next((c["id"] for c in cat if c["engine"] == "elevenlabs" and c["name"].lower().startswith(PREFERE.lower())), None)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text(json.dumps({"defaut": default, "voix": cat,
                            "modeles": {k: (models.get(k, {}).get("model_rates") or {}).get("character_cost_multiplier")
                                        for k in ("eleven_v4", "eleven_multilingual_v2")}}, ensure_ascii=False, indent=1))
-print(f"{len(cat) - 1} voix ElevenLabs du compte + Aoede. Narrateur par défaut : {default}")
+print(f"{len(cat)} voix ElevenLabs du compte. Narrateur par défaut : {default}")
 for c in cat:
     print(f"  {c['id']:32} {c['label']:40} genre={c['gender']} tarif={c['rate']} v4={c.get('v4')}")

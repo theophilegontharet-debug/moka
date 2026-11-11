@@ -27,6 +27,12 @@ CAT = json.loads((root / "site/audio/voix.json").read_text())
 MARGE = 500
 GOOGLE_MAX_CHARS = 25000
 
+PAUSE_F = root / "audio/pause.json"
+PAUSE = json.loads(PAUSE_F.read_text()) if PAUSE_F.exists() else {}
+if MODE == "generer" and PAUSE.get("patrick"):
+    sys.exit("Patrick est en pause (audio/pause.json) : aucune génération lancée, aucun crédit dépensé. "
+             "Pour reprendre : mettre \"patrick\" à false dans audio/pause.json, avec l'accord explicite du propriétaire.")
+
 phase = json.loads(PHASE_F.read_text()) if PHASE_F.exists() else {"plafond": 10000, "consomme": 0, "demandes": [], "fichiers": []}
 narr = json.loads(NARR_F.read_text()) if NARR_F.exists() else {}
 # plafond effectif : celui de la phase, sans jamais dépasser la limite propre à la clé API
@@ -36,6 +42,8 @@ voix = next((v for v in CAT["voix"] if v["id"] == CMD["voix"]), None)
 if not voix:
     sys.exit(f"Voix inconnue du catalogue : {CMD['voix']} (relancer le mode voix)")
 eng = voix["engine"]
+if eng == "google":
+    sys.exit("Google Chirp est retiré de Moka : aucune génération avec cette voix.")
 modele = CMD.get("modele", "eleven_v4") if eng == "elevenlabs" else "chirp3-hd"
 if eng == "elevenlabs" and voix.get("v4") is False and modele == "eleven_v4":
     print("Voix non optimisée pour Eleven v4 : bascule sur Multilingual v2"); modele = "eleven_multilingual_v2"

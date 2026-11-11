@@ -9,7 +9,7 @@ on:
       providers:
         description: "Services à essayer : google, elevenlabs, openai (séparés par des virgules)"
         required: false
-        default: "google"
+        default: "elevenlabs"
       google_voices:
         description: "Voix Google à essayer, ex. Aoede,Charon (facultatif ; sinon 2 féminines + 2 masculines)"
         required: false
@@ -36,7 +36,6 @@ jobs:
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
           ELEVENLABS_VOICE_IDS: ${{ inputs.elevenlabs_voice_ids }}
           PROVIDERS: ${{ inputs.providers }}
           GOOGLE_VOICES: ${{ inputs.google_voices }}

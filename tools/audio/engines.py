@@ -28,7 +28,9 @@ def _req(url, body=None, headers=None, method=None, timeout=180):
 
 # ---------------- Google Chirp 3 HD ----------------
 def google_tts(text=None, markup=None, voice="fr-FR-Chirp3-HD-Aoede", rate=None, pron=None):
-    key = os.environ.get("GOOGLE_TTS_API_KEY") or ""
+    # Google Chirp est retiré de Moka (novembre 2026) : aucune génération, aucun appel réseau, aucune clé lue.
+    raise EngineError("Google Chirp est désactivé dans Moka")
+    key = os.environ.get("GOOGLE_TTS_API_KEY") or ""  # noqa : code conservé pour une éventuelle réactivation
     if not key: raise EngineError("secret GOOGLE_TTS_API_KEY absent")
     inp = {"markup": APOS(markup)} if markup else {"text": APOS(text)}
     if pron:

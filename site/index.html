@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#FDF9F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A120D" media="(prefers-color-scheme: dark)">
 <meta name="description" content="Moka, votre brief quotidien : startups africaines, capital, énergie et tech.">
-<link rel="preload" href="data/articles.json?v=8bb26da174" as="fetch" crossorigin>
+<link rel="preload" href="data/articles.json?v=1b5046166b" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -436,6 +436,16 @@ details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
 .player .skip{white-space:nowrap}
 .narr{margin:8px 0 0; font-size:13px; color:var(--muted)}
 .narr[hidden]{display:none}
+.btn.listen[hidden]{display:none}
+.weeknav{display:grid;grid-template-columns:44px 1fr 44px;gap:8px 10px;align-items:center;margin:4px 0 12px}
+.weeknav h1{font:700 clamp(20px,5vw,28px)/1.15 Outfit,sans-serif;margin:0;text-align:center}
+.wk-sub{text-align:center;color:var(--muted,#6b5a4e);font-size:13px;margin-top:2px}
+.wk-arrow{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--cream,#f5ede4);color:inherit;text-decoration:none;font-size:26px;line-height:1}
+.wk-arrow.off{opacity:.3}
+.wk-date{grid-column:1/-1;display:flex;gap:8px;align-items:center;justify-content:center;font-size:13px}
+.wk-date input{font:inherit;padding:6px 8px;border:1px solid var(--latte,#d9c9b8);border-radius:8px;background:transparent;color:inherit}
+.wk-now{grid-column:1/-1;text-align:center;font-size:13px;font-weight:600;color:var(--accent)}
+.wk-n{font-size:13px;color:var(--muted,#6b5a4e)}
 .narr label{display:flex; align-items:center; gap:8px}
 .narr select{height:30px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--text); font:inherit; font-size:13px; padding:0 8px; max-width:100%}
 .narr .na{margin:6px 0 0; font-size:12.5px; color:var(--accent-strong)}
@@ -475,7 +485,7 @@ body.has-player{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom
 window.MOKA_STANDALONE = true;
 window.claude = { use: async (name) => {
   if (name !== "db") return null;            // pas d'utilisateur, de Gmail, de rédaction ni d'upload
-  const load = fetch("data/articles.json?v=8bb26da174").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
+  const load = fetch("data/articles.json?v=1b5046166b").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
   const none = { exists: false, data: () => undefined };
   return {
     collection: () => ({ onSnapshot: (ok, ko) => { load.then(list => ok({ docs: list.map(a => ({ id: a.id, exists: true, data: () => a })), metadata: { fromCache: false } })).catch(e => ko && ko(e)); return () => {}; } }),
@@ -639,33 +649,55 @@ function statusNotice(){
 }
 
 /* ---------- Vues ---------- */
-function viewHome(){
+/* ---------- Semaines (lundi → dimanche, fuseau Africa/Abidjan) ---------- */
+const TZ="Africa/Abidjan";
+const isoDay=d=>{ const p=new Intl.DateTimeFormat("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"}).format(d); return p; };
+const todayISO=()=>isoDay(new Date());
+const dUTC=iso=>new Date(iso+"T12:00:00Z");
+const addDays=(iso,n)=>{ const d=dUTC(iso); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); };
+const mondayOf=iso=>{ const wd=(dUTC(iso).getUTCDay()+6)%7; return addDays(iso,-wd); };
+function addedOf(a){ if(a.added) return a.added; const c=a.collected_at||""; return c.length<=10?c:isoDay(new Date(c)); }
+const longDay=(iso,o)=>new Intl.DateTimeFormat("fr-FR",{timeZone:"UTC",...o}).format(dUTC(iso));
+function weekLabel(mon){
+  const sun=addDays(mon,6); const sameM=mon.slice(0,7)===sun.slice(0,7);
+  const a=longDay(mon,sameM?{day:"numeric"}:{day:"numeric",month:"long"}); const b=longDay(sun,{day:"numeric",month:"long",year:"numeric"});
+  return `Semaine du ${a==="1"?"1er":a.replace(/^1 /,"1er ")} au ${b.replace(/^1 /,"1er ")}`;
+}
+function viewHome(wk){
   setNav("home"); if(!S.loaded) return;
-  if(!S.articles.length){ $app.innerHTML = catsBar()+statusNotice()+`<div class="empty"><h2>Pas encore d'actualités</h2>La base est vide. Ouvrez la page <a href="#sources" style="color:var(--accent);font-weight:600">Sources</a> pour relever vos newsletters.</div>`+footer(); return; }
-  const arts=[...S.articles].sort(byScore);
-  const hero=arts[0]; const side=arts.slice(1,4); const rail=arts.slice(4,8);
-  const used=new Set([hero,...side,...rail].map(a=>a.id));
-  const nSrc=new Set(arts.flatMap(a=>srcNames(a))).size;
-  const h=new Date().getHours(); const hi = h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir";
-  let html = `<section class="hello"><div class="d">${esc(todayLabel())}</div><h1>${hi}, voici votre brief</h1><p>${arts.length} actualités tirées de ${nSrc} newsletters. L'Afrique d'abord, puis ce qui compte ailleurs.</p></section>`
-   + catsBar() + statusNotice() + `
-  <section class="lead" aria-label="À la une">
-    <a class="hero" href="#a-${esc(hero.id)}"><div style="position:relative">${mediaHTML(hero,{w:1200,h:760})}<div class="over">${eyebrow(hero)}<h2>${esc(hero.title)}</h2></div></div>
-      <div class="body"><p>${esc(hero.dek)}</p>${flags(hero)}${metaHTML(hero)}</div></a>
-    <div class="stack"><div class="head"><span class="eyebrow">À suivre aussi</span></div>${side.map(rowCard).join("")}</div>
-  </section>`;
-  if(rail.length) html += `<section class="sec"><div class="sec-head"><h2>L'essentiel</h2></div><div class="rail">${rail.map(card).join("")}</div></section>`;
-  const pick = arts.find(a=>a.kind==="analyse" && a.figures?.length) || hero;
-  const f = pick.figures?.[pick.figures.length>3?3:0];
-  if(f) html += `<section class="sec"><div class="figure-card"><img class="spark" src="${SYMBOL_URL}" alt=""><span class="lbl">Le chiffre à retenir</span><b>${esc(f.v)}</b><div><p>${esc(f.l)}${f.n?`, ${esc(f.n)}`:""}.</p><a href="#a-${esc(pick.id)}">${esc(pick.title)} →</a></div></div></section>`;
-  for(const c of CATS){
-    const list=arts.filter(a=>a.category===c.id && !used.has(a.id)); if(!list.length) continue;
-    const [first,...more]=list;
-    html += `<section class="sec"><div class="sec-head"><h2><span class="eyebrow" style="--cat:${c.color}"><i></i>Rubrique</span>${esc(c.name)}</h2><a href="#cat-${c.id}">Tout voir</a></div>
-      <div class="mix">${card(first)}${more.length?`<div class="stack">${more.slice(0,4).map(rowCard).join("")}</div>`:""}</div></section>`;
+  const today=todayISO(), curMon=mondayOf(today);
+  let mon = wk && /^\d{4}-\d{2}-\d{2}$/.test(wk) ? mondayOf(wk) : curMon;
+  if(mon>curMon) mon=curMon;
+  const sun=addDays(mon,6);
+  const seen=new Set(), all=[]; for(const a of S.articles){ if(!seen.has(a.id)){ seen.add(a.id); all.push(a); } }
+  const days={}; for(const a of all){ const d=addedOf(a); if(d>=mon && d<=sun) (days[d]=days[d]||[]).push(a); }
+  const keys=Object.keys(days).sort().reverse(); const n=keys.reduce((t,k)=>t+days[k].length,0);
+  const isCur=mon===curMon;
+  const nav=`<nav class="weeknav" aria-label="Choisir la semaine">
+    <a class="wk-arrow" href="#semaine-${addDays(mon,-7)}" aria-label="Semaine précédente">‹</a>
+    <div class="wk-mid"><h1>${esc(weekLabel(mon))}</h1><div class="wk-sub">${isCur?"Semaine en cours · ":""}${n} actualité${n>1?"s":""}</div></div>
+    ${isCur?`<span class="wk-arrow off" aria-hidden="true">›</span>`:`<a class="wk-arrow" href="#semaine-${addDays(mon,7)}" aria-label="Semaine suivante">›</a>`}
+    <label class="wk-date"><span>Aller à la semaine du</span><input id="wkDate" type="date" value="${esc(mon)}" max="${esc(today)}"></label>
+    ${isCur?"":`<a class="wk-now" href="#">Revenir à cette semaine</a>`}
+  </nav>`;
+  let html = `<section class="hello"><div class="d">${esc(todayLabel())}</div></section>`+nav+catsBar()+statusNotice();
+  if(!n){
+    html += `<div class="empty"><h2>Rien cette semaine</h2>Aucune actualité n'a été ajoutée à Moka du ${esc(longDay(mon,{day:"numeric",month:"long"}))} au ${esc(longDay(sun,{day:"numeric",month:"long"}))}. Les semaines passées ne sont pas remplies après coup.</div>`;
+  } else for(const k of keys){
+    const list=days[k].sort(byScore); const [first,...more]=list;
+    html += `<section class="sec"><div class="sec-head"><h2>${esc(longDay(k,{weekday:"long",day:"numeric",month:"long"}).replace(/^(\S+) 1 /,"$1 1er "))}${k===today?" · aujourd'hui":""}</h2><span class="wk-n">${list.length} actualité${list.length>1?"s":""}</span></div>
+      <div class="mix">${card(first)}${more.length?`<div class="stack">${more.map(rowCard).join("")}</div>`:""}</div></section>`;
   }
   $app.innerHTML = html + footer();
+  const di=document.getElementById("wkDate"); if(di) di.onchange=()=>{ if(di.value){ const m=mondayOf(di.value>today?today:di.value); location.hash = m===curMon?"":"#semaine-"+m; if(m===curMon) route(); } };
 }
+/* balayage horizontal sur la vue semaine (hors carrousels, champs et lecteur) */
+(function(){
+  let x0=null,y0=null,t0=0;
+  document.addEventListener("touchstart",e=>{ const t=e.target; if(t.closest&&t.closest(".rail,.cats,input,select,textarea,.fmt,.player,#fmtBody")||!$app.querySelector(".weeknav")||e.touches.length!==1){ x0=null; return; } x0=e.touches[0].clientX; y0=e.touches[0].clientY; t0=Date.now(); },{passive:true});
+  document.addEventListener("touchend",e=>{ if(x0==null) return; const c=e.changedTouches[0]; const dx=c.clientX-x0, dy=c.clientY-y0; const ok=Math.abs(dx)>80 && Math.abs(dx)>2*Math.abs(dy) && Date.now()-t0<700; x0=null; if(!ok) return;
+    const a=$app.querySelector(dx>0?".weeknav a[aria-label='Semaine précédente']":".weeknav a[aria-label='Semaine suivante']"); if(a) a.click(); },{passive:true});
+})();
 function viewCats(){
   setNav("cats"); if(!S.loaded) return;
   const groups=CATS.map(c=>({c, list:S.articles.filter(a=>a.category===c.id).sort(byScore)}));
@@ -704,7 +736,7 @@ function fmtMinutes(a, f){
 }
 function figsHTML(list){ return list.length?`<div class="figs" aria-label="Chiffres clés">${list.map(f=>`<div><b>${esc(f.v)}</b><span>${esc(f.l)}</span>${f.n?`<small>${esc(f.n)}</small>`:""}</div>`).join("")}</div>`:""; }
 function sourcesHTML(a, extra){
-  return `<section class="blk"><div class="blk-title">${I.mail}Sources</div><div class="sources">${(a.sources||[]).map(s=>`<div class="src"><span class="mono">${esc(initials(s.name))}</span><div><b>${esc(s.name)}</b>${s.via?` <span class="sub">via ${esc(s.via)}</span>`:""}<div class="sub">Reçue le ${fmtDate(s.date)}</div></div><div class="links">${s.web?`<a class="lnk" href="${esc(s.web)}" target="_blank" rel="noopener">${esc(s.web_label||"Article original")}${I.ext}</a>`:""}${s.gmail?`<a class="lnk" href="${esc(s.gmail)}" target="_blank" rel="noopener">Dans Gmail${I.ext}</a>`:""}</div></div>`).join("")}</div>
+  return `<section class="blk"><div class="blk-title">${I.mail}Sources</div><div class="sources">${(a.sources||[]).map(s=>`<div class="src"><span class="mono">${esc(initials(s.name))}</span><div><b>${esc(s.name)}</b>${s.via?` <span class="sub">via ${esc(s.via)}</span>`:""}<div class="sub">${s.pub?"Publié":"Reçue"} le ${fmtDate(s.date)}</div></div><div class="links">${s.web?`<a class="lnk" href="${esc(s.web)}" target="_blank" rel="noopener">${esc(s.web_label||"Article original")}${I.ext}</a>`:""}${s.gmail?`<a class="lnk" href="${esc(s.gmail)}" target="_blank" rel="noopener">Dans Gmail${I.ext}</a>`:""}</div></div>`).join("")}</div>
   ${extra&&extra.length?`<div class="blk-sub">Sources de l'analyse approfondie</div><ol class="deep-src">${extra.map((s,i)=>`<li id="ds-${esc(s.id)}"><span class="n">${i+1}</span><div><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}${I.ext}</a>${s.date?`<small>${esc(fmtDate(s.date.length>=10?s.date:s.date+"-01",{month:"long",year:"numeric",...(s.date.length>=10?{day:"numeric"}:{})}))}</small>`:""}</div></li>`).join("")}</ol>`:""}</section>`;
 }
 function relatedHTML(a){ const rel=(a.related||[]).map(r=>S.articles.find(x=>x.id===r)).filter(Boolean);
@@ -787,10 +819,10 @@ function viewArticle(id){
     <div id="photoForm"></div>
     <header class="r-head">${eyebrow(a)}<h1>${esc(a.title)}</h1><p class="dek">${esc(a.dek)}</p></header>
     <div class="r-meta"><div class="srcdots">${names.slice(0,3).map(n=>`<span title="${esc(n)}">${esc(initials(n))}</span>`).join("")}</div>
-      <span><b>${esc(names.join(", "))}</b></span><span>Événement : <b>${esc(a.event_label||fmtDate(a.event_date))}</b></span><span>Reçu le ${pubs.map(d=>fmtDate(d,{day:"numeric",month:"short"})).join(", ")}</span></div>
+      <span><b>${esc(names.join(", "))}</b></span><span>Événement : <b>${esc(a.event_label||fmtDate(a.event_date))}</b></span><span>${a.published_date?`Publié le <b>${esc(fmtDate(a.published_date,{day:"numeric",month:"long",year:"numeric"}))}</b>`:`Reçu le ${pubs.map(d=>fmtDate(d,{day:"numeric",month:"short"})).join(", ")}`}</span><span>Ajouté à Moka le <b>${esc(fmtDate(addedOf(a),{day:"numeric",month:"long",year:"numeric"}))}</b></span></div>
     <div class="legend-line" style="margin-top:12px"><span class="tag ${v.cls||""}">${a.verification==="rapporte"&&a.origin!=="auto"?I.check:""}${esc(v.t||"")}</span>${a.moka_context?`<span class="tag">${I.book}Contexte Moka ajouté</span>`:""}${a.unknowns?.length?`<span class="tag">${I.help}${a.unknowns.length} inconnue${a.unknowns.length>1?"s":""}</span>`:""}</div>
     <div class="fmt" role="radiogroup" aria-label="Profondeur de lecture">${FORMATS.map(f=>{ const m=fmtMinutes(a,f.id); return `<button type="button" role="radio" data-f="${f.id}" aria-checked="false" tabindex="-1"><b>${f.name}</b><span>${f.id==="approfondir"&&deepNA?"indisponible":`${m} min`}</span></button>`; }).join("")}</div>
-    ${MokaAudio.ok?`<button class="btn listen" id="listenBtn" type="button">${I.headphones}<span>Écouter</span><small id="listenFmt"></small></button>`:""}
+    ${MokaAudio.ok?`<button class="btn listen" id="listenBtn" type="button" hidden>${I.headphones}<span>Écouter</span><small id="listenFmt"></small></button>`:""}
     <div id="fmtBody"></div>
   </article>`;
   renderFormat(a);
@@ -890,6 +922,7 @@ function route(){
   const h=location.hash.replace(/^#/,"");
   if(h.startsWith("a-")) return viewArticle(h.slice(2));
   if(h.startsWith("cat-")) return viewCat(h.slice(4));
+  if(h.startsWith("semaine-")) return viewHome(h.slice(8));
   if(h==="rubriques") return viewCats();
   if(h==="saved") return viewSaved();
   if(h==="sources") return viewSources();
@@ -927,16 +960,13 @@ function toggleSave(id){
 
 
 /* ---------- Moka Audio ----------
-   1) Vrais fichiers MP3 (narrations Google Chirp 3 HD, voix Aoede) quand ils existent : élément <audio>,
-      lecture en arrière-plan, commandes sur l'écran verrouillé (Media Session), reprise de la position.
-   2) Sinon, repli sur la synthèse vocale du navigateur, lue phrase par phrase.
-   Aucun appel à un service pendant l'écoute : les MP3 sont des fichiers statiques. */
+   Fichiers MP3 déjà produits (voix ElevenLabs, Patrick par défaut) : élément <audio>, lecture en arrière-plan,
+   commandes sur l'écran verrouillé (Media Session), reprise de la position.
+   Google Chirp est retiré (novembre 2026) et il n'y a plus de repli sur une voix de l'appareil : un article sans MP3
+   se lit en texte, sans bouton d'écoute. Aucun appel à un service pendant l'écoute : les MP3 sont des fichiers statiques. */
 const MokaAudio = (()=>{
-  const synth = window.speechSynthesis;
-  const ttsOk = !!(synth && window.SpeechSynthesisUtterance);
   const RATES=[0.85,0.9,0.95,1,1.15,1.3,1.5];
-  const st={ a:null, fmt:null, mode:null, chunks:[], i:0, playing:false, done:false, voices:[], voice:null, rate:1, token:0, index:{}, entry:null,
-    cat:[{id:"google:Aoede", engine:"google", name:"Aoede", label:"Aoede · Google", gender:"female"}], narrIdx:{}, narr:null };
+  const st={ a:null, fmt:null, mode:null, playing:false, done:false, rate:1, entry:null, cat:[], narrIdx:{}, narr:null };
   try{ st.narr=localStorage.getItem("moka.audio.narrateur"); }catch(e){}
   try{ const r=parseFloat(localStorage.getItem("moka.audio.rate")); st.rate=RATES.includes(r)?r:1; }catch(e){}
   const el = new Audio(); el.preload="none";
@@ -948,79 +978,28 @@ const MokaAudio = (()=>{
   // Narrateurs : catalogue (voix.json) + MP3 déjà produits. Le navigateur ne fait jamais d'appel de synthèse :
   // changer de voix ne déclenche aucune génération, seulement la lecture d'un MP3 existant.
   const getJ=u=>fetch(u,{cache:"no-cache"}).then(r=>r.ok?r.json():{}).catch(()=>({}));
-  Promise.all([getJ("audio/index.json"), getJ("audio/voix.json"), getJ("audio/narrations.json")]).then(([j,c,n])=>{
-    st.index=j||{}; st.narrIdx=n||{};
-    if(c && Array.isArray(c.voix) && c.voix.length){ st.cat=c.voix; if(!st.narr || !st.cat.some(v=>v.id===st.narr)) st.narr=c.defaut||"google:Aoede"; }
-    if(!st.narr || !st.cat.some(v=>v.id===st.narr)) st.narr="google:Aoede";
+  const isGoogle=v=>v&&(v.engine==="google"||/^google:/i.test(v.id||""));   // Google Chirp : jamais proposé
+  Promise.all([getJ("audio/voix.json"), getJ("audio/narrations.json")]).then(([c,n])=>{
+    st.narrIdx=n||{};
+    if(c && Array.isArray(c.voix)){ st.cat=c.voix.filter(v=>!isGoogle(v)); if(!st.narr || !st.cat.some(v=>v.id===st.narr)) st.narr=(st.cat.some(v=>v.id===c.defaut)?c.defaut:st.cat[0]?.id)||null; }
     const a=S.articles.find(x=>"#a-"+x.id===location.hash); if(a) bindButton(a); });
   const vInfo=id=>st.cat.find(v=>v.id===id)||{id, name:id, label:id};
   const vShort=id=>{ const v=vInfo(id); return String(v.name||id).split(/ [-–] /)[0].trim(); };
   const usedFormat=(a,f)=>{ const x=a.formats?.express, d=a.formats?.approfondir;
     if(f==="express"&&!x) return "comprendre"; if(f==="approfondir"&&(!d||d.status==="indisponible")) return "comprendre"; return f; };
-  const entryOf=(a,u,vid)=>{ const e=st.narrIdx?.[a.id]?.[vid]?.[u] || (vid==="google:Aoede"?st.index?.[a.id]?.[u]:null);
+  const entryOf=(a,u,vid)=>{ const e=st.cat.some(v=>v.id===vid)?st.narrIdx?.[a.id]?.[vid]?.[u]:null;
     return e?{...e, used:u, vid, src:`audio/${a.id}/${e.file}`}:null; };
   const mp3For=(a,f,vid)=>entryOf(a,usedFormat(a,f),vid||st.narr);
   const availFor=(a,f)=>st.cat.map(v=>v.id).filter(id=>mp3For(a,f,id));
   const altFor=(a,f)=>{ const av=availFor(a,f); const cur=st.a?.id===a.id&&st.mode==="mp3"?st.entry?.vid:null;
-    return cur&&av.includes(cur)?cur:av.includes("google:Aoede")?"google:Aoede":av[0]||null; };
+    return cur&&av.includes(cur)?cur:av[0]||null; };
 
   // ---- position mémorisée (par article et par format) ----
   const POSK="moka.audio.pos";
   const posAll=()=>{ try{ return JSON.parse(localStorage.getItem(POSK)||"{}"); }catch(e){ return {}; } };
-  const pk=(a,f,v)=>a+"|"+f+(v&&v!=="google:Aoede"?"|"+v:"");
+  const pk=(a,f,v)=>a+"|"+f+(v?"|"+v:"");
   const posGet=(a,f,v)=>posAll()[pk(a,f,v)]||0;
   const posSet=(a,f,t,v)=>{ v=v===undefined?st.entry?.vid:v; try{ const m=posAll(); const k=pk(a,f,v); if(t>0) m[k]=Math.round(t); else delete m[k]; localStorage.setItem(POSK,JSON.stringify(m)); }catch(e){} };
-
-  // ---- texte pour la synthèse du navigateur (repli) ----
-  const norm = t => String(t||"")
-    .replace(/(\d)\s?Md\$/g,"$1 milliards de dollars").replace(/(\d)\s?M\$/g,"$1 millions de dollars").replace(/(\d)\s?k\$/g,"$1 mille dollars")
-    .replace(/(\d)\s?Md€/g,"$1 milliards d'euros").replace(/(\d)\s?M€/g,"$1 millions d'euros").replace(/(\d)\s?M£/g,"$1 millions de livres")
-    .replace(/(\d)\s?\$/g,"$1 dollars").replace(/(\d)\s?€/g,"$1 euros").replace(/(\d)\s?GW\b/g,"$1 gigawatts")
-    .replace(/≈|~/g,"environ ").replace(/→/g," à ").replace(/×\s?(\d)/g,"fois $1").replace(/\bx(\d+)/g,"$1 fois")
-    .replace(/\bT([1-4])\b/g,(m,n)=>["","premier","deuxième","troisième","quatrième"][n]+" trimestre")
-    .replace(/\bVC\b/g,"capital-risque").replace(/\bPE\b/g,"private equity").replace(/\s+/g," ").trim();
-  function script(a, f){
-    const P=[]; const add=t=>{ if(t) P.push(norm(t)); };
-    add(a.title+"."); add(a.dek);
-    const x=a.formats?.express, d=a.formats?.approfondir; const used=usedFormat(a,f);
-    if(used==="express"){ add("L'essentiel."); x.points.forEach(add); add("Pourquoi ça compte. "+x.why); }
-    else {
-      add(a.brief); (a.body||[]).forEach(b=>{ if(b.h) add(b.h+"."); add(b.p); });
-      (a.items||[]).forEach(it=>add(`${it.name}, ${it.where} : ${it.amount}. ${it.what}`));
-      if(used==="approfondir"){ add("Analyse approfondie."); d.sections.forEach(sec=>{ add(sec.h+"."); sec.p.forEach(add); }); }
-      if(a.why) add("Pourquoi ça compte. "+a.why);
-      if(a.moka_context) add("Contexte. "+a.moka_context);
-      const unk=[...(a.unknowns||[]), ...(used==="approfondir"?(d.limits||[]):[])];
-      if(unk.length) add("Ce qu'on ne sait pas encore. "+unk.map(u=>u.replace(/[.\s]+$/,"")).join(". ")+".");
-    }
-    const out=[];
-    P.forEach(par=>{ (par.match(/[^.!?…]+[.!?…]+[»"”)]*|\S[^.!?…]*$/g)||[par]).forEach(sn=>{ sn=sn.trim(); if(!sn) return;
-      while(sn.length>220){ const k=sn.lastIndexOf(", ",220); const cut=k>80?k+1:220; out.push(sn.slice(0,cut).trim()); sn=sn.slice(cut).trim(); }
-      if(sn) out.push(sn); }); });
-    return {chunks:out, used};
-  }
-  function pickVoices(){
-    if(!ttsOk) return;
-    const fr=synth.getVoices().filter(v=>/^fr/i.test(v.lang));
-    const score=v=>(/premium|enhanced|natural|neural|online/i.test(v.name)?4:0)+(/^fr[-_]FR/i.test(v.lang)?2:0)+(/amélie|amelie|thomas|audrey|aurélie|denise|henri|google/i.test(v.name)?1:0)+(v.localService?0.5:0);
-    st.voices=fr.sort((a,b)=>score(b)-score(a)||a.name.localeCompare(b.name));
-    let saved=null; try{ saved=localStorage.getItem("moka.audio.voice"); }catch(e){}
-    st.voice=st.voices.find(v=>v.voiceURI===saved)||st.voices[0]||null;
-    if(st.mode==="tts") render();
-  }
-  if(ttsOk){ pickVoices(); synth.addEventListener?.("voiceschanged", pickVoices); setTimeout(pickVoices,500); }
-
-  // ---- synthèse du navigateur ----
-  function speak(){
-    const my=++st.token; synth.cancel();
-    if(st.i>=st.chunks.length){ st.playing=false; st.i=0; st.done=true; render(); return; }
-    st.done=false;
-    const u=new SpeechSynthesisUtterance(st.chunks[st.i]);
-    u.lang=st.voice?.lang||"fr-FR"; if(st.voice) u.voice=st.voice; u.rate=st.rate; u.pitch=1;
-    u.onend=()=>{ if(my!==st.token||!st.playing) return; st.i++; progress(); speak(); };
-    u.onerror=(e)=>{ if(my!==st.token) return; if(e.error==="interrupted"||e.error==="canceled"){ st.playing=false; render(); return; } st.i++; speak(); };
-    st.playing=true; render(); synth.speak(u);
-  }
 
   // ---- MP3 ----
   let lastSave=0;
@@ -1031,12 +1010,12 @@ const MokaAudio = (()=>{
   el.addEventListener("timeupdate",()=>{ progress(); const now=Date.now(); if(st.a && now-lastSave>4000){ lastSave=now; posSet(st.a.id, st.fmt, el.currentTime); }
     if("mediaSession" in navigator && el.duration && navigator.mediaSession.setPositionState){ try{ navigator.mediaSession.setPositionState({duration:el.duration, playbackRate:el.playbackRate, position:Math.min(el.currentTime, el.duration)}); }catch(e){} } });
   el.addEventListener("loadedmetadata",()=>{ progress(); });
-  el.addEventListener("error",()=>{ if(st.mode!=="mp3"||!st.a) return; const a=st.a; st.mode=null; st.entry=null; startTts(a); });
+  el.addEventListener("error",()=>{ if(st.mode!=="mp3"||!st.a) return; st.playing=false; st.a=null; st.mode=null; st.entry=null; render(); });
   function mediaSession(a){
     if(!("mediaSession" in navigator)) return;
     const art=[{src:"icons/icon-512.png", sizes:"512x512", type:"image/png"}];
     if(a.image?.src) art.unshift({src:a.image.src, sizes:`${a.image.width||1400}x${a.image.height||933}`, type:"image/jpeg"});
-    try{ navigator.mediaSession.metadata=new MediaMetadata({title:a.title, artist:"Moka · voix "+vShort(st.entry?.vid||"google:Aoede"), album:fmtName(st.fmt), artwork:art}); }catch(e){}
+    try{ navigator.mediaSession.metadata=new MediaMetadata({title:a.title, artist:"Moka · voix "+vShort(st.entry?.vid), album:fmtName(st.fmt), artwork:art}); }catch(e){}
     const set=(k,f)=>{ try{ navigator.mediaSession.setActionHandler(k,f); }catch(e){} };
     set("play",()=>el.play()); set("pause",()=>el.pause());
     set("seekbackward",d=>{ el.currentTime=Math.max(0,el.currentTime-(d.seekOffset||15)); });
@@ -1045,33 +1024,28 @@ const MokaAudio = (()=>{
     set("stop",()=>stop());
   }
   function startMp3(a, e){
-    if(ttsOk){ st.token++; synth.cancel(); }
-    st.a=a; st.fmt=e.used; st.mode="mp3"; st.entry=e; st.chunks=[]; st.done=false;
+    st.a=a; st.fmt=e.used; st.mode="mp3"; st.entry=e; st.done=false;
     el.src=e.src; el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; el.preload="auto";
     const pos=posGet(a.id, e.used, e.vid);
     if(pos>3){ const once=()=>{ el.removeEventListener("loadedmetadata",once); if(!el.duration||pos<el.duration-3) el.currentTime=pos; }; el.addEventListener("loadedmetadata",once); }
     mediaSession(a); render(); el.play().catch(()=>{ st.playing=false; render(); });
   }
-  function startTts(a){
-    if(!ttsOk) return;
-    el.pause(); const sc=script(a,S.format); st.a=a; st.fmt=sc.used; st.mode="tts"; st.entry=null; st.chunks=sc.chunks; st.i=0; speak();
-  }
   function start(a){
-    const alt=altFor(a,S.format); const e=mp3For(a,S.format)||(alt?mp3For(a,S.format,alt):null); const used=usedFormat(a,S.format);
-    const same = st.a && st.a.id===a.id && st.fmt===used && st.mode===(e?"mp3":"tts") && (!e || st.entry?.vid===e.vid);
-    if(same && (st.mode==="mp3" || st.chunks.length)){ st.playing?pause():play(); return; }
-    e?startMp3(a,e):startTts(a);
+    const alt=altFor(a,S.format); const e=mp3For(a,S.format)||(alt?mp3For(a,S.format,alt):null); if(!e) return;
+    const same = st.a && st.a.id===a.id && st.fmt===e.used && st.mode==="mp3" && st.entry?.vid===e.vid;
+    if(same){ st.playing?pause():play(); return; }
+    startMp3(a,e);
   }
-  function play(){ if(st.mode==="mp3"){ el.play().catch(()=>{}); } else if(st.chunks.length) speak(); }
-  function pause(){ if(st.mode==="mp3"){ el.pause(); } else { st.token++; st.playing=false; synth.cancel(); render(); } }
+  function play(){ if(st.mode==="mp3") el.play().catch(()=>{}); }
+  function pause(){ if(st.mode==="mp3") el.pause(); }
   function stop(){
-    if(st.mode==="mp3"){ if(st.a && !el.ended) posSet(st.a.id, st.fmt, el.currentTime); el.pause(); el.removeAttribute("src"); el.load(); }
-    else { st.token++; synth?.cancel(); }
-    st.playing=false; st.a=null; st.chunks=[]; st.i=0; st.mode=null; st.entry=null; render();
+    if(st.mode==="mp3" && st.a && !el.ended) posSet(st.a.id, st.fmt, el.currentTime);
+    if(st.mode==="mp3"){ el.pause(); el.removeAttribute("src"); el.load(); }
+    st.playing=false; st.a=null; st.mode=null; st.entry=null; render();
     if("mediaSession" in navigator){ try{ navigator.mediaSession.metadata=null; }catch(e){} }
   }
   function setRate(r){ r=parseFloat(r); if(!RATES.includes(r)) return; st.rate=r; try{ localStorage.setItem("moka.audio.rate",st.rate); }catch(e){}
-    if(st.mode==="mp3"){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; progress(); } else if(st.playing) speak(); }
+    if(st.mode==="mp3"){ el.playbackRate=st.rate; el.defaultPlaybackRate=st.rate; progress(); } }
   function setNarrator(id){
     if(!st.cat.some(v=>v.id===id)) return; st.narr=id; try{ localStorage.setItem("moka.audio.narrateur",id); }catch(e){}
     // lecture en cours : on passe au MP3 de la nouvelle voix s'il existe déjà ; sinon on continue et on signale l'indisponibilité
@@ -1079,33 +1053,31 @@ const MokaAudio = (()=>{
     render();
   }
   function narrSelect(a, idAttr, playing){
-    const groups=[["female","Voix féminines"],["male","Voix masculines"],[null,"Autres voix"]];
     const sel=playing||st.narr, ok=v=>!!entryOf(a, usedFormat(a,S.format), v.id);
-    const opt=v=>`<option value="${esc(v.id)}"${v.id===sel?" selected":""}${playing&&!ok(v)?" disabled":""}>${esc(vShort(v.id))}${playing?"":" · "+(v.engine==="google"?"Google":"ElevenLabs")}${ok(v)?"":" — indisponible"}</option>`;
-    return `<select id="${idAttr}" aria-label="Narrateur">${groups.map(([g,l])=>{ const vs=st.cat.filter(v=>g?v.gender===g:!["female","male"].includes(v.gender)); return vs.length?`<optgroup label="${l}">${vs.map(opt).join("")}</optgroup>`:""; }).join("")}</select>`;
+    const vs=st.cat.filter(ok);
+    return `<select id="${idAttr}" aria-label="Narrateur">${vs.map(v=>`<option value="${esc(v.id)}"${v.id===sel?" selected":""}>${esc(vShort(v.id))}</option>`).join("")}</select>`;
   }
-  function setVoice(uri){ st.voice=st.voices.find(v=>v.voiceURI===uri)||st.voice; try{ localStorage.setItem("moka.audio.voice",uri); }catch(e){} if(st.playing) speak(); }
 
   // ---- bouton « Écouter » de l'article ----
   function bindButton(a){
     const b=document.getElementById("listenBtn"); if(!b) return;
     const mine=mp3For(a,S.format); const alt=altFor(a,S.format); const e=mine||(alt?mp3For(a,S.format,alt):null); const used=usedFormat(a,S.format);
-    const cur = st.a && st.a.id===a.id && st.fmt===used && (!e || st.mode!=="mp3" || st.entry?.vid===e.vid);
-    let label="Écouter", meta;
     let row=document.getElementById("narrRow");
+    // pas d'audio pour cet article / ce format : lecture texte uniquement, aucun bouton inutilisable
+    b.hidden=!e;
+    if(!e){ if(row) row.hidden=true; return; }
     if(!row){ row=document.createElement("div"); row.id="narrRow"; row.className="narr"; b.insertAdjacentElement("afterend", row); }
-    row.hidden=!e;
-    if(e){
+    const many=availFor(a,S.format).length>1;
+    row.hidden=!many;
+    if(many){
       row.innerHTML=`<label>Narrateur ${narrSelect(a,"narrSel")}</label>${mine?"":`<p class="na">${esc(vShort(st.narr))} n’est pas encore disponible pour ce format. Lecture proposée avec ${esc(vShort(e.vid))}.</p>`}`;
       const ns=row.querySelector("#narrSel"); ns.onchange=()=>setNarrator(ns.value);
-      const secs=e.seconds||0; meta=`${fmtName(used)} · ${secs<60?secs+" s":Math.round(secs/60)+" min"} · voix ${vShort(e.vid)}`;
-      const pos=posGet(a.id,used,e.vid);
-      if(cur && st.playing) label="Pause"; else if(cur && st.done) label="Réécouter"; else if(pos>3) label=`Reprendre à ${mmss(pos)}`;
-    } else {
-      const sc=script(a,S.format); const mins=Math.max(1,Math.round(sc.chunks.join(" ").split(/\s+/).length/(160*st.rate)));
-      meta=`${fmtName(sc.used)} · ${mins} min · voix de l'appareil`;
-      if(cur && st.playing) label="Pause"; else if(cur && st.chunks.length) label=st.done?"Réécouter":"Reprendre";
     }
+    const cur = st.a && st.a.id===a.id && st.fmt===used && st.mode==="mp3" && st.entry?.vid===e.vid;
+    let label="Écouter";
+    const secs=e.seconds||0; const meta=`${fmtName(used)} · ${secs<60?secs+" s":Math.round(secs/60)+" min"} · voix ${vShort(e.vid)}`;
+    const pos=posGet(a.id,used,e.vid);
+    if(cur && st.playing) label="Pause"; else if(cur && st.done) label="Réécouter"; else if(pos>3) label=`Reprendre à ${mmss(pos)}`;
     b.querySelector("span").textContent=label;
     document.getElementById("listenFmt").textContent=meta;
     b.setAttribute("aria-pressed", cur&&st.playing?"true":"false");
@@ -1118,37 +1090,32 @@ const MokaAudio = (()=>{
     let pct=0, txt="";
     if(st.mode==="mp3"){ const d=el.duration||st.entry?.seconds||0; pct=d?el.currentTime/d*100:0; txt=`${mmss(el.currentTime)} / ${mmss(d)}`;
       const r=el2.querySelector("#pSeek"); if(r && !r.matches(":active")){ r.max=Math.round(d)||1; r.value=Math.round(el.currentTime); r.style.setProperty("--p",pct+"%"); } }
-    else { pct=st.chunks.length?st.i/st.chunks.length*100:0; txt=`${Math.round(pct)} %`; const bar=el2.querySelector(".bar i"); if(bar) bar.style.width=pct+"%"; }
     const t=el2.querySelector("#pTime"); if(t) t.textContent=txt;
   }
   function render(){
     const box=document.getElementById("player"); if(!box) return;
-    const on=!!(st.a && (st.mode==="mp3" || st.chunks.length));
+    const on=!!(st.a && st.mode==="mp3");
     box.hidden=!on; document.body.classList.toggle("has-player", on);
     if(on){
       box.innerHTML=`<div class="top"><button class="pbtn main" id="pPlay" type="button" aria-label="${st.playing?"Pause":"Lecture"}">${st.playing?I.pause:I.play}</button>
         <a class="ttl" href="#a-${esc(st.a.id)}"><b>${esc(st.a.title)}</b><span>${fmtName(st.fmt)}${st.done?" · terminé":""} · <span id="pTime"></span></span></a>
         <select class="rate" id="pRate" aria-label="Vitesse de lecture">${RATES.map(r=>`<option value="${r}"${r===st.rate?" selected":""}>${rateLabel(r)}</option>`).join("")}</select>
         <button class="pbtn" id="pStop" type="button" aria-label="Arrêter">${I.stop}</button></div>
-        ${st.mode==="mp3"
-          ? `<input class="seek" id="pSeek" type="range" min="0" max="1" step="1" value="0" aria-label="Position de lecture">
-             <div class="more">${st.a&&st.entry?narrSelect(st.a,"pNarr",st.entry.vid):"Narration"} <span class="sp"></span><button class="skip" id="pBack" type="button" aria-label="Reculer de 15 secondes">−15 s</button><button class="skip" id="pFwd" type="button" aria-label="Avancer de 15 secondes">+15 s</button></div>`
-          : `<div class="bar"><i></i></div>${st.voices.length>1?`<label class="more">Voix <select id="pVoice">${st.voices.map(v=>`<option value="${esc(v.voiceURI)}"${v===st.voice?" selected":""}>${esc(v.name.replace(/\s*\(.*\)$/,""))} · ${esc(v.lang)}</option>`).join("")}</select></label>`:""}`}`;
+        <input class="seek" id="pSeek" type="range" min="0" max="1" step="1" value="0" aria-label="Position de lecture">
+        <div class="more">${st.a&&st.entry&&availFor(st.a,st.fmt).length>1?narrSelect(st.a,"pNarr",st.entry.vid):"Narration"} <span class="sp"></span><button class="skip" id="pBack" type="button" aria-label="Reculer de 15 secondes">−15 s</button><button class="skip" id="pFwd" type="button" aria-label="Avancer de 15 secondes">+15 s</button></div>`;
       box.querySelector("#pPlay").onclick=()=>st.playing?pause():play();
       box.querySelector("#pStop").onclick=stop;
       const rs=box.querySelector("#pRate"); rs.onchange=()=>setRate(rs.value);
       const seek=box.querySelector("#pSeek"); if(seek){ seek.oninput=()=>{ el.currentTime=+seek.value; progress(); }; }
       const bk=box.querySelector("#pBack"); if(bk) bk.onclick=()=>{ el.currentTime=Math.max(0,el.currentTime-15); };
       const fw=box.querySelector("#pFwd"); if(fw) fw.onclick=()=>{ el.currentTime=Math.min(el.duration||1e9,el.currentTime+15); };
-      const sel=box.querySelector("#pVoice"); if(sel) sel.onchange=()=>setVoice(sel.value);
       const pn=box.querySelector("#pNarr"); if(pn) pn.onchange=()=>setNarrator(pn.value);
       progress();
     } else box.innerHTML="";
     const a=st.a||S.articles.find(x=>"#a-"+x.id===location.hash);
     if(a && location.hash==="#a-"+a.id) bindButton(a);
   }
-  document.addEventListener("visibilitychange",()=>{ if(!document.hidden && st.mode==="tts" && st.playing && !synth.speaking){ st.playing=false; render(); } });
-  return {ok:ttsOk||true, setNarrator, start, play, pause, stop, bindButton, _st:st, _el:el, _script:script};
+  return {ok:true, setNarrator, start, play, pause, stop, bindButton, _st:st, _el:el};
 })();
 
 /* ---------- Démarrage ---------- */

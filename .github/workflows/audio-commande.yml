@@ -3,6 +3,7 @@ name: Moka Audio — commande
 # Déclenché uniquement quand audio/commande.json change (main ou audio-elevenlabs).
 # mode "voix"     : gratuit, relit le catalogue des voix du compte ElevenLabs.
 # mode "estimer"  : gratuit, calcule le coût prévisionnel d'une génération (aucun appel de synthèse).
+# PAUSE : tant que audio/pause.json contient {"patrick": true}, le mode generer ne fait rien.
 # mode "generer"  : payant, uniquement après accord explicite ; plafond de phase dans audio/phase.json.
 on:
   push:
@@ -28,16 +29,19 @@ jobs:
           MODE=$(python3 -c "import json;print(json.load(open('audio/commande.json'))['mode'])")
           case "$MODE" in voix|estimer|generer) ;; *) echo "mode inconnu"; exit 1;; esac
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          PAUSE=$(python3 -c "import json,os;print('oui' if os.path.exists('audio/pause.json') and json.load(open('audio/pause.json')).get('patrick') else 'non')")
+          echo "pause=$PAUSE" >> "$GITHUB_OUTPUT"
+          [ "$MODE" = "generer" ] && [ "$PAUSE" = "oui" ] && echo "Patrick est en pause (audio/pause.json) : aucune génération, aucun crédit dépensé."
+          true
       - name: Catalogue des voix (gratuit)
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
         run: python3 tools/audio/voix.py
       - name: Génération (${{ steps.cmd.outputs.mode }})
-        if: steps.cmd.outputs.mode != 'voix'
+        if: steps.cmd.outputs.mode == 'estimer' || (steps.cmd.outputs.mode == 'generer' && steps.cmd.outputs.pause != 'oui')
         env:
           MODE: ${{ steps.cmd.outputs.mode }}
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
         run: python3 tools/audio/generer.py
       - name: Publier les MP3 et le registre
         if: always()
