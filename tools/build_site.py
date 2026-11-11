@@ -77,6 +77,20 @@ for a in arts:
         if d.tzinfo is None: d = d.replace(tzinfo=_tz.utc)
         a["added"] = d.astimezone(_ABJ).date().isoformat()
     assert a["added"], a["id"]
+# date de classement : publication de la source ; synthèse Moka multi-sources => date de rédaction
+synth = set(json.loads((D / "dates.json").read_text())["syntheses"])
+assert synth <= set(ids), synth - set(ids)
+def _day(v):
+    if not v: return None
+    if len(v) <= 10: return v
+    d = _dt.fromisoformat(v.replace("Z", "+00:00"))
+    if d.tzinfo is None: d = d.replace(tzinfo=_tz.utc)
+    return d.astimezone(_ABJ).date().isoformat()
+for a in arts:
+    if a["id"] in synth:
+        a["synth"] = True; a["pdate"] = a["added"]
+    else:
+        a["pdate"] = _day(a.get("published_date"))   # None => « Date non confirmée »
 blob = json.dumps(arts, ensure_ascii=False, separators=(",", ":"))
 assert sum(1 for a in arts if a.get("image")) == len(photos)
 
@@ -117,7 +131,7 @@ head = """<link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FDF9F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A120D" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Moka, votre brief quotidien : startups africaines, capital, énergie et tech.">
+<meta name="description" content="Moka, votre brief quotidien : startups africaines, private equity, énergie et tech.">
 <link rel="preload" href="data/articles.json?v=__V__" as="fetch" crossorigin>""".replace("__V__", version)
 
 html = (root / "app/index.html").read_text()
@@ -130,7 +144,7 @@ html = html.replace(marker, adapter + "\n" + marker, 1)
 
 (site / "manifest.webmanifest").write_text(json.dumps({
     "name": "Moka", "short_name": "Moka", "lang": "fr",
-    "description": "Votre brief quotidien : startups africaines, capital, énergie et tech.",
+    "description": "Votre brief quotidien : startups africaines, private equity, énergie et tech.",
     "start_url": "./", "scope": "./", "display": "standalone",
     "background_color": "#FDF9F4", "theme_color": "#FDF9F4",
     "icons": [

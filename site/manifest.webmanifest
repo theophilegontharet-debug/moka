@@ -2,7 +2,7 @@
  "name": "Moka",
  "short_name": "Moka",
  "lang": "fr",
- "description": "Votre brief quotidien : startups africaines, capital, énergie et tech.",
+ "description": "Votre brief quotidien : startups africaines, private equity, énergie et tech.",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",

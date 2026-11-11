@@ -1,0 +1,10 @@
+{
+  "_regle": "Classement par date de PUBLICATION de la source (published_date). Pour une synthèse Moka qui réunit plusieurs sources ou numéros, on classe à la date de rédaction (collected_at) ; les dates des sources restent affichées à part. Pas de date => section « Date non confirmée ».",
+  "syntheses": [
+    "exits-afrique-octobre",
+    "energie-recule",
+    "europe-levees-semaine",
+    "les-elections-americaines-menacent-la-course-aux-data-center-20261106",
+    "les-chiffres-du-vc-africain-varient-du-simple-au-triple-20261109"
+  ]
+}

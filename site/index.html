@@ -14,8 +14,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#FDF9F4" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1A120D" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Moka, votre brief quotidien : startups africaines, capital, énergie et tech.">
-<link rel="preload" href="data/articles.json?v=1b5046166b" as="fetch" crossorigin>
+<meta name="description" content="Moka, votre brief quotidien : startups africaines, private equity, énergie et tech.">
+<link rel="preload" href="data/articles.json?v=06f7dc9a92" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -445,6 +445,15 @@ details.q p{margin:0 0 var(--s4); font-size:17px; line-height:1.6}
 .wk-date{grid-column:1/-1;display:flex;gap:8px;align-items:center;justify-content:center;font-size:13px}
 .wk-date input{font:inherit;padding:6px 8px;border:1px solid var(--latte,#d9c9b8);border-radius:8px;background:transparent;color:inherit}
 .wk-now{grid-column:1/-1;text-align:center;font-size:13px;font-weight:600;color:var(--accent)}
+.viewseg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:6px 0 4px;border-radius:var(--r-pill,999px);background:var(--cream,#f5ede4);border:1px solid var(--line,#e5d8c8)}
+.viewseg button{height:40px;border:0;border-radius:999px;background:transparent;font:inherit;font-weight:600;font-size:var(--t-sm);color:var(--text);cursor:pointer}
+.viewseg button[aria-selected="true"]{background:var(--espresso,#3a261b);color:var(--ivory,#fff)}
+:root[data-theme="dark"] .viewseg button[aria-selected="true"]{background:var(--cream);color:#2A1810}
+[data-savedcount][hidden]{display:none!important}
+.catsec{scroll-margin-top:72px}
+.mix.solo{grid-template-columns:1fr;max-width:760px}
+.meta .pd{font-weight:600}
+button.chip{font-family:inherit;cursor:pointer}
 .wk-n{font-size:13px;color:var(--muted,#6b5a4e)}
 .narr label{display:flex; align-items:center; gap:8px}
 .narr select{height:30px; border-radius:10px; border:1px solid var(--line); background:var(--surface); color:var(--text); font:inherit; font-size:13px; padding:0 8px; max-width:100%}
@@ -485,7 +494,7 @@ body.has-player{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom
 window.MOKA_STANDALONE = true;
 window.claude = { use: async (name) => {
   if (name !== "db") return null;            // pas d'utilisateur, de Gmail, de rédaction ni d'upload
-  const load = fetch("data/articles.json?v=1b5046166b").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
+  const load = fetch("data/articles.json?v=06f7dc9a92").then(r => { if (!r.ok) throw {code: "http_" + r.status}; return r.json(); });
   const none = { exists: false, data: () => undefined };
   return {
     collection: () => ({ onSnapshot: (ok, ko) => { load.then(list => ok({ docs: list.map(a => ({ id: a.id, exists: true, data: () => a })), metadata: { fromCache: false } })).catch(e => ko && ko(e)); return () => {}; } }),
@@ -512,7 +521,7 @@ document.getElementById("logoImg").src = SYMBOL_URL;
 
 const CATS = [
   {id:"afrique-vc", name:"Startups & VC Afrique", short:"VC Afrique", color:"var(--c-afrique)", tint:[180,100,60]},
-  {id:"capital", name:"PE, M&A & financements", short:"Capital", color:"var(--c-capital)", tint:[78,107,134]},
+  {id:"capital", name:"Private Equity & M&A", short:"Private Equity", color:"var(--c-capital)", tint:[78,107,134]},
   {id:"economie-afrique", name:"Économie africaine", short:"Économie Afrique", color:"var(--c-ecoafrique)", tint:[123,139,78]},
   {id:"energie-industrie", name:"Énergie & industrie", short:"Énergie", color:"var(--c-energie)", tint:[192,138,46]},
   {id:"tech", name:"Tech & innovation", short:"Tech", color:"var(--c-tech)", tint:[63,122,116]},
@@ -616,9 +625,10 @@ function flags(a){
   const v=VERIF[a.origin==="auto"?"auto":a.verification];
   return `${v&&v.cls?`<span class="tag ${v.cls}">${esc(v.t)}</span>`:""}`;
 }
+function pubLabel(a){ if(!a.pdate) return "Date non confirmée"; const d=fmtDate(a.pdate,{day:"numeric",month:"short"}); return (a.synth?"Rédigé le ":"Publié le ")+d; }
 function metaHTML(a, short=false){
   const n=srcNames(a);
-  return `<div class="meta"><span>${n.length>1?`${n.length} sources`:esc(n[0]||"")}</span>${short?"":`<span>${esc(a.event_label||fmtDate(a.event_date))}</span>`}<span>${readMin(a)} min</span>${S.saved.has(a.id)?`<span style="color:var(--accent);font-weight:600">Sauvegardé</span>`:""}</div>`;
+  return `<div class="meta"><span class="pd">${esc(pubLabel(a))}</span><span>${n.length>1?`${n.length} sources`:esc(n[0]||"")}</span>${short?"":`<span>${esc(a.event_label||fmtDate(a.event_date))}</span>`}<span>${readMin(a)} min</span>${S.saved.has(a.id)?`<span style="color:var(--accent);font-weight:600">Sauvegardé</span>`:""}</div>`;
 }
 function rowCard(a){
   return `<a class="row" href="#a-${esc(a.id)}"><div>${eyebrow(a)}<h3>${esc(a.title)}</h3>${metaHTML(a,true)}</div>${mediaHTML(a,{w:320,h:320,badge:false,big:false})}</a>`;
@@ -663,33 +673,66 @@ function weekLabel(mon){
   const a=longDay(mon,sameM?{day:"numeric"}:{day:"numeric",month:"long"}); const b=longDay(sun,{day:"numeric",month:"long",year:"numeric"});
   return `Semaine du ${a==="1"?"1er":a.replace(/^1 /,"1er ")} au ${b.replace(/^1 /,"1er ")}`;
 }
+function getView(){ try{ return localStorage.getItem("moka.view")==="date"?"date":"cat"; }catch(e){ return "cat"; } }
+function setView(v){ try{ localStorage.setItem("moka.view",v); }catch(e){} }
+const dayTitle=(k,today)=>longDay(k,{weekday:"long",day:"numeric",month:"long"}).replace(/^(\S+) 1 /,"$1 1er ")+(k===today?" · aujourd'hui":"");
+const plural=(n,w)=>`${n} ${w}${n>1?"s":""}`;
 function viewHome(wk){
   setNav("home"); if(!S.loaded) return;
   const today=todayISO(), curMon=mondayOf(today);
   let mon = wk && /^\d{4}-\d{2}-\d{2}$/.test(wk) ? mondayOf(wk) : curMon;
   if(mon>curMon) mon=curMon;
-  const sun=addDays(mon,6);
+  const sun=addDays(mon,6), view=getView();
   const seen=new Set(), all=[]; for(const a of S.articles){ if(!seen.has(a.id)){ seen.add(a.id); all.push(a); } }
-  const days={}; for(const a of all){ const d=addedOf(a); if(d>=mon && d<=sun) (days[d]=days[d]||[]).push(a); }
-  const keys=Object.keys(days).sort().reverse(); const n=keys.reduce((t,k)=>t+days[k].length,0);
+  const W=all.filter(a=>a.pdate && a.pdate>=mon && a.pdate<=sun);           // les mêmes articles dans les deux vues
+  const undated=all.filter(a=>!a.pdate).length;
+  const counts={}; for(const a of W) counts[a.category]=(counts[a.category]||0)+1;
+  if(S.wkcat && !counts[S.wkcat]) S.wkcat=null;
   const isCur=mon===curMon;
+  const shown = view==="date" && S.wkcat ? W.filter(a=>a.category===S.wkcat) : W;
   const nav=`<nav class="weeknav" aria-label="Choisir la semaine">
     <a class="wk-arrow" href="#semaine-${addDays(mon,-7)}" aria-label="Semaine précédente">‹</a>
-    <div class="wk-mid"><h1>${esc(weekLabel(mon))}</h1><div class="wk-sub">${isCur?"Semaine en cours · ":""}${n} actualité${n>1?"s":""}</div></div>
+    <div class="wk-mid"><h1>${esc(weekLabel(mon))}</h1><div class="wk-sub">${isCur?"Semaine en cours · ":""}${plural(shown.length,"actualité")}${shown.length!==W.length?` sur ${W.length}`:""}</div></div>
     ${isCur?`<span class="wk-arrow off" aria-hidden="true">›</span>`:`<a class="wk-arrow" href="#semaine-${addDays(mon,7)}" aria-label="Semaine suivante">›</a>`}
     <label class="wk-date"><span>Aller à la semaine du</span><input id="wkDate" type="date" value="${esc(mon)}" max="${esc(today)}"></label>
     ${isCur?"":`<a class="wk-now" href="#">Revenir à cette semaine</a>`}
+    ${undated?`<a class="wk-now wk-und" href="#sans-date">Date non confirmée (${undated})</a>`:""}
   </nav>`;
-  let html = `<section class="hello"><div class="d">${esc(todayLabel())}</div></section>`+nav+catsBar()+statusNotice();
-  if(!n){
-    html += `<div class="empty"><h2>Rien cette semaine</h2>Aucune actualité n'a été ajoutée à Moka du ${esc(longDay(mon,{day:"numeric",month:"long"}))} au ${esc(longDay(sun,{day:"numeric",month:"long"}))}. Les semaines passées ne sont pas remplies après coup.</div>`;
-  } else for(const k of keys){
-    const list=days[k].sort(byScore); const [first,...more]=list;
-    html += `<section class="sec"><div class="sec-head"><h2>${esc(longDay(k,{weekday:"long",day:"numeric",month:"long"}).replace(/^(\S+) 1 /,"$1 1er "))}${k===today?" · aujourd'hui":""}</h2><span class="wk-n">${list.length} actualité${list.length>1?"s":""}</span></div>
-      <div class="mix">${card(first)}${more.length?`<div class="stack">${more.map(rowCard).join("")}</div>`:""}</div></section>`;
+  const seg=`<div class="viewseg" role="tablist" aria-label="Mode d'affichage"><button type="button" role="tab" data-view="cat" aria-selected="${view==="cat"}">Par catégorie</button><button type="button" role="tab" data-view="date" aria-selected="${view==="date"}">Par date</button></div>`;
+  const chips=`<div class="cats" role="navigation" aria-label="Catégories">${
+    view==="date"?`<button class="chip" type="button" data-cf="" ${!S.wkcat?'aria-current="page"':""}>Toutes <span class="n">${W.length}</span></button>`:""}${
+    CATS.filter(c=>counts[c.id]).map(c=>`<button class="chip" type="button" style="--dot:${c.color}" data-cf="${c.id}" ${view==="date"&&S.wkcat===c.id?'aria-current="page"':""}><i></i>${esc(c.short)} <span class="n">${counts[c.id]}</span></button>`).join("")}</div>`;
+  let html = `<section class="hello"><div class="d">${esc(todayLabel())}</div></section>`+nav+seg+(W.length?chips:"")+statusNotice();
+  if(!W.length){
+    html += `<div class="empty"><h2>Rien cette semaine</h2>Aucune actualité publiée du ${esc(longDay(mon,{day:"numeric",month:"long"}))} au ${esc(longDay(sun,{day:"numeric",month:"long"}))} n'est dans Moka. Les semaines passées ne sont pas remplies après coup.</div>`;
+  } else if(view==="date"){
+    const days={}; for(const a of shown) (days[a.pdate]=days[a.pdate]||[]).push(a);
+    for(const k of Object.keys(days).sort()){
+      const list=days[k].sort(byScore); const [first,...more]=list;
+      html += `<section class="sec"><div class="sec-head"><h2>${esc(dayTitle(k,today))}</h2><span class="wk-n">${plural(list.length,"actualité")}</span></div>
+        <div class="mix${more.length?"":" solo"}">${card(first)}${more.length?`<div class="stack">${more.map(rowCard).join("")}</div>`:""}</div></section>`;
+    }
+  } else {
+    for(const c of CATS){
+      const list=W.filter(a=>a.category===c.id).sort(byScore); if(!list.length) continue; const [first,...more]=list;
+      html += `<section class="sec catsec" id="catsec-${c.id}"><div class="sec-head"><h2><span class="eyebrow" style="--cat:${c.color}"><i></i>Rubrique</span>${esc(c.name)}</h2><span class="wk-n">${plural(list.length,"actualité")}</span></div>
+        <div class="mix${more.length?"":" solo"}">${card(first)}${more.length?`<div class="stack">${more.map(rowCard).join("")}</div>`:""}</div></section>`;
+    }
   }
   $app.innerHTML = html + footer();
-  const di=document.getElementById("wkDate"); if(di) di.onchange=()=>{ if(di.value){ const m=mondayOf(di.value>today?today:di.value); location.hash = m===curMon?"":"#semaine-"+m; if(m===curMon) route(); } };
+  const di=document.getElementById("wkDate"); if(di) di.onchange=()=>{ if(di.value){ const m=mondayOf(di.value>today?today:di.value); if(m===curMon && !location.hash) route(); else location.hash = m===curMon?"":"#semaine-"+m; } };
+  $app.querySelectorAll(".viewseg [data-view]").forEach(b=>b.onclick=()=>{ if(b.dataset.view===view) return; setView(b.dataset.view); const y=window.scrollY; route(); window.scrollTo({top:0}); });
+  $app.querySelectorAll(".cats [data-cf]").forEach(b=>b.onclick=()=>{
+    const id=b.dataset.cf;
+    if(view==="date"){ S.wkcat=id||null; const y=window.scrollY; route(); window.scrollTo({top:y}); }
+    else { const el=document.getElementById("catsec-"+id); if(el) el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"}); }
+  });
+}
+function viewUndated(){
+  setNav("home"); if(!S.loaded) return;
+  const list=S.articles.filter(a=>!a.pdate).sort(byScore);
+  $app.innerHTML=`<section class="hello"><div class="d">Historique</div><h1>Date non confirmée</h1><p>Articles dont la date de publication n'a pas pu être établie. Ils ne sont rattachés à aucune semaine.</p></section><p><a class="wk-now" href="#">← Retour à la semaine en cours</a></p>`+
+    (list.length?`<div class="stack" style="max-width:760px">${list.map(rowCard).join("")}</div>`:`<div class="empty">Aucun article sans date : toutes les dates de publication sont confirmées.</div>`)+footer();
 }
 /* balayage horizontal sur la vue semaine (hors carrousels, champs et lecteur) */
 (function(){
@@ -819,7 +862,7 @@ function viewArticle(id){
     <div id="photoForm"></div>
     <header class="r-head">${eyebrow(a)}<h1>${esc(a.title)}</h1><p class="dek">${esc(a.dek)}</p></header>
     <div class="r-meta"><div class="srcdots">${names.slice(0,3).map(n=>`<span title="${esc(n)}">${esc(initials(n))}</span>`).join("")}</div>
-      <span><b>${esc(names.join(", "))}</b></span><span>Événement : <b>${esc(a.event_label||fmtDate(a.event_date))}</b></span><span>${a.published_date?`Publié le <b>${esc(fmtDate(a.published_date,{day:"numeric",month:"long",year:"numeric"}))}</b>`:`Reçu le ${pubs.map(d=>fmtDate(d,{day:"numeric",month:"short"})).join(", ")}`}</span><span>Ajouté à Moka le <b>${esc(fmtDate(addedOf(a),{day:"numeric",month:"long",year:"numeric"}))}</b></span></div>
+      <span><b>${esc(names.join(", "))}</b></span><span>Événement : <b>${esc(a.event_label||fmtDate(a.event_date))}</b></span><span>${a.pdate?`${a.synth?"Synthèse Moka rédigée le":"Publié le"} <b>${esc(fmtDate(a.pdate,{day:"numeric",month:"long",year:"numeric"}))}</b>`:`Date de publication non confirmée`}</span><span>Ajouté à Moka le <b>${esc(fmtDate(addedOf(a),{day:"numeric",month:"long",year:"numeric"}))}</b></span></div>
     <div class="legend-line" style="margin-top:12px"><span class="tag ${v.cls||""}">${a.verification==="rapporte"&&a.origin!=="auto"?I.check:""}${esc(v.t||"")}</span>${a.moka_context?`<span class="tag">${I.book}Contexte Moka ajouté</span>`:""}${a.unknowns?.length?`<span class="tag">${I.help}${a.unknowns.length} inconnue${a.unknowns.length>1?"s":""}</span>`:""}</div>
     <div class="fmt" role="radiogroup" aria-label="Profondeur de lecture">${FORMATS.map(f=>{ const m=fmtMinutes(a,f.id); return `<button type="button" role="radio" data-f="${f.id}" aria-checked="false" tabindex="-1"><b>${f.name}</b><span>${f.id==="approfondir"&&deepNA?"indisponible":`${m} min`}</span></button>`; }).join("")}</div>
     ${MokaAudio.ok?`<button class="btn listen" id="listenBtn" type="button" hidden>${I.headphones}<span>Écouter</span><small id="listenFmt"></small></button>`:""}
@@ -923,6 +966,7 @@ function route(){
   if(h.startsWith("a-")) return viewArticle(h.slice(2));
   if(h.startsWith("cat-")) return viewCat(h.slice(4));
   if(h.startsWith("semaine-")) return viewHome(h.slice(8));
+  if(h==="sans-date") return viewUndated();
   if(h==="rubriques") return viewCats();
   if(h==="saved") return viewSaved();
   if(h==="sources") return viewSources();
